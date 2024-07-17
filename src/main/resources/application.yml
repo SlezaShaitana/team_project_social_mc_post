@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: mc-post
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+  datasource:
+    url: jdbc:postgresql://localhost:5432/post_db
+    username: mc_post
+    password: mc_post
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true

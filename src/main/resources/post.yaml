@@ -1,0 +1,1306 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Microservice post",
+    "version": "1.0.0-SNAPSHOT",
+    "description": "Сервис сообщений"
+  },
+  "servers": [
+    {
+      "url": "http://ingress",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Post Service",
+      "description": "Работа с постами, комментариями, лайками"
+    },
+    {
+      "name": "Tag Service",
+      "description": "Работа с тегами"
+    },
+    {
+      "name": "Statistic Service",
+      "description": "Статистика постов, лайков, комментариев"
+    }
+  ],
+  "paths": {
+    "/api/v1/post": {
+      "get": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Получение постов",
+        "operationId": "getAll",
+        "parameters": [
+          {
+            "name": "postSearchDto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/PostSearchDto"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Редактирование поста",
+        "operationId": "update",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Создание поста",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/v1/post/{id}/comment": {
+      "put": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Редактирование комментария",
+        "operationId": "updateComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Создание комментария к посту",
+        "operationId": "createComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/v1/post/{id}/comment/{commentId}": {
+      "put": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Создание сабкомментария",
+        "operationId": "createSubComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Удаление комментария",
+        "operationId": "deleteComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/v1/post/delayed": {
+      "put": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Отложенный пост",
+        "operationId": "getDelayedPost",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/v1/post/{id}/like": {
+      "post": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Создание лайка типа POST",
+        "operationId": "createPostLike",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LikeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Удаление лайка типа POST",
+        "operationId": "deletePostLike",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/v1/post/{id}/comment/{commentId}/like": {
+      "post": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Создание лайка типа COMMENT",
+        "operationId": "createCommentLike",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Создание лайка типа COMMENT",
+        "operationId": "deleteCommentLike",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/v1/tag": {
+      "get": {
+        "tags": [
+          "Tag Service"
+        ],
+        "description": "Получение тегов",
+        "operationId": "getAdviceTags",
+        "parameters": [
+          {
+            "name": "tagSearchDto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TagSearchDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/v1/post/{postId}/comment": {
+      "get": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Получение комментариев",
+        "operationId": "getComment",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "searchDto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CommentSearchDto"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/v1/post/{postId}/comment/{commentId}/subcomment": {
+      "get": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Получение сабкомментариев",
+        "operationId": "getSubComment",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "searchDto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CommentSearchDto"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/v1/post/{id}": {
+      "get": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Получение поста",
+        "operationId": "getById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Post Service"
+        ],
+        "description": "Удаление поста",
+        "operationId": "deleteById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/v1/post/statistic/post": {
+      "get": {
+        "tags": [
+          "Statistic Service"
+        ],
+        "description": "Получение статистики постов",
+        "operationId": "getPostStatistic",
+        "parameters": [
+          {
+            "name": "requestDto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/PostStatisticRequestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/v1/post/statistic/like": {
+      "get": {
+        "tags": [
+          "Statistic Service"
+        ],
+        "description": "Получение статистики лайков",
+        "operationId": "getLikeStatistic",
+        "parameters": [
+          {
+            "name": "requestDto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/PostStatisticRequestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/v1/post/statistic/comment": {
+      "get": {
+        "tags": [
+          "Statistic Service"
+        ],
+        "description": "Получение статистики комментариев",
+        "operationId": "getCommentStatistic",
+        "parameters": [
+          {
+            "name": "requestDto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/PostStatisticRequestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PostDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "time": {
+            "type": "string",
+            "description": "Время создания поста",
+            "format": "date-time"
+          },
+          "timeChanged": {
+            "type": "string",
+            "description": "Время изменения поста",
+            "format": "date-time"
+          },
+          "authorId": {
+            "type": "string",
+            "description": "ID автора поста",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "description": "Зоголовок поста"
+          },
+          "type": {
+            "type": "string",
+            "description": "Тип поста",
+            "enum": [
+              "POSTED",
+              "QUEUED"
+            ]
+          },
+          "postText": {
+            "type": "string",
+            "description": "Текст поста: POSTED - опубликован, QUEUED - отложен)"
+          },
+          "isBlocked": {
+            "type": "boolean",
+            "description": "Заблокирован ли пост?"
+          },
+          "commentsCount": {
+            "type": "integer",
+            "description": "Количество комментариев к посту",
+            "format": "int32"
+          },
+          "tags": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Теги поста",
+            "items": {
+              "$ref": "#/components/schemas/TagDto"
+            }
+          },
+          "reactions": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Список типов реакций",
+            "items": {
+              "$ref": "#/components/schemas/ReactionDto"
+            }
+          },
+          "myReaction": {
+            "type": "string",
+            "description": "Тип реакции пользователя"
+          },
+          "likeAmount": {
+            "type": "integer",
+            "description": "Количество лайков",
+            "format": "int32"
+          },
+          "myLike": {
+            "type": "boolean",
+            "description": "Есть мой лайк?"
+          },
+          "imagePath": {
+            "type": "string",
+            "description": "Путь к изображению"
+          },
+          "publishDate": {
+            "type": "string",
+            "description": "Дата и время публикации поста",
+            "format": "date-time"
+          }
+        },
+        "description": "DTO поста"
+      },
+      "ReactionDto": {
+        "type": "object",
+        "properties": {
+          "reactionType": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "description": "Список типов реакций"
+      },
+      "TagDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string",
+            "description": "Имя тега"
+          }
+        },
+        "description": "DTO тега"
+      },
+      "CommentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "commentType": {
+            "type": "string",
+            "description": "Тип комментария: POST - комментарий к посту, COMMENT - комментарий к комментарию, субкомментарий",
+            "enum": [
+              "POST",
+              "COMMENT"
+            ]
+          },
+          "time": {
+            "type": "string",
+            "description": "Время создания комментария",
+            "format": "date-time"
+          },
+          "timeChanged": {
+            "type": "string",
+            "description": "Время изменения комментария",
+            "format": "date-time"
+          },
+          "authorId": {
+            "type": "string",
+            "description": "ID автора комментария",
+            "format": "uuid"
+          },
+          "parentId": {
+            "type": "string",
+            "description": "ID родителя, к которому был оставлен коммнетарий",
+            "format": "uuid"
+          },
+          "commentText": {
+            "type": "string",
+            "description": "Текст комментария"
+          },
+          "postId": {
+            "type": "string",
+            "description": "ID поста, к которому относится комментарий",
+            "format": "uuid"
+          },
+          "isBlocked": {
+            "type": "boolean",
+            "description": "Заблокирован ли?"
+          },
+          "likeAmount": {
+            "type": "integer",
+            "description": "Количество лайков комментария",
+            "format": "int64"
+          },
+          "myLike": {
+            "type": "boolean",
+            "description": "Это той лайк?"
+          },
+          "commentsCount": {
+            "type": "integer",
+            "description": "Количество комментариев",
+            "format": "int64"
+          },
+          "imagePath": {
+            "type": "string",
+            "description": "Путь к изображению"
+          }
+        },
+        "description": "DTO коммента"
+      },
+      "LikeDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "authorId": {
+            "type": "string",
+            "description": "ID автора комментария",
+            "format": "uuid"
+          },
+          "time": {
+            "type": "string",
+            "description": "Дата создания лайка",
+            "format": "date-time"
+          },
+          "itemId": {
+            "type": "string",
+            "description": "ID поста или комментария, к которому принадлежит лайк",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "description": "Тип лайка: POST - лайк на пост, COMMENT- лайк на комментарий",
+            "enum": [
+              "POST",
+              "COMMENT"
+            ]
+          },
+          "reactionType": {
+            "type": "string",
+            "description": "Тип реакции лайка"
+          }
+        },
+        "description": "DTO лайка"
+      },
+      "TagSearchDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string",
+            "description": "Имя тега для поиска"
+          }
+        },
+        "description": "DTO тега для поиска"
+      },
+      "PostSearchDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "ids": {
+            "type": "array",
+            "description": "ID постов",
+            "items": {
+              "type": "string",
+              "description": "ID постов",
+              "format": "uuid"
+            }
+          },
+          "accountIds": {
+            "type": "array",
+            "description": "ID аккаунтов авторов постов",
+            "items": {
+              "type": "string",
+              "description": "ID аккаунтов авторов постов",
+              "format": "uuid"
+            }
+          },
+          "blockedIds": {
+            "type": "array",
+            "description": "ID заблокированных аккаунтов авторов постов",
+            "items": {
+              "type": "string",
+              "description": "ID заблокированных аккаунтов авторов постов",
+              "format": "uuid"
+            }
+          },
+          "author": {
+            "type": "string",
+            "description": "Автор"
+          },
+          "withFriends": {
+            "type": "boolean",
+            "description": "С друзьями?"
+          },
+          "tags": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Теги поста",
+            "items": {
+              "type": "string",
+              "description": "Теги поста"
+            }
+          },
+          "dateFrom": {
+            "type": "string",
+            "description": "Дата от",
+            "format": "date-time"
+          },
+          "dateTo": {
+            "type": "string",
+            "description": "Дата до",
+            "format": "date-time"
+          }
+        },
+        "description": "DTO для поиска постов"
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "CommentSearchDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "commentType": {
+            "type": "string",
+            "description": "Тип комментария: POST, COMMENT",
+            "enum": [
+              "POST",
+              "COMMENT"
+            ]
+          },
+          "authorId": {
+            "type": "string",
+            "description": "ID автора комментария",
+            "format": "uuid"
+          },
+          "parentId": {
+            "type": "string",
+            "description": "ID родителя комментария",
+            "format": "uuid"
+          },
+          "postId": {
+            "type": "string",
+            "description": "ID поста, к которому относится комментарий",
+            "format": "uuid"
+          }
+        },
+        "description": "DTO для поиска комментов"
+      },
+      "PostStatisticRequestDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "firstMonth": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastMonth": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "description": "DTO для запроса статистики"
+      }
+    },
+    "securitySchemes": {
+      "JWT": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
