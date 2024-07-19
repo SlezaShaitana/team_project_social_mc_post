@@ -18,6 +18,7 @@ public class CommentEntity {
 
     private Boolean isDeleted;
 
+    @Enumerated(EnumType.STRING)
     private TypeComment commentType;
 
     private Date time;

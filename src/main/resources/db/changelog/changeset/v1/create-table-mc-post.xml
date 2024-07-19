@@ -1,0 +1,120 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="mikhail " id="1">
+        <createTable tableName="comment">
+            <column name="comments_count" type="INTEGER"/>
+            <column name="is_blocked" type="BOOLEAN"/>
+            <column name="is_deleted" type="BOOLEAN"/>
+            <column name="like_amount" type="INTEGER"/>
+            <column name="my_like" type="BOOLEAN"/>
+            <column name="time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="time_changed" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="author_id" type="VARCHAR(255)"/>
+            <column name="comment_text" type="VARCHAR(255)"/>
+            <column name="comment_type" type="VARCHAR(255)"/>
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="comment_pkey"/>
+            </column>
+            <column name="image_path" type="VARCHAR(255)"/>
+            <column name="parent_id" type="VARCHAR(255)"/>
+            <column name="post_id" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mikhail" id="2">
+        <createTable tableName="comment_search">
+            <column name="comment_type" type="SMALLINT"/>
+            <column name="is_deleted" type="BOOLEAN"/>
+            <column name="author_id" type="VARCHAR(255)"/>
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="comment_search_pkey"/>
+            </column>
+            <column name="parent_id" type="VARCHAR(255)"/>
+            <column name="post_id" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mikhail" id="3">
+        <createTable tableName="post">
+            <column name="comments_count" type="INTEGER"/>
+            <column name="is_blocked" type="BOOLEAN"/>
+            <column name="is_deleted" type="BOOLEAN"/>
+            <column name="my_like" type="BOOLEAN"/>
+            <column name="time_change" type="INTEGER"/>
+            <column name="publish_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="author_id" type="VARCHAR(255)"/>
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="post_pkey"/>
+            </column>
+            <column name="image_path" type="VARCHAR(255)"/>
+            <column name="my_reaction" type="VARCHAR(255)"/>
+            <column name="post_text" type="VARCHAR(255)"/>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="type" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mikhail" id="4">
+        <createTable tableName="post_reactions">
+            <column name="post_entity_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reactions_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mikhail" id="5">
+        <createTable tableName="post_tags">
+            <column name="post_entity_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tags_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mikhail" id="6">
+        <addUniqueConstraint columnNames="reactions_id" constraintName="post_reactions_reactions_id_key" tableName="post_reactions"/>
+    </changeSet>
+    <changeSet author="mikhail" id="7">
+        <addUniqueConstraint columnNames="tags_id" constraintName="post_tags_tags_id_key" tableName="post_tags"/>
+    </changeSet>
+    <changeSet author="mikhail" id="8">
+        <createTable tableName="reaction">
+            <column name="count" type="INTEGER"/>
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="reaction_pkey"/>
+            </column>
+            <column name="reaction_type" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mikhail" id="9">
+        <createTable tableName="tag_search">
+            <column name="is_deleted" type="BOOLEAN"/>
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tag_search_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mikhail" id="10">
+        <createTable tableName="tags">
+            <column name="is_deleted" type="BOOLEAN"/>
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tags_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mikhail" id="11">
+        <addForeignKeyConstraint baseColumnNames="reactions_id" baseTableName="post_reactions" constraintName="fk6l98x9j6nyvx1979lxnebvmf0" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="reaction" validate="true"/>
+    </changeSet>
+    <changeSet author="mikhail" id="12">
+        <addForeignKeyConstraint baseColumnNames="tags_id" baseTableName="post_tags" constraintName="fkc9w0wcpokniw86jioo5rrb37s" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tags" validate="true"/>
+    </changeSet>
+    <changeSet author="mikhail" id="13">
+        <addForeignKeyConstraint baseColumnNames="post_entity_id" baseTableName="post_tags" constraintName="fkftnuv890v99nej5sdr1dymo" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="post" validate="true"/>
+    </changeSet>
+    <changeSet author="mikhail" id="14">
+        <addForeignKeyConstraint baseColumnNames="post_entity_id" baseTableName="post_reactions" constraintName="fkmlr5ywjmp6pam8tb22h4s84gg" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="post" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

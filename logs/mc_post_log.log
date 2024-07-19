@@ -1118,3 +1118,320 @@ Caused by: liquibase.exception.ValidationFailedException: Validation Failed:
 17-07-2024 23:02:57.365 [http-nio-8080-exec-1] 16329 INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Initializing Servlet 'dispatcherServlet'
 17-07-2024 23:02:57.376 [http-nio-8080-exec-1] 16329 INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Completed initialization in 7 ms
 17-07-2024 23:03:29.368 [http-nio-8080-exec-3] 16329 WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver.logException - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public org.springframework.http.ResponseEntity<?> com.social.mc_post.controllers.RestStatisticController.handlerStatisticPost(com.social.mc_post.dto.RequestDto)]
+18-07-2024 00:18:49.245 [SpringApplicationShutdownHook] 16329 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.destroy - Closing JPA EntityManagerFactory for persistence unit 'default'
+18-07-2024 00:18:49.260 [SpringApplicationShutdownHook] 16329 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown initiated...
+18-07-2024 00:18:49.284 [SpringApplicationShutdownHook] 16329 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown completed.
+19-07-2024 22:49:54.791 [main] 8930 INFO  c.social.mc_post.McPostApplication.logStarting - Starting McPostApplication using Java 17.0.11 with PID 8930 (/home/mikhail/Документы/command-project/mc-post/target/classes started by mikhail in /home/mikhail/Документы/command-project/mc-post)
+19-07-2024 22:49:54.868 [main] 8930 INFO  c.social.mc_post.McPostApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+19-07-2024 22:50:02.645 [main] 8930 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+19-07-2024 22:50:03.114 [main] 8930 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 429 ms. Found 7 JPA repository interfaces.
+19-07-2024 22:50:07.194 [main] 8930 INFO  o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+19-07-2024 22:50:07.235 [main] 8930 INFO  o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+19-07-2024 22:50:07.245 [main] 8930 INFO  o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+19-07-2024 22:50:07.247 [main] 8930 INFO  o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.25]
+19-07-2024 22:50:07.716 [main] 8930 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+19-07-2024 22:50:07.730 [main] 8930 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 12119 ms
+19-07-2024 22:50:09.662 [main] 8930 INFO  o.h.jpa.internal.util.LogHelper.logPersistenceUnitInformation - HHH000204: Processing PersistenceUnitInfo [name: default]
+19-07-2024 22:50:10.161 [main] 8930 INFO  org.hibernate.Version.logVersion - HHH000412: Hibernate ORM core version 6.5.2.Final
+19-07-2024 22:50:10.408 [main] 8930 INFO  o.h.c.i.RegionFactoryInitiator.initiateService - HHH000026: Second-level cache disabled
+19-07-2024 22:50:12.702 [main] 8930 INFO  o.s.o.j.p.SpringPersistenceUnitInfo.addTransformer - No LoadTimeWeaver setup: ignoring JPA class transformer
+19-07-2024 22:50:13.090 [main] 8930 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Starting...
+19-07-2024 22:50:14.346 [main] 8930 INFO  com.zaxxer.hikari.pool.HikariPool.checkFailFast - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@30cafd13
+19-07-2024 22:50:14.353 [main] 8930 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Start completed.
+19-07-2024 22:50:17.775 [main] 8930 ERROR o.s.o.j.LocalContainerEntityManagerFactoryBean.buildNativeEntityManagerFactory - Failed to initialize JPA EntityManagerFactory: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.MappingException: Column 'time_change' is duplicated in mapping for entity 'com.social.mc_post.structure.PostEntity' (use '@Column(insertable=false, updatable=false)' when mapping multiple properties to the same column)
+19-07-2024 22:50:17.782 [main] 8930 WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext.refresh - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.MappingException: Column 'time_change' is duplicated in mapping for entity 'com.social.mc_post.structure.PostEntity' (use '@Column(insertable=false, updatable=false)' when mapping multiple properties to the same column)
+19-07-2024 22:50:17.790 [main] 8930 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown initiated...
+19-07-2024 22:50:17.806 [main] 8930 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown completed.
+19-07-2024 22:50:17.822 [main] 8930 INFO  o.a.catalina.core.StandardService.log - Stopping service [Tomcat]
+19-07-2024 22:50:17.939 [main] 8930 INFO  o.s.b.a.l.ConditionEvaluationReportLogger.logMessage - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+19-07-2024 22:50:18.081 [main] 8930 ERROR o.s.boot.SpringApplication.reportFailure - Application run failed
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.MappingException: Column 'time_change' is duplicated in mapping for entity 'com.social.mc_post.structure.PostEntity' (use '@Column(insertable=false, updatable=false)' when mapping multiple properties to the same column)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1788)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:205)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:952)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352)
+	at com.social.mc_post.McPostApplication.main(McPostApplication.java:10)
+Caused by: jakarta.persistence.PersistenceException: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.MappingException: Column 'time_change' is duplicated in mapping for entity 'com.social.mc_post.structure.PostEntity' (use '@Column(insertable=false, updatable=false)' when mapping multiple properties to the same column)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:421)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1835)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1784)
+	... 15 common frames omitted
+Caused by: org.hibernate.MappingException: Column 'time_change' is duplicated in mapping for entity 'com.social.mc_post.structure.PostEntity' (use '@Column(insertable=false, updatable=false)' when mapping multiple properties to the same column)
+	at org.hibernate.mapping.Value.checkColumnDuplication(Value.java:196)
+	at org.hibernate.mapping.MappingHelper.checkPropertyColumnDuplication(MappingHelper.java:251)
+	at org.hibernate.mapping.PersistentClass.checkColumnDuplication(PersistentClass.java:939)
+	at org.hibernate.mapping.PersistentClass.validate(PersistentClass.java:694)
+	at org.hibernate.mapping.RootClass.validate(RootClass.java:276)
+	at org.hibernate.boot.internal.MetadataImpl.validate(MetadataImpl.java:496)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:280)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:457)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1506)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409)
+	... 19 common frames omitted
+19-07-2024 22:51:31.670 [main] 9098 INFO  c.social.mc_post.McPostApplication.logStarting - Starting McPostApplication using Java 17.0.11 with PID 9098 (/home/mikhail/Документы/command-project/mc-post/target/classes started by mikhail in /home/mikhail/Документы/command-project/mc-post)
+19-07-2024 22:51:31.752 [main] 9098 INFO  c.social.mc_post.McPostApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+19-07-2024 22:51:37.133 [main] 9098 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+19-07-2024 22:51:37.553 [main] 9098 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 382 ms. Found 7 JPA repository interfaces.
+19-07-2024 22:51:40.265 [main] 9098 INFO  o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+19-07-2024 22:51:40.312 [main] 9098 INFO  o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+19-07-2024 22:51:40.325 [main] 9098 INFO  o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+19-07-2024 22:51:40.328 [main] 9098 INFO  o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.25]
+19-07-2024 22:51:40.671 [main] 9098 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+19-07-2024 22:51:40.691 [main] 9098 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 8354 ms
+19-07-2024 22:51:42.057 [main] 9098 INFO  o.h.jpa.internal.util.LogHelper.logPersistenceUnitInformation - HHH000204: Processing PersistenceUnitInfo [name: default]
+19-07-2024 22:51:42.346 [main] 9098 INFO  org.hibernate.Version.logVersion - HHH000412: Hibernate ORM core version 6.5.2.Final
+19-07-2024 22:51:42.503 [main] 9098 INFO  o.h.c.i.RegionFactoryInitiator.initiateService - HHH000026: Second-level cache disabled
+19-07-2024 22:51:43.837 [main] 9098 INFO  o.s.o.j.p.SpringPersistenceUnitInfo.addTransformer - No LoadTimeWeaver setup: ignoring JPA class transformer
+19-07-2024 22:51:43.968 [main] 9098 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Starting...
+19-07-2024 22:51:44.658 [main] 9098 INFO  com.zaxxer.hikari.pool.HikariPool.checkFailFast - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@273dec10
+19-07-2024 22:51:44.669 [main] 9098 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Start completed.
+19-07-2024 22:51:50.462 [main] 9098 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator.initiateService - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+19-07-2024 22:51:50.648 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - SQL Warning Code: 0, SQLState: 00000
+19-07-2024 22:51:50.655 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - relation "post_reactions" does not exist, skipping
+19-07-2024 22:51:50.667 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - SQL Warning Code: 0, SQLState: 00000
+19-07-2024 22:51:50.669 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - relation "post_reactions" does not exist, skipping
+19-07-2024 22:51:50.690 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - SQL Warning Code: 0, SQLState: 00000
+19-07-2024 22:51:50.696 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - relation "post_tags" does not exist, skipping
+19-07-2024 22:51:50.705 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - SQL Warning Code: 0, SQLState: 00000
+19-07-2024 22:51:50.708 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - relation "post_tags" does not exist, skipping
+19-07-2024 22:51:50.714 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - SQL Warning Code: 0, SQLState: 00000
+19-07-2024 22:51:50.725 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - table "comment" does not exist, skipping
+19-07-2024 22:51:50.732 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - SQL Warning Code: 0, SQLState: 00000
+19-07-2024 22:51:50.740 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - table "comment_search" does not exist, skipping
+19-07-2024 22:51:50.784 [main] 9098 WARN  o.h.t.s.i.ExceptionHandlerLoggedImpl.handleException - GenerationTarget encountered exception accepting command : Error executing DDL "drop table if exists like cascade" via JDBC [ERROR: syntax error at or near "like"
+  Позиция: 22]
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "drop table if exists like cascade" via JDBC [ERROR: syntax error at or near "like"
+  Позиция: 22]
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94)
+	at org.hibernate.tool.schema.internal.Helper.applySqlString(Helper.java:233)
+	at org.hibernate.tool.schema.internal.Helper.applySqlStrings(Helper.java:217)
+	at org.hibernate.tool.schema.internal.SchemaDropperImpl.dropTables(SchemaDropperImpl.java:381)
+	at org.hibernate.tool.schema.internal.SchemaDropperImpl.dropConstraintsTablesSequences(SchemaDropperImpl.java:253)
+	at org.hibernate.tool.schema.internal.SchemaDropperImpl.dropFromMetadata(SchemaDropperImpl.java:215)
+	at org.hibernate.tool.schema.internal.SchemaDropperImpl.performDrop(SchemaDropperImpl.java:185)
+	at org.hibernate.tool.schema.internal.SchemaDropperImpl.doDrop(SchemaDropperImpl.java:155)
+	at org.hibernate.tool.schema.internal.SchemaDropperImpl.doDrop(SchemaDropperImpl.java:115)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:238)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:144)
+	at java.base/java.util.HashMap.forEach(HashMap.java:1421)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:141)
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37)
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:322)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:457)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1506)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1835)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1784)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:205)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:952)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352)
+	at com.social.mc_post.McPostApplication.main(McPostApplication.java:10)
+Caused by: org.postgresql.util.PSQLException: ERROR: syntax error at or near "like"
+  Позиция: 22
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2725)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2412)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:371)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:502)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:419)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:341)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:326)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:302)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:297)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
+	... 39 common frames omitted
+19-07-2024 22:51:50.807 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - SQL Warning Code: 0, SQLState: 00000
+19-07-2024 22:51:50.814 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - table "post" does not exist, skipping
+19-07-2024 22:51:50.834 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - SQL Warning Code: 0, SQLState: 00000
+19-07-2024 22:51:50.836 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - table "post_reactions" does not exist, skipping
+19-07-2024 22:51:50.841 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - SQL Warning Code: 0, SQLState: 00000
+19-07-2024 22:51:50.842 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - table "post_tags" does not exist, skipping
+19-07-2024 22:51:50.847 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - SQL Warning Code: 0, SQLState: 00000
+19-07-2024 22:51:50.848 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - table "reaction" does not exist, skipping
+19-07-2024 22:51:50.856 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - SQL Warning Code: 0, SQLState: 00000
+19-07-2024 22:51:50.858 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - table "tag_search" does not exist, skipping
+19-07-2024 22:51:50.871 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - SQL Warning Code: 0, SQLState: 00000
+19-07-2024 22:51:50.873 [main] 9098 WARN  o.h.e.jdbc.spi.SqlExceptionHelper.logWarning - table "tags" does not exist, skipping
+19-07-2024 22:51:51.284 [main] 9098 WARN  o.h.t.s.i.ExceptionHandlerLoggedImpl.handleException - GenerationTarget encountered exception accepting command : Error executing DDL "create table like (is_deleted boolean, time timestamp(6), author_id varchar(255), id varchar(255) not null, item_id varchar(255), reaction_type varchar(255), type varchar(255) check (type in ('POST','COMMENT')), primary key (id))" via JDBC [ERROR: syntax error at or near "like"
+  Позиция: 14]
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "create table like (is_deleted boolean, time timestamp(6), author_id varchar(255), id varchar(255) not null, item_id varchar(255), reaction_type varchar(255), type varchar(255) check (type in ('POST','COMMENT')), primary key (id))" via JDBC [ERROR: syntax error at or near "like"
+  Позиция: 14]
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94)
+	at org.hibernate.tool.schema.internal.Helper.applySqlString(Helper.java:233)
+	at org.hibernate.tool.schema.internal.Helper.applySqlStrings(Helper.java:217)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.createTables(SchemaCreatorImpl.java:428)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.createSequencesTablesConstraints(SchemaCreatorImpl.java:344)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.createFromMetadata(SchemaCreatorImpl.java:239)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.performCreation(SchemaCreatorImpl.java:172)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.doCreation(SchemaCreatorImpl.java:142)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.doCreation(SchemaCreatorImpl.java:118)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:250)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:144)
+	at java.base/java.util.HashMap.forEach(HashMap.java:1421)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:141)
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37)
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:322)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:457)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1506)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1835)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1784)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:205)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:952)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352)
+	at com.social.mc_post.McPostApplication.main(McPostApplication.java:10)
+Caused by: org.postgresql.util.PSQLException: ERROR: syntax error at or near "like"
+  Позиция: 14
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2725)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2412)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:371)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:502)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:419)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:341)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:326)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:302)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:297)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
+	... 39 common frames omitted
+19-07-2024 22:51:52.036 [main] 9098 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.buildNativeEntityManagerFactory - Initialized JPA EntityManagerFactory for persistence unit 'default'
+19-07-2024 22:51:52.299 [main] 9098 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration.openEntityManagerInViewInterceptor - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+19-07-2024 22:51:55.468 [main] 9098 INFO  o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
+19-07-2024 22:51:55.563 [main] 9098 INFO  o.s.b.w.e.tomcat.TomcatWebServer.start - Tomcat started on port 8080 (http) with context path '/'
+19-07-2024 22:51:55.659 [main] 9098 INFO  c.social.mc_post.McPostApplication.logStarted - Started McPostApplication in 27.909 seconds (process running for 30.376)
+19-07-2024 22:57:00.220 [SpringApplicationShutdownHook] 9098 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.destroy - Closing JPA EntityManagerFactory for persistence unit 'default'
+19-07-2024 22:57:00.229 [SpringApplicationShutdownHook] 9098 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown initiated...
+19-07-2024 22:57:00.255 [SpringApplicationShutdownHook] 9098 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown completed.
+19-07-2024 22:58:15.881 [main] 9865 INFO  c.social.mc_post.McPostApplication.logStarting - Starting McPostApplication using Java 17.0.11 with PID 9865 (/home/mikhail/Документы/command-project/mc-post/target/classes started by mikhail in /home/mikhail/Документы/command-project/mc-post)
+19-07-2024 22:58:15.900 [main] 9865 INFO  c.social.mc_post.McPostApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+19-07-2024 22:58:23.439 [main] 9865 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+19-07-2024 22:58:24.223 [main] 9865 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 653 ms. Found 7 JPA repository interfaces.
+19-07-2024 22:58:30.010 [main] 9865 INFO  o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+19-07-2024 22:58:30.089 [main] 9865 INFO  o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+19-07-2024 22:58:30.100 [main] 9865 INFO  o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+19-07-2024 22:58:30.102 [main] 9865 INFO  o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.25]
+19-07-2024 22:58:30.529 [main] 9865 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+19-07-2024 22:58:30.550 [main] 9865 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 14240 ms
+19-07-2024 22:58:32.043 [main] 9865 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Starting...
+19-07-2024 22:58:33.338 [main] 9865 INFO  com.zaxxer.hikari.pool.HikariPool.checkFailFast - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@7da635c0
+19-07-2024 22:58:33.345 [main] 9865 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Start completed.
+19-07-2024 22:58:34.813 [main] 9865 INFO  liquibase.database.log - Set default schema name to public
+19-07-2024 22:58:38.941 [main] 9865 INFO  liquibase.changelog.log - Creating database history table with name: public.databasechangelog
+19-07-2024 22:58:39.352 [main] 9865 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+19-07-2024 22:58:40.662 [main] 9865 INFO  liquibase.lockservice.log - Successfully acquired change log lock
+19-07-2024 22:58:40.671 [main] 9865 INFO  liquibase.command.log - Using deploymentId: 1419120669
+19-07-2024 22:58:40.699 [main] 9865 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+19-07-2024 22:58:41.248 [main] 9865 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-table-mc-post.xml::1::mikhail 
+19-07-2024 22:58:41.599 [main] 9865 INFO  liquibase.changelog.log - Table comment created
+19-07-2024 22:58:41.626 [main] 9865 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-table-mc-post.xml::1::mikhail  ran successfully in 363ms
+19-07-2024 22:58:41.707 [main] 9865 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-table-mc-post.xml::2::mikhail
+19-07-2024 22:58:41.844 [main] 9865 INFO  liquibase.changelog.log - Table comment_search created
+19-07-2024 22:58:41.869 [main] 9865 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-table-mc-post.xml::2::mikhail ran successfully in 159ms
+19-07-2024 22:58:41.944 [main] 9865 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-table-mc-post.xml::3::mikhail
+19-07-2024 22:58:42.178 [main] 9865 INFO  liquibase.changelog.log - Table post created
+19-07-2024 22:58:42.202 [main] 9865 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-table-mc-post.xml::3::mikhail ran successfully in 250ms
+19-07-2024 22:58:42.229 [main] 9865 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-table-mc-post.xml::4::mikhail
+19-07-2024 22:58:42.300 [main] 9865 INFO  liquibase.changelog.log - Table post_reactions created
+19-07-2024 22:58:42.325 [main] 9865 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-table-mc-post.xml::4::mikhail ran successfully in 82ms
+19-07-2024 22:58:42.710 [main] 9865 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-table-mc-post.xml::5::mikhail
+19-07-2024 22:58:42.777 [main] 9865 INFO  liquibase.changelog.log - Table post_tags created
+19-07-2024 22:58:42.800 [main] 9865 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-table-mc-post.xml::5::mikhail ran successfully in 85ms
+19-07-2024 22:58:42.824 [main] 9865 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-table-mc-post.xml::6::mikhail
+19-07-2024 22:58:42.888 [main] 9865 INFO  liquibase.changelog.log - Unique constraint added to post_reactions(reactions_id)
+19-07-2024 22:58:42.910 [main] 9865 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-table-mc-post.xml::6::mikhail ran successfully in 84ms
+19-07-2024 22:58:42.937 [main] 9865 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-table-mc-post.xml::7::mikhail
+19-07-2024 22:58:42.988 [main] 9865 INFO  liquibase.changelog.log - Unique constraint added to post_tags(tags_id)
+19-07-2024 22:58:43.010 [main] 9865 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-table-mc-post.xml::7::mikhail ran successfully in 72ms
+19-07-2024 22:58:43.036 [main] 9865 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-table-mc-post.xml::8::mikhail
+19-07-2024 22:58:43.155 [main] 9865 INFO  liquibase.changelog.log - Table reaction created
+19-07-2024 22:58:43.176 [main] 9865 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-table-mc-post.xml::8::mikhail ran successfully in 138ms
+19-07-2024 22:58:43.224 [main] 9865 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-table-mc-post.xml::9::mikhail
+19-07-2024 22:58:43.412 [main] 9865 INFO  liquibase.changelog.log - Table tag_search created
+19-07-2024 22:58:43.443 [main] 9865 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-table-mc-post.xml::9::mikhail ran successfully in 207ms
+19-07-2024 22:58:43.481 [main] 9865 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-table-mc-post.xml::10::mikhail
+19-07-2024 22:58:43.613 [main] 9865 INFO  liquibase.changelog.log - Table tags created
+19-07-2024 22:58:43.642 [main] 9865 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-table-mc-post.xml::10::mikhail ran successfully in 159ms
+19-07-2024 22:58:43.674 [main] 9865 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-table-mc-post.xml::11::mikhail
+19-07-2024 22:58:43.711 [main] 9865 INFO  liquibase.changelog.log - Foreign key constraint added to post_reactions (reactions_id)
+19-07-2024 22:58:43.720 [main] 9865 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-table-mc-post.xml::11::mikhail ran successfully in 44ms
+19-07-2024 22:58:43.743 [main] 9865 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-table-mc-post.xml::12::mikhail
+19-07-2024 22:58:43.765 [main] 9865 INFO  liquibase.changelog.log - Foreign key constraint added to post_tags (tags_id)
+19-07-2024 22:58:43.778 [main] 9865 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-table-mc-post.xml::12::mikhail ran successfully in 30ms
+19-07-2024 22:58:43.812 [main] 9865 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-table-mc-post.xml::13::mikhail
+19-07-2024 22:58:43.824 [main] 9865 INFO  liquibase.changelog.log - Foreign key constraint added to post_tags (post_entity_id)
+19-07-2024 22:58:43.863 [main] 9865 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-table-mc-post.xml::13::mikhail ran successfully in 50ms
+19-07-2024 22:58:43.912 [main] 9865 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-table-mc-post.xml::14::mikhail
+19-07-2024 22:58:43.965 [main] 9865 INFO  liquibase.changelog.log - Foreign key constraint added to post_reactions (post_entity_id)
+19-07-2024 22:58:44.014 [main] 9865 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-table-mc-post.xml::14::mikhail ran successfully in 98ms
+19-07-2024 22:58:44.177 [main] 9865 INFO  liquibase.util.log - UPDATE SUMMARY
+19-07-2024 22:58:44.179 [main] 9865 INFO  liquibase.util.log - Run:                         14
+19-07-2024 22:58:44.185 [main] 9865 INFO  liquibase.util.log - Previously run:               0
+19-07-2024 22:58:44.199 [main] 9865 INFO  liquibase.util.log - Filtered out:                 0
+19-07-2024 22:58:44.200 [main] 9865 INFO  liquibase.util.log - -------------------------------
+19-07-2024 22:58:44.203 [main] 9865 INFO  liquibase.util.log - Total change sets:           14
+19-07-2024 22:58:44.214 [main] 9865 INFO  liquibase.util.log - Update summary generated
+19-07-2024 22:58:44.244 [main] 9865 INFO  liquibase.command.log - Update command completed successfully.
+19-07-2024 22:58:44.250 [main] 9865 INFO  liquibase.ui.log - Liquibase: Update has been successful. Rows affected: 14
+19-07-2024 22:58:44.284 [main] 9865 INFO  liquibase.lockservice.log - Successfully released change log lock
+19-07-2024 22:58:44.295 [main] 9865 INFO  liquibase.command.log - Command execution complete
+19-07-2024 22:58:44.944 [main] 9865 INFO  o.h.jpa.internal.util.LogHelper.logPersistenceUnitInformation - HHH000204: Processing PersistenceUnitInfo [name: default]
+19-07-2024 22:58:45.417 [main] 9865 INFO  org.hibernate.Version.logVersion - HHH000412: Hibernate ORM core version 6.5.2.Final
+19-07-2024 22:58:45.628 [main] 9865 INFO  o.h.c.i.RegionFactoryInitiator.initiateService - HHH000026: Second-level cache disabled
+19-07-2024 22:58:47.481 [main] 9865 INFO  o.s.o.j.p.SpringPersistenceUnitInfo.addTransformer - No LoadTimeWeaver setup: ignoring JPA class transformer
+19-07-2024 22:58:52.232 [main] 9865 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator.initiateService - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+19-07-2024 22:58:52.246 [main] 9865 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.buildNativeEntityManagerFactory - Initialized JPA EntityManagerFactory for persistence unit 'default'
+19-07-2024 22:58:52.854 [main] 9865 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration.openEntityManagerInViewInterceptor - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+19-07-2024 22:58:56.486 [main] 9865 INFO  o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
+19-07-2024 22:58:56.563 [main] 9865 INFO  o.s.b.w.e.tomcat.TomcatWebServer.start - Tomcat started on port 8080 (http) with context path '/'
+19-07-2024 22:58:56.603 [main] 9865 INFO  c.social.mc_post.McPostApplication.logStarted - Started McPostApplication in 44.796 seconds (process running for 47.422)

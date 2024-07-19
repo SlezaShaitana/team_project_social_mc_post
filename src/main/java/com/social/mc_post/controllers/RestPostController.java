@@ -1,9 +1,6 @@
 package com.social.mc_post.controllers;
 
-import com.social.mc_post.dto.CommentDto;
-import com.social.mc_post.dto.LikeDto;
-import com.social.mc_post.dto.Pageable;
-import com.social.mc_post.dto.PostDto;
+import com.social.mc_post.dto.*;
 import org.aspectj.bridge.ICommand;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 public class RestPostController {
 
     @GetMapping("/post")
-    public ResponseEntity<?> handlerPost(){
-        return ResponseEntity.ok(new PostDto());
+    public ResponseEntity<?> handlerPost(PostSearchDto searchDto, Pageable pageable){
+        return ResponseEntity.ok(searchDto);
     }
 
     @PutMapping("/post")
@@ -74,5 +71,34 @@ public class RestPostController {
         return ResponseEntity.ok().build();
     }
 
-        
+    @DeleteMapping("/post/{id}/comment/{commentId}/like")
+    public ResponseEntity<?> handlerDeleteLikeComment(@PathVariable(value = "id") String id,
+                                                    @PathVariable(value = "commentId") String commentId){
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/post/{postId}/comment")
+    public ResponseEntity<?> getComments(@PathVariable(value = "postId") String postId,
+                                         CommentSearchDto searchDto, Pageable pageable){
+        return null;
+    }
+
+    @GetMapping("/post/{postId}/comment/{commentId}/subcomment")
+    public ResponseEntity<?> getSubComments(@PathVariable(value = "postId") String postId,
+                                         @PathVariable(value = "commentId") String commentId,
+                                         CommentSearchDto searchDto, Pageable pageable){
+        return null;
+    }
+
+    @GetMapping("/post/{id}")
+    public ResponseEntity<PostDto> getPost(@PathVariable(value = "id") String id){
+        return null;
+    }
+
+    @DeleteMapping("/post/{id}")
+    public ResponseEntity<PostDto> deletePost(@PathVariable(value = "id") String id){
+        return null;
+    }
+
+
 }

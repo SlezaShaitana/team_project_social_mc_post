@@ -7,6 +7,6 @@
   http://www.liquibase.org/xml/ns/dbchangelog
   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <include file="v1/create-table-like.xml" relativeToChangelogFile="true"/>
+    <include file="v1/create-table-mc-post.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

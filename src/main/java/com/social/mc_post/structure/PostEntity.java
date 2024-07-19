@@ -22,23 +22,30 @@ public class PostEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(name = "is_deleted")
     private Boolean isDeleted;
 
     private Date time;
 
+    @Column(name = "time_change")
     private Date timeChanged;
 
+    @Column(name = "author_id")
     private String authorId;
 
+    @Column(name = "title")
     private String title;
 
     @Enumerated(EnumType.STRING)
     private TypePost type;
 
+    @Column(name = "post_text")
     private String postText;
 
+    @Column(name = "is_blocked")
     private Boolean isBlocked;
 
+    @Column(name = "comments_count")
     private Integer commentsCount;
 
     @OneToMany
@@ -47,8 +54,10 @@ public class PostEntity {
     @OneToMany
     private List<ReactionEntity> reactions;
 
+    @Column(name = "my_reaction")
     private String myReaction;
 
+    @Column(name = "time_change", insertable=false, updatable=false)
     private Integer likeAmount;
 
     private Boolean myLike;
