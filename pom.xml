@@ -11,8 +11,9 @@
 	<groupId>com.example</groupId>
 	<artifactId>mc-post</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>mc-post</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Post service</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -28,6 +29,8 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<docker.image.prefix>mc-post</docker.image.prefix>
+		<start-class>com.social.mc_post.McPostApplication</start-class>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -59,8 +62,8 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 	<build>
+		<finalName>mc-post</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -86,7 +89,18 @@
 					<outputChangeLogFile>src/main/resources/liquibase-outputChangeLog.xml</outputChangeLogFile>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.xenoamess.docker</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.25</version>
+				<configuration>
+					<repository>social/mc-post</repository>
+					<tag>${project.version}</tag>
+					<buildArgs>
+						<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>
