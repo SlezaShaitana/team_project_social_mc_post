@@ -3,6 +3,7 @@ package com.social.mc_post.dto;
 import com.social.mc_post.dto.enums.TypeLike;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Setter
@@ -18,7 +19,7 @@ public class LikeDto {
 
     private String authorId;
 
-    private Date time;
+    private LocalDateTime time;
 
     private String itemId;
 

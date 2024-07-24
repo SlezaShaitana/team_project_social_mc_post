@@ -1,14 +1,13 @@
 package com.social.mc_post.structure;
 
-import com.social.mc_post.dto.ReactionDto;
-import com.social.mc_post.dto.TagDto;
 import com.social.mc_post.dto.enums.TypePost;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "post")
@@ -27,8 +26,9 @@ public class PostEntity {
 
     private Date time;
 
-    @Column(name = "time_change")
-    private Date timeChanged;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "time_changed")
+    private LocalDateTime timeChanged;
 
     @Column(name = "author_id")
     private String authorId;
@@ -48,23 +48,27 @@ public class PostEntity {
     @Column(name = "comments_count")
     private Integer commentsCount;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<TagEntity> tags;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<ReactionEntity> reactions;
 
     @Column(name = "my_reaction")
     private String myReaction;
 
-    @Column(name = "time_change", insertable=false, updatable=false)
+    @Column(name = "like_amount")
     private Integer likeAmount;
 
+    @Column(name = "my_like")
     private Boolean myLike;
 
+    @Column(name = "image_path")
     private String imagePath;
 
-    private Date publishDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "publish_date")
+    private LocalDateTime publishDate;
 
     public PostEntity(){}
 

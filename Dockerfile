@@ -1,13 +1,6 @@
 #
 # Build stage
 #
-#FROM maven:3.6.3-openjdk-17-slim AS build
-##COPY src /src
-##COPY pom.xml /mc-post
-#RUN mvn package -DskipTests
-#
-# Build stage
-#
 FROM maven:3.6.3-openjdk-17-slim AS build
 COPY src /home/app/src
 COPY pom.xml /home/app

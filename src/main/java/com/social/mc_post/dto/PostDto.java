@@ -1,15 +1,15 @@
 package com.social.mc_post.dto;
 
 import com.social.mc_post.dto.enums.TypePost;
+import com.social.mc_post.structure.ReactionEntity;
+import com.social.mc_post.structure.TagEntity;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @Builder
 public class PostDto {
 
@@ -19,7 +19,7 @@ public class PostDto {
 
     private Date time;
 
-    private Date timeChanged;
+    private LocalDateTime timeChanged;
 
     private String authorId;
 
@@ -33,9 +33,9 @@ public class PostDto {
 
     private Integer commentsCount;
 
-    private List<TagDto> tags;
+    private List<TagEntity> tags;
 
-    private List<ReactionDto> reactions;
+    private List<ReactionEntity> reactions;
 
     private String myReaction;
 
@@ -45,5 +45,5 @@ public class PostDto {
 
     private String imagePath;
 
-    private Date publishDate;
+    private LocalDateTime publishDate;
 }

@@ -1,37 +1,54 @@
 package com.social.mc_post.controllers;
 
 import com.social.mc_post.dto.*;
-import org.aspectj.bridge.ICommand;
+import com.social.mc_post.services.PostService;
+import com.social.mc_post.structure.PostEntity;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/v1")
+@Slf4j
 public class RestPostController {
 
+    private final PostService postService;
+
+    @Autowired
+    public RestPostController (PostService postService){
+        this.postService = postService;
+    }
+
     @GetMapping("/post")
-    public ResponseEntity<?> handlerPost(PostSearchDto searchDto, Pageable pageable){
-        return ResponseEntity.ok(searchDto);
+    public Page<PostEntity> handlerPost(PostSearchDto searchDto, PageableDto pageableDto){
+        return postService.getPosts(searchDto, pageableDto);
     }
 
     @PutMapping("/post")
-    public ResponseEntity<?> putPost(@RequestBody PostDto postDto){
-        return ResponseEntity.ok(postDto);
+    public PostDto handlerUpdatePost(@RequestBody PostDto postDto){
+        return postService.updatePost(postDto);
     }
 
     @PostMapping("/post")
-    public ResponseEntity<?> hendlerPost(@RequestBody PostDto postDto){
-        return ResponseEntity.ok(postDto);
+    @ResponseStatus(HttpStatus.CREATED)
+    public PostDto handlerCreatePost(@RequestBody PostDto postDto){
+        log.info(postDto.toString());
+        return postService.createPost(postDto);
     }
 
     @PutMapping("/post/{id}/comment")
-    public ResponseEntity<?> hendlerComment(@PathVariable(value = "id") String id){
+    public ResponseEntity<?> handlerComment(@PathVariable(value = "id") String id){
         return ResponseEntity.ok().body(id);
 
     }
 
     @PostMapping("/post/{id}/comment")
-    public ResponseEntity<?> hendlerPostComment(@PathVariable(value = "id") String id,
+    public ResponseEntity<?> handlerPostComment(@PathVariable(value = "id") String id,
                                                 @RequestBody CommentDto commentDto){
         return ResponseEntity.ok(commentDto);
     }
@@ -79,14 +96,14 @@ public class RestPostController {
 
     @GetMapping("/post/{postId}/comment")
     public ResponseEntity<?> getComments(@PathVariable(value = "postId") String postId,
-                                         CommentSearchDto searchDto, Pageable pageable){
+                                         CommentSearchDto searchDto, PageableDto pageableDto){
         return null;
     }
 
     @GetMapping("/post/{postId}/comment/{commentId}/subcomment")
     public ResponseEntity<?> getSubComments(@PathVariable(value = "postId") String postId,
                                          @PathVariable(value = "commentId") String commentId,
-                                         CommentSearchDto searchDto, Pageable pageable){
+                                         CommentSearchDto searchDto, PageableDto pageableDto){
         return null;
     }
 
@@ -96,8 +113,9 @@ public class RestPostController {
     }
 
     @DeleteMapping("/post/{id}")
-    public ResponseEntity<PostDto> deletePost(@PathVariable(value = "id") String id){
-        return null;
+
+    public void deletePost(@PathVariable(value = "id") String id){
+        postService.deletePost(id);
     }
 
 
