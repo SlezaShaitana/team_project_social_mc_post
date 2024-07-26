@@ -1,7 +1,6 @@
 package com.social.mc_post.dto.mappers;
 
 import com.social.mc_post.dto.PostDto;
-import com.social.mc_post.dto.TagDto;
 import com.social.mc_post.structure.PostEntity;
 
 public class PostMapper {

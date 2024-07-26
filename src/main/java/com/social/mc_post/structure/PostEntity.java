@@ -1,11 +1,13 @@
 package com.social.mc_post.structure;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.social.mc_post.dto.enums.TypePost;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -69,6 +71,10 @@ public class PostEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "publish_date")
     private LocalDateTime publishDate;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.REMOVE)
+    private List<CommentEntity> commentEntities = new ArrayList<>();
 
     public PostEntity(){}
 

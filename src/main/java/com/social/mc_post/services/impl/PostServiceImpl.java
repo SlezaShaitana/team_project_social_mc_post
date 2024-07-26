@@ -4,6 +4,7 @@ import com.social.mc_post.dto.PageableDto;
 import com.social.mc_post.dto.PostDto;
 import com.social.mc_post.dto.PostSearchDto;
 import com.social.mc_post.dto.mappers.PostMapper;
+import com.social.mc_post.exception.PostNotFoundException;
 import com.social.mc_post.repository.PostRepository;
 import com.social.mc_post.services.PostService;
 import com.social.mc_post.structure.PostEntity;
@@ -15,8 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -58,8 +57,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(String id) {
         PostEntity post = postRepository.findPostEntityById(id);
-        postRepository.delete(post);
-
-        log.info("Post delete by id: {}", post.getId());
+        if (post != null) {
+            postRepository.delete(post);
+            log.info("Post delete by id: {}", post.getId());
+        } else {
+            throw new PostNotFoundException("Post not found");
+        }
     }
 }

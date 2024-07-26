@@ -2,6 +2,7 @@ package com.social.mc_post.structure;
 
 import com.social.mc_post.dto.enums.TypeComment;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.util.Date;
 @Table(name = "comment")
 @Setter
 @Getter
+@Builder
 public class CommentEntity {
 
     @Id

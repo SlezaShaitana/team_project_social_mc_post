@@ -1,6 +1,7 @@
 package com.social.mc_post.controllers;
 
 import com.social.mc_post.dto.*;
+import com.social.mc_post.services.CommentService;
 import com.social.mc_post.services.PostService;
 import com.social.mc_post.structure.PostEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +19,12 @@ import java.util.Optional;
 public class RestPostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
     @Autowired
-    public RestPostController (PostService postService){
+    public RestPostController (PostService postService, CommentService commentService){
         this.postService = postService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/post")
@@ -48,9 +51,9 @@ public class RestPostController {
     }
 
     @PostMapping("/post/{id}/comment")
-    public ResponseEntity<?> handlerPostComment(@PathVariable(value = "id") String id,
+    public CommentDto handlerPostComment(@PathVariable(value = "id") String id,
                                                 @RequestBody CommentDto commentDto){
-        return ResponseEntity.ok(commentDto);
+        return commentService.createCommentPost(commentDto, id);
     }
 
     @PutMapping("/post/{id}/comment/{commentId}")
@@ -113,7 +116,7 @@ public class RestPostController {
     }
 
     @DeleteMapping("/post/{id}")
-
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePost(@PathVariable(value = "id") String id){
         postService.deletePost(id);
     }
