@@ -31,9 +31,9 @@ services:
       POSTGRES_PASSWORD: mc_post
       POSTGRES_DB: post_db
   mc-post:
-#    image: mc_post:latest
+    image: mc_post:latest
 #    build:
-      context: .
+#      context: .
     container_name: post-service
     ports:
       - 80:8080
