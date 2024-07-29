@@ -56,12 +56,15 @@ public class RestPostController {
         return commentService.createCommentPost(commentDto, id);
     }
 
+    //TODO  Добавить реализацию добавления сабкоментария
     @PutMapping("/post/{id}/comment/{commentId}")
-    public ResponseEntity<?> handlerPostSubComment(@PathVariable(value = "id") String id,
-                                                   @PathVariable(value = "commentId") String commentId,
-                                                   @RequestBody CommentDto commentDto){
-        return ResponseEntity.ok(commentDto);
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentDto handlerPostSubComment(@PathVariable(value = "id") String id,
+                                      @PathVariable(value = "commentId") String commentId,
+                                      @RequestBody CommentDto subComment){
+        return commentService.createSubCommentPost(id, commentId, subComment);
     }
+
 
     @DeleteMapping("/post/{id}/comment/{commentId}")
     public ResponseEntity<?> handlerDeleteComment(@PathVariable(value = "id") String id,
@@ -74,10 +77,12 @@ public class RestPostController {
         return ResponseEntity.ok().build();
     }
 
+    //TODO Create like post
     @PostMapping("/post/{id}/like")
-    public ResponseEntity<?> handlerLike(@PathVariable(value = "id") String id,
+    @ResponseStatus(HttpStatus.CREATED)
+    public LikeDto handlerLike(@PathVariable(value = "id") String id,
                                          @RequestBody LikeDto likeDto){
-        return ResponseEntity.ok(likeDto);
+        return postService.createLikePost(id, likeDto);
     }
 
     @DeleteMapping("/post/{id}/like")
@@ -110,11 +115,14 @@ public class RestPostController {
         return null;
     }
 
+    //TODO Get post by id
     @GetMapping("/post/{id}")
-    public ResponseEntity<PostDto> getPost(@PathVariable(value = "id") String id){
-        return null;
+    public PostDto getPost(@PathVariable(value = "id") String id){
+        return postService.getPostById(id);
     }
 
+
+    //TODO Delete post by id
     @DeleteMapping("/post/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePost(@PathVariable(value = "id") String id){

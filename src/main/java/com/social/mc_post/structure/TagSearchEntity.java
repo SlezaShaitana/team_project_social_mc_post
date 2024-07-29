@@ -14,8 +14,8 @@ import java.util.UUID;
 public class TagSearchEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     private Boolean isDeleted;
 

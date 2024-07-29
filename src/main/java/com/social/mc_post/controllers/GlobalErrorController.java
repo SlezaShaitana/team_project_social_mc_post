@@ -16,6 +16,6 @@ public class GlobalErrorController {
     @ExceptionHandler(PostNotFoundException.class)
     public ResponseEntity<ErrorPost> postNotFoundException(PostNotFoundException ex){
         log.error(ex.getMessage());
-        return new ResponseEntity<>(new ErrorPost(HttpStatus.NOT_FOUND.value(), ex.getMessage()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ErrorPost(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 }

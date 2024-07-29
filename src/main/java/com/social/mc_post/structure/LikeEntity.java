@@ -2,16 +2,18 @@ package com.social.mc_post.structure;
 
 import com.social.mc_post.dto.enums.TypeLike;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
 
 @Entity
-@Table(name = "like")
+@Table(name = "like_post")
 @Setter
 @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class LikeEntity {
 
     @Id

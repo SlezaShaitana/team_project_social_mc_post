@@ -31,11 +31,12 @@ services:
       POSTGRES_PASSWORD: mc_post
       POSTGRES_DB: post_db
   mc-post:
+    image: mc_post:latest
     build:
       context: .
     container_name: post-service
     ports:
-      - 8080:8585
+      - 80:8080
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://mc_post_db:5432/post_db
     depends_on:

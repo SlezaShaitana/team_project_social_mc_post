@@ -19,7 +19,7 @@ public class LikeDto {
 
     private String authorId;
 
-    private LocalDateTime time;
+    private Date time;
 
     private String itemId;
 

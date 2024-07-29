@@ -2,15 +2,15 @@ package com.social.mc_post.structure;
 
 import com.social.mc_post.dto.enums.TypeComment;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 @Entity
 @Table(name = "comment")
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class CommentEntity {
 
@@ -56,4 +56,6 @@ public class CommentEntity {
 
     @Column(name = "image_path")
     private String imagePath;
+
+
 }
