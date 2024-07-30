@@ -18,4 +18,5 @@ public interface PostService {
     void deletePost(String id);
 
     LikeDto createLikePost(String idPost, LikeDto likeDto);
+    Boolean checkPost(String postId);
 }

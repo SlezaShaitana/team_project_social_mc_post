@@ -5,6 +5,9 @@ import com.social.mc_post.dto.PostDto;
 import com.social.mc_post.structure.CommentEntity;
 import com.social.mc_post.structure.PostEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CommentMapper {
 
     public static CommentDto mapToCommentDto(CommentEntity commentEntity){
@@ -44,4 +47,53 @@ public class CommentMapper {
                 .imagePath(commentDto.getImagePath())
                 .build();
     }
+
+    public static List<CommentEntity> mapToCommentEntityList(List<CommentDto> commentDto){
+        List<CommentEntity> commentEntities = new ArrayList<>();
+        for (CommentDto comment : commentDto){
+            CommentEntity newComment = CommentEntity.builder()
+                    .id(comment.getId())
+                    .isDeleted(comment.getIsDeleted())
+                    .time(comment.getTime())
+                    .timeChanged(comment.getTimeChanged())
+                    .authorId(comment.getAuthorId())
+                    .parentId(comment.getParentId())
+                    .postId(comment.getPostId())
+                    .commentText(comment.getCommentText())
+                    .commentType(comment.getCommentType())
+                    .isBlocked(comment.getIsBlocked())
+                    .likeAmount(comment.getLikeAmount())
+                    .myLike(comment.getMyLike())
+                    .commentsCount(comment.getCommentsCount())
+                    .imagePath(comment.getImagePath())
+                    .build();
+            commentEntities.add(newComment);
+        }
+       return commentEntities;
+    }
+
+    public static List<CommentDto> mapToCommentDtoList(List<CommentEntity> commentEntities){
+        List<CommentDto> commentDto = new ArrayList<>();
+        for (CommentEntity comment : commentEntities){
+            CommentDto newComment = CommentDto.builder()
+                    .id(comment.getId())
+                    .isDeleted(comment.getIsDeleted())
+                    .time(comment.getTime())
+                    .timeChanged(comment.getTimeChanged())
+                    .authorId(comment.getAuthorId())
+                    .parentId(comment.getParentId())
+                    .postId(comment.getPostId())
+                    .commentText(comment.getCommentText())
+                    .commentType(comment.getCommentType())
+                    .isBlocked(comment.getIsBlocked())
+                    .likeAmount(comment.getLikeAmount())
+                    .myLike(comment.getMyLike())
+                    .commentsCount(comment.getCommentsCount())
+                    .imagePath(comment.getImagePath())
+                    .build();
+            commentDto.add(newComment);
+        }
+        return commentDto;
+    }
+
 }

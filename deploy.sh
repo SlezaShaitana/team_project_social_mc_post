@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Pull new changes
-git pull
+#git pull
 
 # Prepare Jar
 mvn clean

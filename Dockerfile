@@ -19,6 +19,4 @@ COPY --from=build ${JAR_FILE} /mc-post.jar
 
 #COPY ${JAR_FILE} /mc-post.jar
 EXPOSE 8080
-MAINTAINER popov
-
 ENTRYPOINT ["java","-jar","/mc-post.jar"]

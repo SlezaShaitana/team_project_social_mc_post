@@ -11036,3 +11036,806 @@ Caused by: liquibase.exception.ValidationFailedException: Validation Failed:
 	at liquibase.command.core.helpers.DatabaseChangelogCommandStep.run(DatabaseChangelogCommandStep.java:92)
 	at liquibase.command.CommandScope.execute(CommandScope.java:219)
 	... 113 common frames omitted
+30-07-2024 12:26:42.899 [main] 5732 INFO  c.social.mc_post.McPostApplication.logStarting - Starting McPostApplication using Java 17.0.11 with PID 5732 (/home/mikhail/Документы/command-project/mc-post/target/classes started by mikhail in /home/mikhail/Документы/command-project/mc-post)
+30-07-2024 12:26:42.941 [main] 5732 INFO  c.social.mc_post.McPostApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+30-07-2024 12:26:52.462 [main] 5732 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+30-07-2024 12:26:52.951 [main] 5732 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 435 ms. Found 7 JPA repository interfaces.
+30-07-2024 12:27:00.996 [main] 5732 INFO  o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+30-07-2024 12:27:01.069 [main] 5732 INFO  o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+30-07-2024 12:27:01.141 [main] 5732 INFO  o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+30-07-2024 12:27:01.143 [main] 5732 INFO  o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.25]
+30-07-2024 12:27:01.463 [main] 5732 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+30-07-2024 12:27:01.471 [main] 5732 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 17192 ms
+30-07-2024 12:27:04.055 [main] 5732 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Starting...
+30-07-2024 12:27:07.556 [main] 5732 INFO  com.zaxxer.hikari.pool.HikariPool.checkFailFast - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@7fbd3e75
+30-07-2024 12:27:07.570 [main] 5732 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Start completed.
+30-07-2024 12:27:09.063 [main] 5732 INFO  liquibase.database.log - Set default schema name to public
+30-07-2024 12:27:14.425 [main] 5732 INFO  liquibase.changelog.log - Creating database history table with name: public.databasechangelog
+30-07-2024 12:27:14.722 [main] 5732 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+30-07-2024 12:27:15.806 [main] 5732 INFO  liquibase.lockservice.log - Successfully acquired change log lock
+30-07-2024 12:27:15.812 [main] 5732 INFO  liquibase.command.log - Using deploymentId: 2331635811
+30-07-2024 12:27:15.820 [main] 5732 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+30-07-2024 12:27:16.022 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::1::mikhail
+30-07-2024 12:27:16.223 [main] 5732 INFO  liquibase.changelog.log - Table comment created
+30-07-2024 12:27:16.250 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::1::mikhail ran successfully in 216ms
+30-07-2024 12:27:16.302 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::2::mikhail
+30-07-2024 12:27:16.512 [main] 5732 INFO  liquibase.changelog.log - Table comment_search created
+30-07-2024 12:27:16.548 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::2::mikhail ran successfully in 241ms
+30-07-2024 12:27:16.581 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::3::mikhail
+30-07-2024 12:27:16.681 [main] 5732 INFO  liquibase.changelog.log - Table like_post created
+30-07-2024 12:27:16.704 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::3::mikhail ran successfully in 119ms
+30-07-2024 12:27:16.783 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::4::mikhail
+30-07-2024 12:27:16.947 [main] 5732 INFO  liquibase.changelog.log - Table post created
+30-07-2024 12:27:16.970 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::4::mikhail ran successfully in 177ms
+30-07-2024 12:27:17.028 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::5::mikhail
+30-07-2024 12:27:17.125 [main] 5732 INFO  liquibase.changelog.log - Table post_comment_entities created
+30-07-2024 12:27:17.202 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::5::mikhail ran successfully in 172ms
+30-07-2024 12:27:17.267 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::6::mikhail
+30-07-2024 12:27:17.369 [main] 5732 INFO  liquibase.changelog.log - Table post_reactions created
+30-07-2024 12:27:17.534 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::6::mikhail ran successfully in 265ms
+30-07-2024 12:27:17.637 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::7::mikhail
+30-07-2024 12:27:17.812 [main] 5732 INFO  liquibase.changelog.log - Table post_tags created
+30-07-2024 12:27:17.888 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::7::mikhail ran successfully in 239ms
+30-07-2024 12:27:17.946 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::8::mikhail
+30-07-2024 12:27:18.067 [main] 5732 INFO  liquibase.changelog.log - Unique constraint added to post_comment_entities(comment_entities_id)
+30-07-2024 12:27:18.099 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::8::mikhail ran successfully in 151ms
+30-07-2024 12:27:18.212 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::9::mikhail
+30-07-2024 12:27:18.322 [main] 5732 INFO  liquibase.changelog.log - Unique constraint added to post_reactions(reactions_id)
+30-07-2024 12:27:18.365 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::9::mikhail ran successfully in 147ms
+30-07-2024 12:27:18.510 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::10::mikhail
+30-07-2024 12:27:18.654 [main] 5732 INFO  liquibase.changelog.log - Unique constraint added to post_tags(tags_id)
+30-07-2024 12:27:18.696 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::10::mikhail ran successfully in 183ms
+30-07-2024 12:27:18.744 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::11::mikhail
+30-07-2024 12:27:19.043 [main] 5732 INFO  liquibase.changelog.log - Table reaction created
+30-07-2024 12:27:19.084 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::11::mikhail ran successfully in 336ms
+30-07-2024 12:27:19.187 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::12::mikhail
+30-07-2024 12:27:19.465 [main] 5732 INFO  liquibase.changelog.log - Table tag_search created
+30-07-2024 12:27:19.516 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::12::mikhail ran successfully in 320ms
+30-07-2024 12:27:19.574 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::13::mikhail
+30-07-2024 12:27:19.815 [main] 5732 INFO  liquibase.changelog.log - Table tags created
+30-07-2024 12:27:19.881 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::13::mikhail ran successfully in 305ms
+30-07-2024 12:27:19.939 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::14::mikhail
+30-07-2024 12:27:19.957 [main] 5732 INFO  liquibase.changelog.log - Foreign key constraint added to post_reactions (reactions_id)
+30-07-2024 12:27:20.025 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::14::mikhail ran successfully in 83ms
+30-07-2024 12:27:20.127 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::15::mikhail
+30-07-2024 12:27:20.140 [main] 5732 INFO  liquibase.changelog.log - Foreign key constraint added to post_tags (tags_id)
+30-07-2024 12:27:20.203 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::15::mikhail ran successfully in 72ms
+30-07-2024 12:27:20.238 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::16::mikhail
+30-07-2024 12:27:20.253 [main] 5732 INFO  liquibase.changelog.log - Foreign key constraint added to post_tags (post_entity_id)
+30-07-2024 12:27:20.269 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::16::mikhail ran successfully in 29ms
+30-07-2024 12:27:20.315 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::17::mikhail
+30-07-2024 12:27:20.329 [main] 5732 INFO  liquibase.changelog.log - Foreign key constraint added to post_comment_entities (comment_entities_id)
+30-07-2024 12:27:20.413 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::17::mikhail ran successfully in 96ms
+30-07-2024 12:27:20.549 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::18::mikhail
+30-07-2024 12:27:20.594 [main] 5732 INFO  liquibase.changelog.log - Foreign key constraint added to post_reactions (post_entity_id)
+30-07-2024 12:27:20.939 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::18::mikhail ran successfully in 386ms
+30-07-2024 12:27:21.205 [main] 5732 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::19::mikhail
+30-07-2024 12:27:21.217 [main] 5732 INFO  liquibase.changelog.log - Foreign key constraint added to post_comment_entities (post_entity_id)
+30-07-2024 12:27:21.325 [main] 5732 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::19::mikhail ran successfully in 115ms
+30-07-2024 12:27:21.403 [main] 5732 INFO  liquibase.util.log - UPDATE SUMMARY
+30-07-2024 12:27:21.415 [main] 5732 INFO  liquibase.util.log - Run:                         19
+30-07-2024 12:27:21.416 [main] 5732 INFO  liquibase.util.log - Previously run:               0
+30-07-2024 12:27:21.419 [main] 5732 INFO  liquibase.util.log - Filtered out:                 0
+30-07-2024 12:27:21.421 [main] 5732 INFO  liquibase.util.log - -------------------------------
+30-07-2024 12:27:21.432 [main] 5732 INFO  liquibase.util.log - Total change sets:           19
+30-07-2024 12:27:21.436 [main] 5732 INFO  liquibase.util.log - Update summary generated
+30-07-2024 12:27:21.461 [main] 5732 INFO  liquibase.command.log - Update command completed successfully.
+30-07-2024 12:27:21.463 [main] 5732 INFO  liquibase.ui.log - Liquibase: Update has been successful. Rows affected: 19
+30-07-2024 12:27:21.509 [main] 5732 INFO  liquibase.lockservice.log - Successfully released change log lock
+30-07-2024 12:27:21.515 [main] 5732 INFO  liquibase.command.log - Command execution complete
+30-07-2024 12:27:22.627 [main] 5732 INFO  o.h.jpa.internal.util.LogHelper.logPersistenceUnitInformation - HHH000204: Processing PersistenceUnitInfo [name: default]
+30-07-2024 12:27:23.960 [main] 5732 INFO  org.hibernate.Version.logVersion - HHH000412: Hibernate ORM core version 6.5.2.Final
+30-07-2024 12:27:24.443 [main] 5732 INFO  o.h.c.i.RegionFactoryInitiator.initiateService - HHH000026: Second-level cache disabled
+30-07-2024 12:27:28.265 [main] 5732 INFO  o.s.o.j.p.SpringPersistenceUnitInfo.addTransformer - No LoadTimeWeaver setup: ignoring JPA class transformer
+30-07-2024 12:27:36.552 [main] 5732 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator.initiateService - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+30-07-2024 12:27:36.568 [main] 5732 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.buildNativeEntityManagerFactory - Initialized JPA EntityManagerFactory for persistence unit 'default'
+30-07-2024 12:27:38.262 [main] 5732 INFO  o.s.d.j.r.query.QueryEnhancerFactory.<clinit> - Hibernate is in classpath; If applicable, HQL parser will be used.
+30-07-2024 12:27:40.995 [main] 5732 WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext.refresh - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'restPostController' defined in file [/home/mikhail/Документы/command-project/mc-post/target/classes/com/social/mc_post/controllers/RestPostController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'postServiceImpl' defined in file [/home/mikhail/Документы/command-project/mc-post/target/classes/com/social/mc_post/services/impl/PostServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'postRepository' defined in com.social.mc_post.repository.PostRepository defined in @EnableJpaRepositories declared on McPostApplication: Could not create query for public abstract jakarta.persistence.criteria.Predicate org.springframework.data.jpa.domain.Specification.toPredicate(jakarta.persistence.criteria.Root,jakarta.persistence.criteria.CriteriaQuery,jakarta.persistence.criteria.CriteriaBuilder); Reason: Failed to create query for method public abstract jakarta.persistence.criteria.Predicate org.springframework.data.jpa.domain.Specification.toPredicate(jakarta.persistence.criteria.Root,jakarta.persistence.criteria.CriteriaQuery,jakarta.persistence.criteria.CriteriaBuilder); No property 'toPredicate' found for type 'PostEntity'
+30-07-2024 12:27:40.997 [main] 5732 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.destroy - Closing JPA EntityManagerFactory for persistence unit 'default'
+30-07-2024 12:27:41.004 [main] 5732 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown initiated...
+30-07-2024 12:27:41.027 [main] 5732 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown completed.
+30-07-2024 12:27:41.063 [main] 5732 INFO  o.a.catalina.core.StandardService.log - Stopping service [Tomcat]
+30-07-2024 12:27:41.145 [main] 5732 INFO  o.s.b.a.l.ConditionEvaluationReportLogger.logMessage - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+30-07-2024 12:27:41.368 [main] 5732 ERROR o.s.boot.SpringApplication.reportFailure - Application run failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'restPostController' defined in file [/home/mikhail/Документы/command-project/mc-post/target/classes/com/social/mc_post/controllers/RestPostController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'postServiceImpl' defined in file [/home/mikhail/Документы/command-project/mc-post/target/classes/com/social/mc_post/services/impl/PostServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'postRepository' defined in com.social.mc_post.repository.PostRepository defined in @EnableJpaRepositories declared on McPostApplication: Could not create query for public abstract jakarta.persistence.criteria.Predicate org.springframework.data.jpa.domain.Specification.toPredicate(jakarta.persistence.criteria.Root,jakarta.persistence.criteria.CriteriaQuery,jakarta.persistence.criteria.CriteriaBuilder); Reason: Failed to create query for method public abstract jakarta.persistence.criteria.Predicate org.springframework.data.jpa.domain.Specification.toPredicate(jakarta.persistence.criteria.Root,jakarta.persistence.criteria.CriteriaQuery,jakarta.persistence.criteria.CriteriaBuilder); No property 'toPredicate' found for type 'PostEntity'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:795)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:237)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1357)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1194)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:975)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:962)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352)
+	at com.social.mc_post.McPostApplication.main(McPostApplication.java:19)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'postServiceImpl' defined in file [/home/mikhail/Документы/command-project/mc-post/target/classes/com/social/mc_post/services/impl/PostServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'postRepository' defined in com.social.mc_post.repository.PostRepository defined in @EnableJpaRepositories declared on McPostApplication: Could not create query for public abstract jakarta.persistence.criteria.Predicate org.springframework.data.jpa.domain.Specification.toPredicate(jakarta.persistence.criteria.Root,jakarta.persistence.criteria.CriteriaQuery,jakarta.persistence.criteria.CriteriaBuilder); Reason: Failed to create query for method public abstract jakarta.persistence.criteria.Predicate org.springframework.data.jpa.domain.Specification.toPredicate(jakarta.persistence.criteria.Root,jakarta.persistence.criteria.CriteriaQuery,jakarta.persistence.criteria.CriteriaBuilder); No property 'toPredicate' found for type 'PostEntity'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:795)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:237)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1357)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1194)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:904)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:782)
+	... 19 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'postRepository' defined in com.social.mc_post.repository.PostRepository defined in @EnableJpaRepositories declared on McPostApplication: Could not create query for public abstract jakarta.persistence.criteria.Predicate org.springframework.data.jpa.domain.Specification.toPredicate(jakarta.persistence.criteria.Root,jakarta.persistence.criteria.CriteriaQuery,jakarta.persistence.criteria.CriteriaBuilder); Reason: Failed to create query for method public abstract jakarta.persistence.criteria.Predicate org.springframework.data.jpa.domain.Specification.toPredicate(jakarta.persistence.criteria.Root,jakarta.persistence.criteria.CriteriaQuery,jakarta.persistence.criteria.CriteriaBuilder); No property 'toPredicate' found for type 'PostEntity'
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1788)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:904)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:782)
+	... 33 common frames omitted
+Caused by: org.springframework.data.repository.query.QueryCreationException: Could not create query for public abstract jakarta.persistence.criteria.Predicate org.springframework.data.jpa.domain.Specification.toPredicate(jakarta.persistence.criteria.Root,jakarta.persistence.criteria.CriteriaQuery,jakarta.persistence.criteria.CriteriaBuilder); Reason: Failed to create query for method public abstract jakarta.persistence.criteria.Predicate org.springframework.data.jpa.domain.Specification.toPredicate(jakarta.persistence.criteria.Root,jakarta.persistence.criteria.CriteriaQuery,jakarta.persistence.criteria.CriteriaBuilder); No property 'toPredicate' found for type 'PostEntity'
+	at org.springframework.data.repository.query.QueryCreationException.create(QueryCreationException.java:101)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.lookupQuery(QueryExecutorMethodInterceptor.java:115)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.mapMethodsToQuery(QueryExecutorMethodInterceptor.java:99)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.lambda$new$0(QueryExecutorMethodInterceptor.java:88)
+	at java.base/java.util.Optional.map(Optional.java:260)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.<init>(QueryExecutorMethodInterceptor.java:88)
+	at org.springframework.data.repository.core.support.RepositoryFactorySupport.getRepository(RepositoryFactorySupport.java:357)
+	at org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport.lambda$afterPropertiesSet$5(RepositoryFactoryBeanSupport.java:286)
+	at org.springframework.data.util.Lazy.getNullable(Lazy.java:135)
+	at org.springframework.data.util.Lazy.get(Lazy.java:113)
+	at org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport.afterPropertiesSet(RepositoryFactoryBeanSupport.java:292)
+	at org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean.afterPropertiesSet(JpaRepositoryFactoryBean.java:132)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1835)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1784)
+	... 44 common frames omitted
+Caused by: java.lang.IllegalArgumentException: Failed to create query for method public abstract jakarta.persistence.criteria.Predicate org.springframework.data.jpa.domain.Specification.toPredicate(jakarta.persistence.criteria.Root,jakarta.persistence.criteria.CriteriaQuery,jakarta.persistence.criteria.CriteriaBuilder); No property 'toPredicate' found for type 'PostEntity'
+	at org.springframework.data.jpa.repository.query.PartTreeJpaQuery.<init>(PartTreeJpaQuery.java:107)
+	at org.springframework.data.jpa.repository.query.JpaQueryLookupStrategy$CreateQueryLookupStrategy.resolveQuery(JpaQueryLookupStrategy.java:124)
+	at org.springframework.data.jpa.repository.query.JpaQueryLookupStrategy$CreateIfNotFoundQueryLookupStrategy.resolveQuery(JpaQueryLookupStrategy.java:258)
+	at org.springframework.data.jpa.repository.query.JpaQueryLookupStrategy$AbstractQueryLookupStrategy.resolveQuery(JpaQueryLookupStrategy.java:95)
+	at org.springframework.data.repository.core.support.QueryExecutorMethodInterceptor.lookupQuery(QueryExecutorMethodInterceptor.java:111)
+	... 56 common frames omitted
+Caused by: org.springframework.data.mapping.PropertyReferenceException: No property 'toPredicate' found for type 'PostEntity'
+	at org.springframework.data.mapping.PropertyPath.<init>(PropertyPath.java:94)
+	at org.springframework.data.mapping.PropertyPath.create(PropertyPath.java:455)
+	at org.springframework.data.mapping.PropertyPath.create(PropertyPath.java:431)
+	at org.springframework.data.mapping.PropertyPath.lambda$from$0(PropertyPath.java:384)
+	at java.base/java.util.concurrent.ConcurrentMap.computeIfAbsent(ConcurrentMap.java:330)
+	at org.springframework.data.mapping.PropertyPath.from(PropertyPath.java:366)
+	at org.springframework.data.mapping.PropertyPath.from(PropertyPath.java:344)
+	at org.springframework.data.repository.query.parser.Part.<init>(Part.java:81)
+	at org.springframework.data.repository.query.parser.PartTree$OrPart.lambda$new$0(PartTree.java:259)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:921)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:682)
+	at org.springframework.data.repository.query.parser.PartTree$OrPart.<init>(PartTree.java:260)
+	at org.springframework.data.repository.query.parser.PartTree$Predicate.lambda$new$0(PartTree.java:389)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:921)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:682)
+	at org.springframework.data.repository.query.parser.PartTree$Predicate.<init>(PartTree.java:390)
+	at org.springframework.data.repository.query.parser.PartTree.<init>(PartTree.java:100)
+	at org.springframework.data.jpa.repository.query.PartTreeJpaQuery.<init>(PartTreeJpaQuery.java:101)
+	... 60 common frames omitted
+30-07-2024 12:45:43.520 [main] 6357 INFO  c.social.mc_post.McPostApplication.logStarting - Starting McPostApplication using Java 17.0.11 with PID 6357 (/home/mikhail/Документы/command-project/mc-post/target/classes started by mikhail in /home/mikhail/Документы/command-project/mc-post)
+30-07-2024 12:45:43.537 [main] 6357 INFO  c.social.mc_post.McPostApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+30-07-2024 12:45:46.342 [main] 6357 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+30-07-2024 12:45:46.847 [main] 6357 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 468 ms. Found 7 JPA repository interfaces.
+30-07-2024 12:45:50.106 [main] 6357 INFO  o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+30-07-2024 12:45:50.142 [main] 6357 INFO  o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+30-07-2024 12:45:50.152 [main] 6357 INFO  o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+30-07-2024 12:45:50.153 [main] 6357 INFO  o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.25]
+30-07-2024 12:45:50.411 [main] 6357 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+30-07-2024 12:45:50.419 [main] 6357 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 6461 ms
+30-07-2024 12:45:51.101 [main] 6357 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Starting...
+30-07-2024 12:45:51.717 [main] 6357 INFO  com.zaxxer.hikari.pool.HikariPool.checkFailFast - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6d6f6860
+30-07-2024 12:45:51.725 [main] 6357 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Start completed.
+30-07-2024 12:45:52.277 [main] 6357 INFO  liquibase.database.log - Set default schema name to public
+30-07-2024 12:45:54.255 [main] 6357 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+30-07-2024 12:45:54.541 [main] 6357 INFO  liquibase.ui.log - Database is up to date, no changesets to execute
+30-07-2024 12:45:54.555 [main] 6357 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+30-07-2024 12:45:54.603 [main] 6357 INFO  liquibase.util.log - UPDATE SUMMARY
+30-07-2024 12:45:54.605 [main] 6357 INFO  liquibase.util.log - Run:                          0
+30-07-2024 12:45:54.607 [main] 6357 INFO  liquibase.util.log - Previously run:              19
+30-07-2024 12:45:54.609 [main] 6357 INFO  liquibase.util.log - Filtered out:                 0
+30-07-2024 12:45:54.612 [main] 6357 INFO  liquibase.util.log - -------------------------------
+30-07-2024 12:45:54.614 [main] 6357 INFO  liquibase.util.log - Total change sets:           19
+30-07-2024 12:45:54.618 [main] 6357 INFO  liquibase.util.log - Update summary generated
+30-07-2024 12:45:54.718 [main] 6357 INFO  liquibase.lockservice.log - Successfully released change log lock
+30-07-2024 12:45:54.725 [main] 6357 INFO  liquibase.command.log - Command execution complete
+30-07-2024 12:45:55.167 [main] 6357 INFO  o.h.jpa.internal.util.LogHelper.logPersistenceUnitInformation - HHH000204: Processing PersistenceUnitInfo [name: default]
+30-07-2024 12:45:55.422 [main] 6357 INFO  org.hibernate.Version.logVersion - HHH000412: Hibernate ORM core version 6.5.2.Final
+30-07-2024 12:45:55.571 [main] 6357 INFO  o.h.c.i.RegionFactoryInitiator.initiateService - HHH000026: Second-level cache disabled
+30-07-2024 12:45:56.797 [main] 6357 INFO  o.s.o.j.p.SpringPersistenceUnitInfo.addTransformer - No LoadTimeWeaver setup: ignoring JPA class transformer
+30-07-2024 12:46:00.601 [main] 6357 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator.initiateService - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+30-07-2024 12:46:00.614 [main] 6357 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.buildNativeEntityManagerFactory - Initialized JPA EntityManagerFactory for persistence unit 'default'
+30-07-2024 12:46:01.607 [main] 6357 INFO  o.s.d.j.r.query.QueryEnhancerFactory.<clinit> - Hibernate is in classpath; If applicable, HQL parser will be used.
+30-07-2024 12:46:03.353 [main] 6357 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration.openEntityManagerInViewInterceptor - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+30-07-2024 12:46:04.845 [main] 6357 INFO  o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
+30-07-2024 12:46:04.912 [main] 6357 INFO  o.s.b.w.e.tomcat.TomcatWebServer.start - Tomcat started on port 8080 (http) with context path '/'
+30-07-2024 12:46:04.949 [main] 6357 INFO  c.social.mc_post.McPostApplication.logStarted - Started McPostApplication in 24.051 seconds (process running for 27.541)
+30-07-2024 13:19:05.209 [SpringApplicationShutdownHook] 6357 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.destroy - Closing JPA EntityManagerFactory for persistence unit 'default'
+30-07-2024 13:19:05.217 [SpringApplicationShutdownHook] 6357 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown initiated...
+30-07-2024 13:19:05.239 [SpringApplicationShutdownHook] 6357 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown completed.
+30-07-2024 13:19:22.787 [main] 6925 INFO  c.social.mc_post.McPostApplication.logStarting - Starting McPostApplication using Java 17.0.11 with PID 6925 (/home/mikhail/Документы/command-project/mc-post/target/classes started by mikhail in /home/mikhail/Документы/command-project/mc-post)
+30-07-2024 13:19:22.804 [main] 6925 INFO  c.social.mc_post.McPostApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+30-07-2024 13:19:26.051 [main] 6925 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+30-07-2024 13:19:26.460 [main] 6925 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 367 ms. Found 7 JPA repository interfaces.
+30-07-2024 13:19:29.599 [main] 6925 INFO  o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+30-07-2024 13:19:29.632 [main] 6925 INFO  o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+30-07-2024 13:19:29.641 [main] 6925 INFO  o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+30-07-2024 13:19:29.643 [main] 6925 INFO  o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.25]
+30-07-2024 13:19:29.879 [main] 6925 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+30-07-2024 13:19:29.899 [main] 6925 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 6767 ms
+30-07-2024 13:19:30.535 [main] 6925 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Starting...
+30-07-2024 13:19:31.167 [main] 6925 INFO  com.zaxxer.hikari.pool.HikariPool.checkFailFast - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@a85644c
+30-07-2024 13:19:31.176 [main] 6925 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Start completed.
+30-07-2024 13:19:31.815 [main] 6925 INFO  liquibase.database.log - Set default schema name to public
+30-07-2024 13:19:33.688 [main] 6925 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+30-07-2024 13:19:33.936 [main] 6925 INFO  liquibase.ui.log - Database is up to date, no changesets to execute
+30-07-2024 13:19:33.943 [main] 6925 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+30-07-2024 13:19:33.980 [main] 6925 INFO  liquibase.util.log - UPDATE SUMMARY
+30-07-2024 13:19:33.981 [main] 6925 INFO  liquibase.util.log - Run:                          0
+30-07-2024 13:19:33.983 [main] 6925 INFO  liquibase.util.log - Previously run:              19
+30-07-2024 13:19:33.983 [main] 6925 INFO  liquibase.util.log - Filtered out:                 0
+30-07-2024 13:19:33.984 [main] 6925 INFO  liquibase.util.log - -------------------------------
+30-07-2024 13:19:33.984 [main] 6925 INFO  liquibase.util.log - Total change sets:           19
+30-07-2024 13:19:33.987 [main] 6925 INFO  liquibase.util.log - Update summary generated
+30-07-2024 13:19:34.084 [main] 6925 INFO  liquibase.lockservice.log - Successfully released change log lock
+30-07-2024 13:19:34.091 [main] 6925 INFO  liquibase.command.log - Command execution complete
+30-07-2024 13:19:34.404 [main] 6925 INFO  o.h.jpa.internal.util.LogHelper.logPersistenceUnitInformation - HHH000204: Processing PersistenceUnitInfo [name: default]
+30-07-2024 13:19:34.567 [main] 6925 INFO  org.hibernate.Version.logVersion - HHH000412: Hibernate ORM core version 6.5.2.Final
+30-07-2024 13:19:34.702 [main] 6925 INFO  o.h.c.i.RegionFactoryInitiator.initiateService - HHH000026: Second-level cache disabled
+30-07-2024 13:19:35.752 [main] 6925 INFO  o.s.o.j.p.SpringPersistenceUnitInfo.addTransformer - No LoadTimeWeaver setup: ignoring JPA class transformer
+30-07-2024 13:19:39.690 [main] 6925 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator.initiateService - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+30-07-2024 13:19:39.703 [main] 6925 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.buildNativeEntityManagerFactory - Initialized JPA EntityManagerFactory for persistence unit 'default'
+30-07-2024 13:19:40.711 [main] 6925 INFO  o.s.d.j.r.query.QueryEnhancerFactory.<clinit> - Hibernate is in classpath; If applicable, HQL parser will be used.
+30-07-2024 13:19:42.327 [main] 6925 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration.openEntityManagerInViewInterceptor - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+30-07-2024 13:19:43.592 [main] 6925 INFO  o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
+30-07-2024 13:19:43.638 [main] 6925 INFO  o.s.b.w.e.tomcat.TomcatWebServer.start - Tomcat started on port 8080 (http) with context path '/'
+30-07-2024 13:19:43.679 [main] 6925 INFO  c.social.mc_post.McPostApplication.logStarted - Started McPostApplication in 23.549 seconds (process running for 26.089)
+30-07-2024 15:51:26.119 [SpringApplicationShutdownHook] 6925 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.destroy - Closing JPA EntityManagerFactory for persistence unit 'default'
+30-07-2024 15:51:26.126 [SpringApplicationShutdownHook] 6925 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown initiated...
+30-07-2024 15:51:26.136 [SpringApplicationShutdownHook] 6925 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown completed.
+30-07-2024 21:41:18.809 [main] 8178 INFO  c.social.mc_post.McPostApplication.logStarting - Starting McPostApplication using Java 17.0.11 with PID 8178 (/home/mikhail/Документы/command-project/mc-post/target/classes started by mikhail in /home/mikhail/Документы/command-project/mc-post)
+30-07-2024 21:41:18.886 [main] 8178 INFO  c.social.mc_post.McPostApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+30-07-2024 21:41:35.991 [main] 8178 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+30-07-2024 21:41:37.573 [main] 8178 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 1492 ms. Found 7 JPA repository interfaces.
+30-07-2024 21:41:54.843 [main] 8178 INFO  o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+30-07-2024 21:41:55.347 [main] 8178 INFO  o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+30-07-2024 21:41:55.472 [main] 8178 INFO  o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+30-07-2024 21:41:55.475 [main] 8178 INFO  o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.25]
+30-07-2024 21:41:57.287 [main] 8178 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+30-07-2024 21:41:57.335 [main] 8178 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 36692 ms
+30-07-2024 21:42:02.930 [main] 8178 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Starting...
+30-07-2024 21:42:06.979 [main] 8178 INFO  com.zaxxer.hikari.pool.HikariPool.checkFailFast - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@32a4ecbe
+30-07-2024 21:42:07.033 [main] 8178 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Start completed.
+30-07-2024 21:42:11.986 [main] 8178 INFO  liquibase.database.log - Set default schema name to public
+30-07-2024 21:42:24.816 [main] 8178 INFO  liquibase.changelog.log - Creating database history table with name: public.databasechangelog
+30-07-2024 21:42:25.569 [main] 8178 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+30-07-2024 21:42:31.157 [main] 8178 INFO  liquibase.lockservice.log - Successfully acquired change log lock
+30-07-2024 21:42:31.169 [main] 8178 INFO  liquibase.command.log - Using deploymentId: 2364951168
+30-07-2024 21:42:31.195 [main] 8178 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+30-07-2024 21:42:32.924 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::1::mikhail
+30-07-2024 21:42:33.250 [main] 8178 INFO  liquibase.changelog.log - Table comment created
+30-07-2024 21:42:33.279 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::1::mikhail ran successfully in 336ms
+30-07-2024 21:42:33.474 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::2::mikhail
+30-07-2024 21:42:33.776 [main] 8178 INFO  liquibase.changelog.log - Table comment_search created
+30-07-2024 21:42:33.811 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::2::mikhail ran successfully in 299ms
+30-07-2024 21:42:34.000 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::3::mikhail
+30-07-2024 21:42:34.267 [main] 8178 INFO  liquibase.changelog.log - Table like_post created
+30-07-2024 21:42:34.287 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::3::mikhail ran successfully in 214ms
+30-07-2024 21:42:34.487 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::4::mikhail
+30-07-2024 21:42:34.875 [main] 8178 INFO  liquibase.changelog.log - Table post created
+30-07-2024 21:42:34.908 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::4::mikhail ran successfully in 419ms
+30-07-2024 21:42:34.936 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::5::mikhail
+30-07-2024 21:42:35.307 [main] 8178 INFO  liquibase.changelog.log - Table post_comment_entities created
+30-07-2024 21:42:35.363 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::5::mikhail ran successfully in 383ms
+30-07-2024 21:42:35.464 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::6::mikhail
+30-07-2024 21:42:35.590 [main] 8178 INFO  liquibase.changelog.log - Table post_reactions created
+30-07-2024 21:42:35.616 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::6::mikhail ran successfully in 100ms
+30-07-2024 21:42:35.645 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::7::mikhail
+30-07-2024 21:42:35.794 [main] 8178 INFO  liquibase.changelog.log - Table post_tags created
+30-07-2024 21:42:35.820 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::7::mikhail ran successfully in 140ms
+30-07-2024 21:42:35.922 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::8::mikhail
+30-07-2024 21:42:36.032 [main] 8178 INFO  liquibase.changelog.log - Unique constraint added to post_comment_entities(comment_entities_id)
+30-07-2024 21:42:36.058 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::8::mikhail ran successfully in 134ms
+30-07-2024 21:42:36.100 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::9::mikhail
+30-07-2024 21:42:36.199 [main] 8178 INFO  liquibase.changelog.log - Unique constraint added to post_reactions(reactions_id)
+30-07-2024 21:42:36.225 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::9::mikhail ran successfully in 105ms
+30-07-2024 21:42:36.263 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::10::mikhail
+30-07-2024 21:42:36.369 [main] 8178 INFO  liquibase.changelog.log - Unique constraint added to post_tags(tags_id)
+30-07-2024 21:42:36.380 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::10::mikhail ran successfully in 110ms
+30-07-2024 21:42:36.475 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::11::mikhail
+30-07-2024 21:42:36.710 [main] 8178 INFO  liquibase.changelog.log - Table reaction created
+30-07-2024 21:42:36.738 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::11::mikhail ran successfully in 248ms
+30-07-2024 21:42:36.783 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::12::mikhail
+30-07-2024 21:42:36.922 [main] 8178 INFO  liquibase.changelog.log - Table tag_search created
+30-07-2024 21:42:36.946 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::12::mikhail ran successfully in 146ms
+30-07-2024 21:42:36.992 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::13::mikhail
+30-07-2024 21:42:37.133 [main] 8178 INFO  liquibase.changelog.log - Table tags created
+30-07-2024 21:42:37.166 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::13::mikhail ran successfully in 172ms
+30-07-2024 21:42:37.229 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::14::mikhail
+30-07-2024 21:42:37.272 [main] 8178 INFO  liquibase.changelog.log - Foreign key constraint added to post_reactions (reactions_id)
+30-07-2024 21:42:37.306 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::14::mikhail ran successfully in 52ms
+30-07-2024 21:42:37.388 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::15::mikhail
+30-07-2024 21:42:37.490 [main] 8178 INFO  liquibase.changelog.log - Foreign key constraint added to post_tags (tags_id)
+30-07-2024 21:42:37.540 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::15::mikhail ran successfully in 150ms
+30-07-2024 21:42:37.658 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::16::mikhail
+30-07-2024 21:42:37.723 [main] 8178 INFO  liquibase.changelog.log - Foreign key constraint added to post_tags (post_entity_id)
+30-07-2024 21:42:37.787 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::16::mikhail ran successfully in 109ms
+30-07-2024 21:42:37.875 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::17::mikhail
+30-07-2024 21:42:37.938 [main] 8178 INFO  liquibase.changelog.log - Foreign key constraint added to post_comment_entities (comment_entities_id)
+30-07-2024 21:42:37.959 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::17::mikhail ran successfully in 65ms
+30-07-2024 21:42:38.004 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::18::mikhail
+30-07-2024 21:42:38.040 [main] 8178 INFO  liquibase.changelog.log - Foreign key constraint added to post_reactions (post_entity_id)
+30-07-2024 21:42:38.063 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::18::mikhail ran successfully in 48ms
+30-07-2024 21:42:38.162 [main] 8178 INFO  liquibase.ui.log - Running Changeset: db/changelog/changeset/v1/create-tables-mc-post.xml::19::mikhail
+30-07-2024 21:42:38.286 [main] 8178 INFO  liquibase.changelog.log - Foreign key constraint added to post_comment_entities (post_entity_id)
+30-07-2024 21:42:38.362 [main] 8178 INFO  liquibase.changelog.log - ChangeSet db/changelog/changeset/v1/create-tables-mc-post.xml::19::mikhail ran successfully in 191ms
+30-07-2024 21:42:38.547 [main] 8178 INFO  liquibase.util.log - UPDATE SUMMARY
+30-07-2024 21:42:38.565 [main] 8178 INFO  liquibase.util.log - Run:                         19
+30-07-2024 21:42:38.569 [main] 8178 INFO  liquibase.util.log - Previously run:               0
+30-07-2024 21:42:38.576 [main] 8178 INFO  liquibase.util.log - Filtered out:                 0
+30-07-2024 21:42:38.590 [main] 8178 INFO  liquibase.util.log - -------------------------------
+30-07-2024 21:42:38.606 [main] 8178 INFO  liquibase.util.log - Total change sets:           19
+30-07-2024 21:42:38.641 [main] 8178 INFO  liquibase.util.log - Update summary generated
+30-07-2024 21:42:38.655 [main] 8178 INFO  liquibase.command.log - Update command completed successfully.
+30-07-2024 21:42:38.666 [main] 8178 INFO  liquibase.ui.log - Liquibase: Update has been successful. Rows affected: 19
+30-07-2024 21:42:38.694 [main] 8178 INFO  liquibase.lockservice.log - Successfully released change log lock
+30-07-2024 21:42:38.698 [main] 8178 INFO  liquibase.command.log - Command execution complete
+30-07-2024 21:42:41.351 [main] 8178 INFO  o.h.jpa.internal.util.LogHelper.logPersistenceUnitInformation - HHH000204: Processing PersistenceUnitInfo [name: default]
+30-07-2024 21:42:44.510 [main] 8178 INFO  org.hibernate.Version.logVersion - HHH000412: Hibernate ORM core version 6.5.2.Final
+30-07-2024 21:42:45.666 [main] 8178 INFO  o.h.c.i.RegionFactoryInitiator.initiateService - HHH000026: Second-level cache disabled
+30-07-2024 21:42:51.594 [main] 8178 INFO  o.s.o.j.p.SpringPersistenceUnitInfo.addTransformer - No LoadTimeWeaver setup: ignoring JPA class transformer
+30-07-2024 21:43:09.395 [main] 8178 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator.initiateService - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+30-07-2024 21:43:09.423 [main] 8178 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.buildNativeEntityManagerFactory - Initialized JPA EntityManagerFactory for persistence unit 'default'
+30-07-2024 21:43:12.398 [main] 8178 INFO  o.s.d.j.r.query.QueryEnhancerFactory.<clinit> - Hibernate is in classpath; If applicable, HQL parser will be used.
+30-07-2024 21:43:16.328 [main] 8178 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration.openEntityManagerInViewInterceptor - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+30-07-2024 21:43:18.911 [main] 8178 INFO  o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
+30-07-2024 21:43:19.069 [main] 8178 INFO  o.s.b.w.e.tomcat.TomcatWebServer.start - Tomcat started on port 8080 (http) with context path '/'
+30-07-2024 21:43:19.146 [main] 8178 INFO  c.social.mc_post.McPostApplication.logStarted - Started McPostApplication in 137.033 seconds (process running for 148.877)
+30-07-2024 21:43:53.190 [http-nio-8080-exec-1] 8178 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring DispatcherServlet 'dispatcherServlet'
+30-07-2024 21:43:53.193 [http-nio-8080-exec-1] 8178 INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Initializing Servlet 'dispatcherServlet'
+30-07-2024 21:43:53.200 [http-nio-8080-exec-1] 8178 INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Completed initialization in 4 ms
+30-07-2024 21:43:53.871 [http-nio-8080-exec-1] 8178 INFO  c.s.m.controllers.RestPostController.handlerCreatePost - Create new POST: MIkhail POPOV
+30-07-2024 21:43:55.014 [http-nio-8080-exec-1] 8178 INFO  c.s.m.services.impl.PostServiceImpl.createPost - Create new post id: ec541160-aa99-4844-bc32-264565e5a40c
+30-07-2024 21:51:40.622 [http-nio-8080-exec-6] 8178 INFO  c.s.m.s.impl.CommentServiceImpl.createCommentPost - Text : Ghjh
+30-07-2024 21:51:40.656 [http-nio-8080-exec-6] 8178 INFO  c.s.m.s.impl.CommentServiceImpl.createCommentPost - Comment id : 239e54eb-1efe-4626-96c9-b595ed5329ed
+30-07-2024 21:54:20.768 [http-nio-8080-exec-8] 8178 WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver.logException - Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' is not supported]
+30-07-2024 21:59:23.542 [SpringApplicationShutdownHook] 8178 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.destroy - Closing JPA EntityManagerFactory for persistence unit 'default'
+30-07-2024 21:59:23.555 [SpringApplicationShutdownHook] 8178 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown initiated...
+30-07-2024 21:59:23.631 [SpringApplicationShutdownHook] 8178 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown completed.
+30-07-2024 21:59:39.687 [main] 9858 INFO  c.social.mc_post.McPostApplication.logStarting - Starting McPostApplication using Java 17.0.11 with PID 9858 (/home/mikhail/Документы/command-project/mc-post/target/classes started by mikhail in /home/mikhail/Документы/command-project/mc-post)
+30-07-2024 21:59:39.703 [main] 9858 INFO  c.social.mc_post.McPostApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+30-07-2024 21:59:42.578 [main] 9858 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+30-07-2024 21:59:42.946 [main] 9858 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 335 ms. Found 7 JPA repository interfaces.
+30-07-2024 21:59:46.145 [main] 9858 INFO  o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+30-07-2024 21:59:46.185 [main] 9858 INFO  o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+30-07-2024 21:59:46.198 [main] 9858 INFO  o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+30-07-2024 21:59:46.202 [main] 9858 INFO  o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.25]
+30-07-2024 21:59:46.477 [main] 9858 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+30-07-2024 21:59:46.488 [main] 9858 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 6404 ms
+30-07-2024 21:59:47.091 [main] 9858 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Starting...
+30-07-2024 21:59:47.902 [main] 9858 INFO  com.zaxxer.hikari.pool.HikariPool.checkFailFast - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2b44d6d0
+30-07-2024 21:59:47.914 [main] 9858 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Start completed.
+30-07-2024 21:59:48.676 [main] 9858 INFO  liquibase.database.log - Set default schema name to public
+30-07-2024 21:59:50.725 [main] 9858 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+30-07-2024 21:59:51.002 [main] 9858 INFO  liquibase.ui.log - Database is up to date, no changesets to execute
+30-07-2024 21:59:51.010 [main] 9858 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+30-07-2024 21:59:51.050 [main] 9858 INFO  liquibase.util.log - UPDATE SUMMARY
+30-07-2024 21:59:51.053 [main] 9858 INFO  liquibase.util.log - Run:                          0
+30-07-2024 21:59:51.056 [main] 9858 INFO  liquibase.util.log - Previously run:              19
+30-07-2024 21:59:51.059 [main] 9858 INFO  liquibase.util.log - Filtered out:                 0
+30-07-2024 21:59:51.060 [main] 9858 INFO  liquibase.util.log - -------------------------------
+30-07-2024 21:59:51.063 [main] 9858 INFO  liquibase.util.log - Total change sets:           19
+30-07-2024 21:59:51.067 [main] 9858 INFO  liquibase.util.log - Update summary generated
+30-07-2024 21:59:51.190 [main] 9858 INFO  liquibase.lockservice.log - Successfully released change log lock
+30-07-2024 21:59:51.203 [main] 9858 INFO  liquibase.command.log - Command execution complete
+30-07-2024 21:59:51.642 [main] 9858 INFO  o.h.jpa.internal.util.LogHelper.logPersistenceUnitInformation - HHH000204: Processing PersistenceUnitInfo [name: default]
+30-07-2024 21:59:51.835 [main] 9858 INFO  org.hibernate.Version.logVersion - HHH000412: Hibernate ORM core version 6.5.2.Final
+30-07-2024 21:59:51.994 [main] 9858 INFO  o.h.c.i.RegionFactoryInitiator.initiateService - HHH000026: Second-level cache disabled
+30-07-2024 21:59:53.093 [main] 9858 INFO  o.s.o.j.p.SpringPersistenceUnitInfo.addTransformer - No LoadTimeWeaver setup: ignoring JPA class transformer
+30-07-2024 21:59:57.116 [main] 9858 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator.initiateService - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+30-07-2024 21:59:57.130 [main] 9858 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.buildNativeEntityManagerFactory - Initialized JPA EntityManagerFactory for persistence unit 'default'
+30-07-2024 21:59:58.383 [main] 9858 INFO  o.s.d.j.r.query.QueryEnhancerFactory.<clinit> - Hibernate is in classpath; If applicable, HQL parser will be used.
+30-07-2024 21:59:59.899 [main] 9858 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration.openEntityManagerInViewInterceptor - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+30-07-2024 22:00:01.436 [main] 9858 INFO  o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
+30-07-2024 22:00:01.485 [main] 9858 INFO  o.s.b.w.e.tomcat.TomcatWebServer.start - Tomcat started on port 8080 (http) with context path '/'
+30-07-2024 22:00:01.521 [main] 9858 INFO  c.social.mc_post.McPostApplication.logStarted - Started McPostApplication in 24.46 seconds (process running for 26.354)
+30-07-2024 22:00:17.488 [http-nio-8080-exec-2] 9858 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring DispatcherServlet 'dispatcherServlet'
+30-07-2024 22:00:17.489 [http-nio-8080-exec-2] 9858 INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Initializing Servlet 'dispatcherServlet'
+30-07-2024 22:00:17.496 [http-nio-8080-exec-2] 9858 INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Completed initialization in 5 ms
+30-07-2024 22:17:18.822 [http-nio-8080-exec-4] 9858 ERROR o.a.c.c.C.[.[.[.[dispatcherServlet].log - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because the return value of "com.social.mc_post.dto.PageableDto.getPage()" is null] with root cause
+java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because the return value of "com.social.mc_post.dto.PageableDto.getPage()" is null
+	at com.social.mc_post.controllers.RestPostController.getComments(RestPostController.java:134)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:389)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:904)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+30-07-2024 22:36:54.757 [http-nio-8080-exec-7] 9858 ERROR o.a.c.c.C.[.[.[.[dispatcherServlet].log - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because the return value of "com.social.mc_post.dto.PageableDto.getPage()" is null] with root cause
+java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because the return value of "com.social.mc_post.dto.PageableDto.getPage()" is null
+	at com.social.mc_post.controllers.RestPostController.getComments(RestPostController.java:134)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:389)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:904)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+30-07-2024 22:38:07.291 [http-nio-8080-exec-8] 9858 ERROR o.a.c.c.C.[.[.[.[dispatcherServlet].log - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because the return value of "com.social.mc_post.dto.PageableDto.getPage()" is null] with root cause
+java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because the return value of "com.social.mc_post.dto.PageableDto.getPage()" is null
+	at com.social.mc_post.controllers.RestPostController.getComments(RestPostController.java:134)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:389)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:904)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+30-07-2024 22:40:16.143 [SpringApplicationShutdownHook] 9858 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.destroy - Closing JPA EntityManagerFactory for persistence unit 'default'
+30-07-2024 22:40:16.194 [SpringApplicationShutdownHook] 9858 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown initiated...
+30-07-2024 22:40:16.209 [SpringApplicationShutdownHook] 9858 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown completed.
+30-07-2024 22:40:32.425 [main] 11644 INFO  c.social.mc_post.McPostApplication.logStarting - Starting McPostApplication using Java 17.0.11 with PID 11644 (/home/mikhail/Документы/command-project/mc-post/target/classes started by mikhail in /home/mikhail/Документы/command-project/mc-post)
+30-07-2024 22:40:32.467 [main] 11644 INFO  c.social.mc_post.McPostApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+30-07-2024 22:40:35.261 [main] 11644 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+30-07-2024 22:40:35.692 [main] 11644 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 392 ms. Found 7 JPA repository interfaces.
+30-07-2024 22:40:41.591 [main] 11644 INFO  o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+30-07-2024 22:40:41.665 [main] 11644 INFO  o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+30-07-2024 22:40:41.684 [main] 11644 INFO  o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+30-07-2024 22:40:41.686 [main] 11644 INFO  o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.25]
+30-07-2024 22:40:41.966 [main] 11644 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+30-07-2024 22:40:41.977 [main] 11644 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 9174 ms
+30-07-2024 22:40:42.621 [main] 11644 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Starting...
+30-07-2024 22:40:43.289 [main] 11644 INFO  com.zaxxer.hikari.pool.HikariPool.checkFailFast - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2b44d6d0
+30-07-2024 22:40:43.301 [main] 11644 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Start completed.
+30-07-2024 22:40:43.971 [main] 11644 INFO  liquibase.database.log - Set default schema name to public
+30-07-2024 22:40:45.933 [main] 11644 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+30-07-2024 22:40:46.216 [main] 11644 INFO  liquibase.ui.log - Database is up to date, no changesets to execute
+30-07-2024 22:40:46.225 [main] 11644 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+30-07-2024 22:40:46.265 [main] 11644 INFO  liquibase.util.log - UPDATE SUMMARY
+30-07-2024 22:40:46.268 [main] 11644 INFO  liquibase.util.log - Run:                          0
+30-07-2024 22:40:46.270 [main] 11644 INFO  liquibase.util.log - Previously run:              19
+30-07-2024 22:40:46.272 [main] 11644 INFO  liquibase.util.log - Filtered out:                 0
+30-07-2024 22:40:46.274 [main] 11644 INFO  liquibase.util.log - -------------------------------
+30-07-2024 22:40:46.276 [main] 11644 INFO  liquibase.util.log - Total change sets:           19
+30-07-2024 22:40:46.280 [main] 11644 INFO  liquibase.util.log - Update summary generated
+30-07-2024 22:40:46.397 [main] 11644 INFO  liquibase.lockservice.log - Successfully released change log lock
+30-07-2024 22:40:46.413 [main] 11644 INFO  liquibase.command.log - Command execution complete
+30-07-2024 22:40:46.782 [main] 11644 INFO  o.h.jpa.internal.util.LogHelper.logPersistenceUnitInformation - HHH000204: Processing PersistenceUnitInfo [name: default]
+30-07-2024 22:40:47.010 [main] 11644 INFO  org.hibernate.Version.logVersion - HHH000412: Hibernate ORM core version 6.5.2.Final
+30-07-2024 22:40:47.140 [main] 11644 INFO  o.h.c.i.RegionFactoryInitiator.initiateService - HHH000026: Second-level cache disabled
+30-07-2024 22:40:48.350 [main] 11644 INFO  o.s.o.j.p.SpringPersistenceUnitInfo.addTransformer - No LoadTimeWeaver setup: ignoring JPA class transformer
+30-07-2024 22:40:53.037 [main] 11644 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator.initiateService - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+30-07-2024 22:40:53.068 [main] 11644 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.buildNativeEntityManagerFactory - Initialized JPA EntityManagerFactory for persistence unit 'default'
+30-07-2024 22:40:55.877 [main] 11644 INFO  o.s.d.j.r.query.QueryEnhancerFactory.<clinit> - Hibernate is in classpath; If applicable, HQL parser will be used.
+30-07-2024 22:40:58.163 [main] 11644 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration.openEntityManagerInViewInterceptor - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+30-07-2024 22:40:59.678 [main] 11644 INFO  o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
+30-07-2024 22:40:59.807 [main] 11644 INFO  o.s.b.w.e.tomcat.TomcatWebServer.start - Tomcat started on port 8080 (http) with context path '/'
+30-07-2024 22:40:59.862 [main] 11644 INFO  c.social.mc_post.McPostApplication.logStarted - Started McPostApplication in 30.379 seconds (process running for 32.547)
+30-07-2024 22:41:09.101 [http-nio-8080-exec-2] 11644 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring DispatcherServlet 'dispatcherServlet'
+30-07-2024 22:41:09.102 [http-nio-8080-exec-2] 11644 INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Initializing Servlet 'dispatcherServlet'
+30-07-2024 22:41:09.109 [http-nio-8080-exec-2] 11644 INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Completed initialization in 6 ms
+30-07-2024 22:41:09.310 [http-nio-8080-exec-2] 11644 ERROR o.a.c.c.C.[.[.[.[dispatcherServlet].log - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.NullPointerException: Cannot invoke "java.lang.Integer.toString()" because the return value of "com.social.mc_post.dto.PageableDto.getSize()" is null] with root cause
+java.lang.NullPointerException: Cannot invoke "java.lang.Integer.toString()" because the return value of "com.social.mc_post.dto.PageableDto.getSize()" is null
+	at com.social.mc_post.controllers.RestPostController.getComments(RestPostController.java:134)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:389)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:904)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+30-07-2024 22:45:41.298 [http-nio-8080-exec-5] 11644 INFO  c.s.m.controllers.RestPostController.getComments - 1
+30-07-2024 22:45:41.777 [http-nio-8080-exec-5] 11644 WARN  o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$PlainPageSerializationWarning.convert - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+30-07-2024 22:47:54.657 [http-nio-8080-exec-7] 11644 INFO  c.s.m.s.impl.CommentServiceImpl.createCommentPost - Text : Ghjh
+30-07-2024 22:47:54.771 [http-nio-8080-exec-7] 11644 INFO  c.s.m.s.impl.CommentServiceImpl.createCommentPost - Comment id : e1ce6894-6069-4422-8d4a-85dd1cf6a28d
+30-07-2024 22:48:56.813 [http-nio-8080-exec-10] 11644 INFO  c.s.m.controllers.RestPostController.getComments - 1
+30-07-2024 23:37:11.508 [http-nio-8080-exec-4] 11644 INFO  c.s.m.controllers.RestPostController.getComments - 1
+30-07-2024 23:42:26.814 [http-nio-8080-exec-3] 11644 INFO  c.s.m.s.impl.CommentServiceImpl.createSubCommentPost - Create subcomment id: d6f32f5d-daa5-4cc6-b34d-0e3a9143a7a5
+31-07-2024 00:00:11.486 [SpringApplicationShutdownHook] 11644 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.destroy - Closing JPA EntityManagerFactory for persistence unit 'default'
+31-07-2024 00:00:11.496 [SpringApplicationShutdownHook] 11644 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown initiated...
+31-07-2024 00:00:11.513 [SpringApplicationShutdownHook] 11644 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown completed.
+31-07-2024 00:00:30.300 [main] 15929 INFO  c.social.mc_post.McPostApplication.logStarting - Starting McPostApplication using Java 17.0.11 with PID 15929 (/home/mikhail/Документы/command-project/mc-post/target/classes started by mikhail in /home/mikhail/Документы/command-project/mc-post)
+31-07-2024 00:00:30.333 [main] 15929 INFO  c.social.mc_post.McPostApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+31-07-2024 00:00:34.222 [main] 15929 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+31-07-2024 00:00:34.791 [main] 15929 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 499 ms. Found 7 JPA repository interfaces.
+31-07-2024 00:00:41.036 [main] 15929 INFO  o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+31-07-2024 00:00:41.131 [main] 15929 INFO  o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+31-07-2024 00:00:41.161 [main] 15929 INFO  o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+31-07-2024 00:00:41.169 [main] 15929 INFO  o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.25]
+31-07-2024 00:00:41.825 [main] 15929 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+31-07-2024 00:00:41.850 [main] 15929 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 10698 ms
+31-07-2024 00:00:43.926 [main] 15929 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Starting...
+31-07-2024 00:00:46.566 [main] 15929 INFO  com.zaxxer.hikari.pool.HikariPool.checkFailFast - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@196624bf
+31-07-2024 00:00:46.620 [main] 15929 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Start completed.
+31-07-2024 00:00:48.287 [main] 15929 INFO  liquibase.database.log - Set default schema name to public
+31-07-2024 00:00:50.221 [main] 15929 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+31-07-2024 00:00:50.513 [main] 15929 INFO  liquibase.ui.log - Database is up to date, no changesets to execute
+31-07-2024 00:00:50.520 [main] 15929 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+31-07-2024 00:00:50.568 [main] 15929 INFO  liquibase.util.log - UPDATE SUMMARY
+31-07-2024 00:00:50.569 [main] 15929 INFO  liquibase.util.log - Run:                          0
+31-07-2024 00:00:50.571 [main] 15929 INFO  liquibase.util.log - Previously run:              19
+31-07-2024 00:00:50.572 [main] 15929 INFO  liquibase.util.log - Filtered out:                 0
+31-07-2024 00:00:50.573 [main] 15929 INFO  liquibase.util.log - -------------------------------
+31-07-2024 00:00:50.575 [main] 15929 INFO  liquibase.util.log - Total change sets:           19
+31-07-2024 00:00:50.579 [main] 15929 INFO  liquibase.util.log - Update summary generated
+31-07-2024 00:00:50.708 [main] 15929 INFO  liquibase.lockservice.log - Successfully released change log lock
+31-07-2024 00:00:50.718 [main] 15929 INFO  liquibase.command.log - Command execution complete
+31-07-2024 00:00:51.145 [main] 15929 INFO  o.h.jpa.internal.util.LogHelper.logPersistenceUnitInformation - HHH000204: Processing PersistenceUnitInfo [name: default]
+31-07-2024 00:00:51.336 [main] 15929 INFO  org.hibernate.Version.logVersion - HHH000412: Hibernate ORM core version 6.5.2.Final
+31-07-2024 00:00:51.493 [main] 15929 INFO  o.h.c.i.RegionFactoryInitiator.initiateService - HHH000026: Second-level cache disabled
+31-07-2024 00:00:52.532 [main] 15929 INFO  o.s.o.j.p.SpringPersistenceUnitInfo.addTransformer - No LoadTimeWeaver setup: ignoring JPA class transformer
+31-07-2024 00:00:56.154 [main] 15929 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator.initiateService - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+31-07-2024 00:00:56.164 [main] 15929 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.buildNativeEntityManagerFactory - Initialized JPA EntityManagerFactory for persistence unit 'default'
+31-07-2024 00:00:57.149 [main] 15929 INFO  o.s.d.j.r.query.QueryEnhancerFactory.<clinit> - Hibernate is in classpath; If applicable, HQL parser will be used.
+31-07-2024 00:00:59.801 [main] 15929 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration.openEntityManagerInViewInterceptor - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+31-07-2024 00:01:01.074 [main] 15929 INFO  o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
+31-07-2024 00:01:01.117 [main] 15929 INFO  o.s.b.w.e.tomcat.TomcatWebServer.start - Tomcat started on port 8080 (http) with context path '/'
+31-07-2024 00:01:01.151 [main] 15929 INFO  c.social.mc_post.McPostApplication.logStarted - Started McPostApplication in 34.218 seconds (process running for 36.579)
+31-07-2024 00:03:28.822 [http-nio-8080-exec-1] 15929 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring DispatcherServlet 'dispatcherServlet'
+31-07-2024 00:03:28.824 [http-nio-8080-exec-1] 15929 INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Initializing Servlet 'dispatcherServlet'
+31-07-2024 00:03:28.828 [http-nio-8080-exec-1] 15929 INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Completed initialization in 4 ms
+31-07-2024 00:03:29.003 [http-nio-8080-exec-1] 15929 INFO  c.s.m.controllers.RestPostController.getSubComments - GEt sub comments: e1ce6894-6069-4422-8d4a-85dd1cf6a28d
+31-07-2024 00:03:29.565 [http-nio-8080-exec-1] 15929 WARN  o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$PlainPageSerializationWarning.convert - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+31-07-2024 00:07:01.584 [SpringApplicationShutdownHook] 15929 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.destroy - Closing JPA EntityManagerFactory for persistence unit 'default'
+31-07-2024 00:07:01.603 [SpringApplicationShutdownHook] 15929 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown initiated...
+31-07-2024 00:07:01.637 [SpringApplicationShutdownHook] 15929 INFO  com.zaxxer.hikari.HikariDataSource.close - HikariPool-1 - Shutdown completed.
+31-07-2024 00:07:13.810 [main] 16351 INFO  c.social.mc_post.McPostApplication.logStarting - Starting McPostApplication using Java 17.0.11 with PID 16351 (/home/mikhail/Документы/command-project/mc-post/target/classes started by mikhail in /home/mikhail/Документы/command-project/mc-post)
+31-07-2024 00:07:13.833 [main] 16351 INFO  c.social.mc_post.McPostApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+31-07-2024 00:07:16.980 [main] 16351 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+31-07-2024 00:07:17.388 [main] 16351 INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 369 ms. Found 7 JPA repository interfaces.
+31-07-2024 00:07:20.500 [main] 16351 INFO  o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+31-07-2024 00:07:20.536 [main] 16351 INFO  o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+31-07-2024 00:07:20.553 [main] 16351 INFO  o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+31-07-2024 00:07:20.555 [main] 16351 INFO  o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/10.1.25]
+31-07-2024 00:07:20.834 [main] 16351 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+31-07-2024 00:07:20.844 [main] 16351 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 6695 ms
+31-07-2024 00:07:21.458 [main] 16351 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Starting...
+31-07-2024 00:07:22.113 [main] 16351 INFO  com.zaxxer.hikari.pool.HikariPool.checkFailFast - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5921b93c
+31-07-2024 00:07:22.128 [main] 16351 INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Start completed.
+31-07-2024 00:07:22.781 [main] 16351 INFO  liquibase.database.log - Set default schema name to public
+31-07-2024 00:07:24.881 [main] 16351 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+31-07-2024 00:07:25.192 [main] 16351 INFO  liquibase.ui.log - Database is up to date, no changesets to execute
+31-07-2024 00:07:25.200 [main] 16351 INFO  liquibase.changelog.log - Reading from public.databasechangelog
+31-07-2024 00:07:25.240 [main] 16351 INFO  liquibase.util.log - UPDATE SUMMARY
+31-07-2024 00:07:25.242 [main] 16351 INFO  liquibase.util.log - Run:                          0
+31-07-2024 00:07:25.244 [main] 16351 INFO  liquibase.util.log - Previously run:              19
+31-07-2024 00:07:25.245 [main] 16351 INFO  liquibase.util.log - Filtered out:                 0
+31-07-2024 00:07:25.246 [main] 16351 INFO  liquibase.util.log - -------------------------------
+31-07-2024 00:07:25.248 [main] 16351 INFO  liquibase.util.log - Total change sets:           19
+31-07-2024 00:07:25.252 [main] 16351 INFO  liquibase.util.log - Update summary generated
+31-07-2024 00:07:25.353 [main] 16351 INFO  liquibase.lockservice.log - Successfully released change log lock
+31-07-2024 00:07:25.360 [main] 16351 INFO  liquibase.command.log - Command execution complete
+31-07-2024 00:07:25.766 [main] 16351 INFO  o.h.jpa.internal.util.LogHelper.logPersistenceUnitInformation - HHH000204: Processing PersistenceUnitInfo [name: default]
+31-07-2024 00:07:25.954 [main] 16351 INFO  org.hibernate.Version.logVersion - HHH000412: Hibernate ORM core version 6.5.2.Final
+31-07-2024 00:07:26.101 [main] 16351 INFO  o.h.c.i.RegionFactoryInitiator.initiateService - HHH000026: Second-level cache disabled
+31-07-2024 00:07:27.200 [main] 16351 INFO  o.s.o.j.p.SpringPersistenceUnitInfo.addTransformer - No LoadTimeWeaver setup: ignoring JPA class transformer
+31-07-2024 00:07:31.260 [main] 16351 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator.initiateService - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+31-07-2024 00:07:31.274 [main] 16351 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.buildNativeEntityManagerFactory - Initialized JPA EntityManagerFactory for persistence unit 'default'
+31-07-2024 00:07:32.446 [main] 16351 INFO  o.s.d.j.r.query.QueryEnhancerFactory.<clinit> - Hibernate is in classpath; If applicable, HQL parser will be used.
+31-07-2024 00:07:33.875 [main] 16351 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration.openEntityManagerInViewInterceptor - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+31-07-2024 00:07:35.352 [main] 16351 INFO  o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
+31-07-2024 00:07:35.396 [main] 16351 INFO  o.s.b.w.e.tomcat.TomcatWebServer.start - Tomcat started on port 8080 (http) with context path '/'
+31-07-2024 00:07:35.431 [main] 16351 INFO  c.social.mc_post.McPostApplication.logStarted - Started McPostApplication in 24.342 seconds (process running for 26.675)
+31-07-2024 00:15:51.439 [http-nio-8080-exec-2] 16351 INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring DispatcherServlet 'dispatcherServlet'
+31-07-2024 00:15:51.441 [http-nio-8080-exec-2] 16351 INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Initializing Servlet 'dispatcherServlet'
+31-07-2024 00:15:51.447 [http-nio-8080-exec-2] 16351 INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Completed initialization in 4 ms
+31-07-2024 00:15:51.627 [http-nio-8080-exec-2] 16351 INFO  c.s.m.controllers.RestPostController.getSubComments - GEt sub comments: e1ce6894-6069-4422-8d4a-85dd1cf6a28d
+31-07-2024 00:16:22.507 [http-nio-8080-exec-4] 16351 INFO  c.s.m.s.impl.CommentServiceImpl.createSubCommentPost - Create subcomment id: aba03ecf-725c-4e6b-8d2a-82aee470bad8
+31-07-2024 00:16:41.191 [http-nio-8080-exec-3] 16351 INFO  c.s.m.controllers.RestPostController.getSubComments - GEt sub comments: e1ce6894-6069-4422-8d4a-85dd1cf6a28d
+31-07-2024 00:17:44.729 [http-nio-8080-exec-8] 16351 INFO  c.s.m.controllers.RestPostController.getSubComments - GEt sub comments: e1ce6894-6069-4422-8d4a-85dd1cf6a28d
+31-07-2024 00:18:44.422 [http-nio-8080-exec-7] 16351 INFO  c.s.m.controllers.RestPostController.getSubComments - GEt sub comments: e1ce6894-6069-4422-8d4a-85dd1cf6a28d
+31-07-2024 00:18:58.075 [http-nio-8080-exec-9] 16351 INFO  c.s.m.controllers.RestPostController.getSubComments - GEt sub comments: e1ce6894-6069-4422-8d4a-85dd1cf6a28d
+31-07-2024 00:19:13.110 [http-nio-8080-exec-10] 16351 INFO  c.s.m.controllers.RestPostController.getSubComments - GEt sub comments: e1ce6894-6069-4422-8d4a-85dd1cf6a28d
+31-07-2024 00:20:27.084 [http-nio-8080-exec-4] 16351 INFO  c.s.m.controllers.RestPostController.getSubComments - GEt sub comments: e1ce6894-6069-4422-8d4a-85dd1cf6a28d

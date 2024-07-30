@@ -9,6 +9,7 @@ import com.social.mc_post.dto.mappers.PostMapper;
 import com.social.mc_post.exception.PostNotFoundException;
 import com.social.mc_post.repository.LikeRepository;
 import com.social.mc_post.repository.PostRepository;
+import com.social.mc_post.repository.specifications.PostSpecification;
 import com.social.mc_post.services.PostService;
 import com.social.mc_post.structure.LikeEntity;
 import com.social.mc_post.structure.PostEntity;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -90,9 +92,24 @@ public class PostServiceImpl implements PostService {
     public LikeDto createLikePost(String idPost, LikeDto likeDto) {
         PostEntity post = postRepository.findPostEntityById(idPost);
         LikeEntity likePost = LikeMapper.mapToLikeEntity(likeDto);
-        //likePost.setItemId(post.getId());
+        likePost.setItemId(post.getId());
         likeRepository.save(likePost);
         return LikeMapper.mapToLikeDto(likePost);
+    }
+
+    @Override
+    public Boolean checkPost(String postId){
+        Optional<PostEntity> post = postRepository.findById(postId);
+        return post.isPresent();
+    }
+
+
+    public Page<PostEntity> find(String title, Integer page){
+        Specification<PostEntity> spec = Specification.where(null);
+        if (title != null){
+            spec.and(PostSpecification.getTitle(title));
+        }
+        return postRepository.findAll(spec, PageRequest.of(page - 1, 5));
     }
 
 }
