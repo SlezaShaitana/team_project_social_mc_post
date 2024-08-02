@@ -30,6 +30,16 @@ services:
       POSTGRES_USER: mc_post
       POSTGRES_PASSWORD: mc_post
       POSTGRES_DB: post_db
+
+#  eureka-server:
+#    image: evrika
+#    container_name: eureka-server
+#    ports:
+#      - "8888:8888"
+#    networks:
+#      - eureka-network
+
+
 #  mc-post:
 #    image: mc_post:latest
 #    build:
@@ -41,3 +51,7 @@ services:
 #      - SPRING_DATASOURCE_URL=jdbc:postgresql://mc_post_db:5432/post_db
 #    depends_on:
 #      - postgres
+
+#networks:
+#  eureka-network:
+#    driver: bridge

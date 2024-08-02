@@ -11,7 +11,6 @@ import com.social.mc_post.repository.CommentRepository;
 import com.social.mc_post.repository.LikeRepository;
 import com.social.mc_post.repository.PostRepository;
 import com.social.mc_post.repository.specifications.CommentSpecification;
-import com.social.mc_post.repository.specifications.PostSpecification;
 import com.social.mc_post.services.CommentService;
 import com.social.mc_post.structure.CommentEntity;
 import com.social.mc_post.structure.LikeEntity;
@@ -22,8 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import java.lang.reflect.Type;
 import java.util.Date;
 
 @Service
@@ -34,28 +31,30 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
     private final CommentSpecification commentSpecification;
+    private final CommentMapper commentMapper;
 
     @Autowired
     public CommentServiceImpl(CommentRepository commentRepository,
                               PostRepository postRepository,
                               LikeRepository likeRepository,
-                              CommentSpecification commentSpecification) {
+                              CommentSpecification commentSpecification, CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
         this.likeRepository = likeRepository;
         this.commentSpecification = commentSpecification;
+        this.commentMapper = commentMapper;
     }
 
     @Override
     public CommentDto createCommentPost(CommentDto commentDto, String postId) {
-        CommentEntity newComment = CommentMapper.mapToCommentEntity(commentDto);
+        CommentEntity newComment = commentMapper.mapToCommentEntity(commentDto);
         calculateCountCommentPost(postId, false);
 
         log.info("Text : {}", newComment.getCommentText());
         commentRepository.save(newComment);
 
         log.info("Comment id : {}", newComment.getId());
-        return CommentMapper.mapToCommentDto(newComment);
+        return commentMapper.mapToCommentDto(newComment);
     }
 
     @Override
@@ -63,12 +62,12 @@ public class CommentServiceImpl implements CommentService {
         PostEntity post = postRepository.findPostEntityById(idPost);
         if (post != null) {
             CommentEntity commentPost = commentRepository.findCommentEntityById(idComment);
-            CommentEntity newSubComment = CommentMapper.mapToCommentEntity(subComment);
+            CommentEntity newSubComment = commentMapper.mapToCommentEntity(subComment);
             newSubComment.setParentId(commentPost.getId());
             newSubComment.setPostId(post.getId());
             commentRepository.save(newSubComment);
             log.info("Create subcomment id: {}", newSubComment.getId());
-            return CommentMapper.mapToCommentDto(newSubComment);
+            return commentMapper.mapToCommentDto(newSubComment);
         } else {
             throw new PostNotFoundException("Post not found");
         }
@@ -86,7 +85,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto updateComment(String idComment, CommentDto commentDto) {
         CommentEntity comment = commentRepository.findCommentEntityById(idComment);
         commentRepository.updateComment(comment, idComment);
-        return CommentMapper.mapToCommentDto(comment);
+        return commentMapper.mapToCommentDto(comment);
     }
 
     public void calculateCountCommentPost(String idPost, boolean delete) {

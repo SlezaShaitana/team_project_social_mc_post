@@ -9,10 +9,12 @@ import com.social.mc_post.dto.mappers.PostMapper;
 import com.social.mc_post.exception.PostNotFoundException;
 import com.social.mc_post.repository.LikeRepository;
 import com.social.mc_post.repository.PostRepository;
+import com.social.mc_post.repository.TagRepository;
 import com.social.mc_post.repository.specifications.PostSpecification;
 import com.social.mc_post.services.PostService;
 import com.social.mc_post.structure.LikeEntity;
 import com.social.mc_post.structure.PostEntity;
+import com.social.mc_post.structure.TagEntity;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,12 +34,14 @@ public class PostServiceImpl implements PostService {
     private final LikeRepository likeRepository;
 
     private final PostRepository postRepository;
+    private final TagRepository tagRepository;
 
     @Autowired
     public PostServiceImpl(PostRepository postRepository,
-                           LikeRepository likeRepository) {
+                           LikeRepository likeRepository, TagRepository tagRepository) {
         this.postRepository = postRepository;
         this.likeRepository = likeRepository;
+        this.tagRepository = tagRepository;
     }
 
     @Override
@@ -50,6 +55,14 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDto createPost(PostDto newPost) {
         PostEntity post = PostMapper.mapToPostEntity(newPost);
+        List<TagEntity> tags = newPost.getTags();
+        for (TagEntity tag : tags){
+            TagEntity newTag = TagEntity.builder()
+                    .name(tag.getName())
+                    .isDeleted(tag.getIsDeleted())
+                    .build();
+            tagRepository.save(newTag);
+        }
         PostEntity savePost = postRepository.save(post);
         PostDto savePostDto = PostMapper.mapToPostDto(savePost);
         log.info("Create new post id: {}", savePostDto.getId());

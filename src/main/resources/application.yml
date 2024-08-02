@@ -13,3 +13,13 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8888/eureka/
+#      register-with-eureka: true
+#      fetch-registry: true
+
+app:
+  jwt:
+    secret: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
