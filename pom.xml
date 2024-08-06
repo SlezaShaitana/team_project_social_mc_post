@@ -126,6 +126,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>3.3.2</version>
 				<configuration>
 					<excludes>
 						<annotationProcessorPaths>
@@ -135,10 +136,10 @@
 								<version>${org.mapstruct.version}</version>
 							</path>
 						</annotationProcessorPaths>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
+<!--						<exclude>-->
+<!--							<groupId>org.projectlombok</groupId>-->
+<!--							<artifactId>lombok</artifactId>-->
+<!--						</exclude>-->
 					</excludes>
 				</configuration>
 			</plugin>
