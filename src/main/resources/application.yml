@@ -5,7 +5,7 @@ spring:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.xml
   datasource:
-    url: jdbc:postgresql://localhost:5432/post_db
+    url: jdbc:postgresql://localhost:5435/post_db
     username: mc_post
     password: mc_post
   jpa:

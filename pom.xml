@@ -126,21 +126,20 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>3.3.2</version>
 				<configuration>
-					<excludes>
-						<annotationProcessorPaths>
-							<path>
-								<groupId>org.mapstruct</groupId>
-								<artifactId>mapstruct-processor</artifactId>
-								<version>${org.mapstruct.version}</version>
-							</path>
-						</annotationProcessorPaths>
+<!--					<excludes>-->
+<!--						<annotationProcessorPaths>-->
+<!--							<path>-->
+<!--								<groupId>org.mapstruct</groupId>-->
+<!--								<artifactId>mapstruct-processor</artifactId>-->
+<!--								<version>${org.mapstruct.version}</version>-->
+<!--							</path>-->
+<!--						</annotationProcessorPaths>-->
 <!--						<exclude>-->
 <!--							<groupId>org.projectlombok</groupId>-->
 <!--							<artifactId>lombok</artifactId>-->
 <!--						</exclude>-->
-					</excludes>
+<!--					</excludes>-->
 				</configuration>
 			</plugin>
 			<plugin>
@@ -149,7 +148,7 @@
 				<version>4.27.0</version>
 				<configuration>
 					<driver>org.postgresql.Driver</driver>
-					<url>jdbc:postgresql://localhost:5432/post_db</url>
+					<url>jdbc:postgresql://localhost:5435/post_db</url>
 					<username>mc_post</username>
 					<password>mc_post</password>
 					<outputChangeLogFile>src/main/resources/liquibase-outputChangeLog.xml</outputChangeLogFile>
