@@ -14,7 +14,7 @@ spring:
       ddl-auto: none
     show-sql: true
   security:
-    ig
+
 #eureka:
 #  client:
 #    service-url:
