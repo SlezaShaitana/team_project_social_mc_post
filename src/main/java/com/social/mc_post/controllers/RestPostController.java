@@ -5,16 +5,15 @@ import com.social.mc_post.exception.PostNotFoundException;
 import com.social.mc_post.services.CommentService;
 import com.social.mc_post.services.PostService;
 import com.social.mc_post.structure.CommentEntity;
-import com.social.mc_post.structure.PostEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -31,11 +30,12 @@ public class RestPostController {
     }
 
     @GetMapping("/post")
-    public Page<PostEntity> handlerPost(PostSearchDto searchDto, PageableDto pageableDto){
+    public Page<PostDto> handlerPost(PostSearchDto searchDto, PageableDto pageableDto){
         return postService.getPosts(searchDto, pageableDto);
     }
 
     @PutMapping("/post")
+    @PreAuthorize("ROLE_USER")
     public PostDto handlerUpdatePost(@RequestBody PostDto postDto){
         return postService.updatePost(postDto);
     }
@@ -56,12 +56,10 @@ public class RestPostController {
         }
     }
 
-    //TODO Update comment
     @PutMapping("/post/{id}/comment")
     public CommentDto handlerComment(@PathVariable(value = "id") String id,
                                             @RequestBody CommentDto commentDto){
         return commentService.updateComment(id, commentDto);
-
     }
 
     @PostMapping("/post/{id}/comment")
@@ -70,7 +68,6 @@ public class RestPostController {
         return commentService.createCommentPost(commentDto, id);
     }
 
-    //TODO  Добавить реализацию добавления сабкоментария
     @PutMapping("/post/{id}/comment/{commentId}")
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDto handlerPostSubComment(@PathVariable(value = "id") String id,
@@ -79,8 +76,6 @@ public class RestPostController {
         return commentService.createSubCommentPost(id, commentId, subComment);
     }
 
-
-    //TODO Delete comment post by id
     @DeleteMapping("/post/{id}/comment/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void handlerDeleteComment(@PathVariable(value = "id") String id,
@@ -92,7 +87,6 @@ public class RestPostController {
         }
     }
 
-    // TODO Delayed
     @PutMapping("/post/delayed")
     public ResponseEntity handlerDeferredPost(){
         return ResponseEntity.ok().build();
@@ -106,21 +100,18 @@ public class RestPostController {
         return postService.createLikePost(id, likeDto);
     }
 
-    // TODO Удаление лайка типа пост
     @DeleteMapping("/post/{id}/like")
     public ResponseEntity<?> handlerDeleteLike(@PathVariable(value = "id") String id){
         return ResponseEntity.ok("Hello");
     }
 
-    // TODO create like comment
     @PostMapping("/post/{id}/comment/{commentId}/like")
     public ResponseDto handlerPostLikeComment(@PathVariable(value = "id") String idPost,
                                                     @PathVariable(value = "commentId") String commentId) throws BadRequestException {
         commentService.createLikeComment(idPost, commentId);
-        return new ResponseDto(HttpStatus.CREATED.value(), "Succfal");
+        return new ResponseDto(HttpStatus.CREATED.value(), "Successful operation");
     }
 
-    // TODO remove like comment
     @DeleteMapping("/post/{id}/comment/{commentId}/like")
     public ResponseDto handlerDeleteLikeComment(@PathVariable(value = "id") String idPost,
                                                     @PathVariable(value = "commentId") String commentId) throws BadRequestException {
@@ -139,7 +130,6 @@ public class RestPostController {
         return commentService.getAllComments(postId, page, searchDto);
     }
 
-    //TODO Get subcomment
     @GetMapping("/post/{postId}/comment/{commentId}/subcomment")
     public Page<CommentEntity> getSubComments(@PathVariable(value = "postId") String postId,
                                          @PathVariable(value = "commentId") String commentId,
@@ -148,13 +138,11 @@ public class RestPostController {
         return commentService.getAllSubComments(postId, commentId, page, searchDto);
     }
 
-    //TODO Get post by id
     @GetMapping("/post/{id}")
     public PostDto getPost(@PathVariable(value = "id") String id){
         return postService.getPostById(id);
     }
 
-    //TODO Delete post by id
     @DeleteMapping("/post/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePost(@PathVariable(value = "id") String id){

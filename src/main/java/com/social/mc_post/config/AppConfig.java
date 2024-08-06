@@ -1,6 +1,6 @@
 package com.social.mc_post.config;
 
-import com.social.mc_post.security.JwtValidation;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

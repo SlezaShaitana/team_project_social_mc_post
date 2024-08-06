@@ -45,17 +45,25 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<PostEntity> getPosts(PostSearchDto postSearchDto, PageableDto pageableDto) {
+    public Page<PostDto> getPosts(PostSearchDto postSearchDto, PageableDto pageableDto) {
         Pageable pageable = PageRequest.of(0, pageableDto.getPage());
         return postRepository
                 .findPageOfPostByPublishDateBetweenOrderByPublishDate
-                        (postSearchDto.getDateTo(), postSearchDto.getDateFrom(), pageable);
+                        (postSearchDto.getDateTo(), postSearchDto.getDateFrom(), pageable).map(PostMapper::mapToPostDto);
     }
 
     @Override
     public PostDto createPost(PostDto newPost) {
         PostEntity post = PostMapper.mapToPostEntity(newPost);
-        List<TagEntity> tags = newPost.getTags();
+        saveTagInDB(newPost);
+        PostEntity savePost = postRepository.save(post);
+        PostDto savePostDto = PostMapper.mapToPostDto(savePost);
+        log.info("Create new post id: {}", savePostDto.getId());
+        return savePostDto;
+    }
+
+    public void saveTagInDB(PostDto postDto){
+        List<TagEntity> tags = postDto.getTags();
         for (TagEntity tag : tags){
             TagEntity newTag = TagEntity.builder()
                     .name(tag.getName())
@@ -63,10 +71,6 @@ public class PostServiceImpl implements PostService {
                     .build();
             tagRepository.save(newTag);
         }
-        PostEntity savePost = postRepository.save(post);
-        PostDto savePostDto = PostMapper.mapToPostDto(savePost);
-        log.info("Create new post id: {}", savePostDto.getId());
-        return savePostDto;
     }
 
     @Override
@@ -120,7 +124,7 @@ public class PostServiceImpl implements PostService {
     public Page<PostEntity> find(String title, Integer page){
         Specification<PostEntity> spec = Specification.where(null);
         if (title != null){
-            spec.and(PostSpecification.getTitle(title));
+            spec.and(PostSpecification.getPostByTitle(title));
         }
         return postRepository.findAll(spec, PageRequest.of(page - 1, 5));
     }

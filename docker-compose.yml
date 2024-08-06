@@ -41,7 +41,7 @@ services:
 
 
 #  mc-post:
-#    image: mc_post:latest
+#    image: mc_postq:latest
 #    build:
 #      context: .
 #    container_name: post-service

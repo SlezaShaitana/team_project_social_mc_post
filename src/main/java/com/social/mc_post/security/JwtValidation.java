@@ -12,4 +12,3 @@ public interface JwtValidation {
     Boolean validateToken(@RequestParam("token") String token);
 
 }
-

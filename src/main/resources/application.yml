@@ -13,6 +13,8 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+  security:
+    ig
 #eureka:
 #  client:
 #    service-url:
@@ -20,6 +22,5 @@ spring:
 #      register-with-eureka: true
 #      fetch-registry: true
 
-app:
-  jwt:
-    secret: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+sonar:
+  - qp_097fc7d5711be538609763b02245a7bdd7703573
