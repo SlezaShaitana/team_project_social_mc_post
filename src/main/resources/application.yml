@@ -1,3 +1,5 @@
+server:
+  port: 8282
 spring:
   application:
     name: mc-post
