@@ -1,31 +1,35 @@
 server:
-  port: 8282
+  port: 8091
+  servlet:
+    context-path: /api/v1/
+
 spring:
   application:
     name: mc-post
-
   liquibase:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.xml
   datasource:
-    url: jdbc:postgresql://localhost:5435/post_db
+    url: jdbc:postgresql://localhost:5432/post_db
     username: mc_post
     password: mc_post
   jpa:
     generate-ddl: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
     show-sql: true
-  security:
+  kafka:
+    bootstrap-servers: localhost:9092
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    hostname: localhost
 
-
-
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://localhost:8888/eureka/
-#      register-with-eureka: true
-#      fetch-registry: true
 
 sonar:
   - qp_097fc7d5711be538609763b02245a7bdd7703573

@@ -48,6 +48,7 @@
     <changeSet author="mikhail" id="4">
         <createTable tableName="post">
             <column name="comments_count" type="INTEGER"/>
+            <column name="deferred" type="BOOLEAN"/>
             <column name="is_blocked" type="BOOLEAN"/>
             <column name="is_deleted" type="BOOLEAN"/>
             <column name="like_amount" type="INTEGER"/>

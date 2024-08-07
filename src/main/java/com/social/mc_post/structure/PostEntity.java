@@ -76,6 +76,8 @@ public class PostEntity {
     @OneToMany(cascade = CascadeType.REMOVE)
     private List<CommentEntity> commentEntities = new ArrayList<>();
 
+    private Boolean deferred;
+
     public PostEntity(){}
 
 }

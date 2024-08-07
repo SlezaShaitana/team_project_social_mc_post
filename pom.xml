@@ -32,6 +32,8 @@
 		<docker.image.prefix>mc-post</docker.image.prefix>
 		<start-class>com.social.mc_post.McPostApplication</start-class>
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+		<madelmapper.version>2.3.9</madelmapper.version>
+		<jwt-token.version>0.12.3</jwt-token.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -65,12 +67,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
-			<version>3.3.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
-			<version>2.3.9</version>
+			<version>${madelmapper.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -80,14 +81,11 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
-
-
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
-			<version>0.12.3</version>
+			<version>${jwt-token.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -102,12 +100,11 @@
 				<artifactId>mapstruct</artifactId>
 				<version>${org.mapstruct.version}</version>
 			</dependency>
-
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.cloud</groupId>-->
-<!--			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
-<!--			<version>4.1.3</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+			<version>4.1.3</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -126,20 +123,21 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>3.3.2</version>
 				<configuration>
-<!--					<excludes>-->
-<!--						<annotationProcessorPaths>-->
-<!--							<path>-->
-<!--								<groupId>org.mapstruct</groupId>-->
-<!--								<artifactId>mapstruct-processor</artifactId>-->
-<!--								<version>${org.mapstruct.version}</version>-->
-<!--							</path>-->
-<!--						</annotationProcessorPaths>-->
-<!--						<exclude>-->
-<!--							<groupId>org.projectlombok</groupId>-->
-<!--							<artifactId>lombok</artifactId>-->
-<!--						</exclude>-->
-<!--					</excludes>-->
+					<excludes>
+						<annotationProcessorPaths>
+							<path>
+								<groupId>org.mapstruct</groupId>
+								<artifactId>mapstruct-processor</artifactId>
+								<version>${org.mapstruct.version}</version>
+							</path>
+						</annotationProcessorPaths>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -148,7 +146,7 @@
 				<version>4.27.0</version>
 				<configuration>
 					<driver>org.postgresql.Driver</driver>
-					<url>jdbc:postgresql://localhost:5435/post_db</url>
+					<url>jdbc:postgresql://localhost:5432/post_db</url>
 					<username>mc_post</username>
 					<password>mc_post</password>
 					<outputChangeLogFile>src/main/resources/liquibase-outputChangeLog.xml</outputChangeLogFile>

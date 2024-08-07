@@ -106,6 +106,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public void createDeferredPost() {
+
+    }
+
+    @Override
     public LikeDto createLikePost(String idPost, LikeDto likeDto) {
         PostEntity post = postRepository.findPostEntityById(idPost);
         LikeEntity likePost = LikeMapper.mapToLikeEntity(likeDto);

@@ -13,7 +13,7 @@ public interface PostService {
     PostDto updatePost(PostDto updatePost);
     PostDto getPostById(String id);
     void deletePost(String id);
-
+    void createDeferredPost();
     LikeDto createLikePost(String idPost, LikeDto likeDto);
     Boolean checkPost(String postId);
 }
