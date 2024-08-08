@@ -10,9 +10,9 @@ spring:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.xml
   datasource:
-    url: jdbc:postgresql://localhost:5432/post_db
-    username: mc_post
-    password: mc_post
+    url: jdbc:postgresql://localhost:5435/database
+    username: postgres
+    password: postgres
   jpa:
     generate-ddl: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
