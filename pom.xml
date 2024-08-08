@@ -126,19 +126,26 @@
 				<version>3.3.2</version>
 				<configuration>
 					<excludes>
-						<annotationProcessorPaths>
-							<path>
-								<groupId>org.mapstruct</groupId>
-								<artifactId>mapstruct-processor</artifactId>
-								<version>${org.mapstruct.version}</version>
-							</path>
-						</annotationProcessorPaths>
+<!--						<annotationProcessorPaths>-->
+<!--							<path>-->
+<!--								<groupId>org.mapstruct</groupId>-->
+<!--								<artifactId>mapstruct-processor</artifactId>-->
+<!--								<version>${org.mapstruct.version}</version>-->
+<!--							</path>-->
+<!--						</annotationProcessorPaths>-->
 						<exclude>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
 				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.liquibase</groupId>
