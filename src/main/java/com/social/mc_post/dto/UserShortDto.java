@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class UserShortDto {
-    private String userId;
+    private String id;
     private String email;
     private List<String> roles;
 
