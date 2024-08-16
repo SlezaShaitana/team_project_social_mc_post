@@ -50,7 +50,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String tokenAuth = getToken(request);
-        if (tokenAuth != null && getToken()){
+        if (tokenAuth != null && jwtValidation.validateToken(tokenAuth)){
             UserShortDto userShortDto = jwtUtil.mapToUserShortDto(tokenAuth);
             Collection<? extends GrantedAuthority> authorities = userShortDto.getRoles().stream()
                     .map(SimpleGrantedAuthority::new)
@@ -67,9 +67,5 @@ public class JwtFilter extends OncePerRequestFilter {
             throw new AuthException("Jwt token not validate.");
         }
         filterChain.doFilter(request, response);
-    }
-
-    protected Boolean getToken(){
-        return true;
     }
 }
