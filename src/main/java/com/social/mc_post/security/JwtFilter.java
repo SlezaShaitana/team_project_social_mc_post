@@ -57,11 +57,11 @@ public class JwtFilter extends OncePerRequestFilter {
                     .collect(Collectors.toList());
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    userShortDto.getEmail(), userShortDto.getUserId(), authorities);
+                    userShortDto.getEmail(), userShortDto.getId(), authorities);
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            userId = UUID.fromString(userShortDto.getUserId());
+            userId = UUID.fromString(userShortDto.getId());
 
         }else {
             throw new AuthException("Jwt token not validate.");
