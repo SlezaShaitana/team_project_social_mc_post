@@ -20,7 +20,7 @@ public class JwtUtil {
         return new String(decoder.decode(chunks[1]));
     }
     public String getIdFromToken(String token) throws JsonProcessingException {
-        return mapToUserShortDto(token).getUserId();
+        return mapToUserShortDto(token).getId();
     }
 
 }
