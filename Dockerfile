@@ -4,7 +4,7 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # Копируем собранный JAR файл из предыдущего этапа
-COPY target/mc-post-0.0.1-SNAPSHOT.jar myapp.jar
+COPY target/mc-post.jar myapp.jar
 
 # Открываем порт, на котором будет работать приложение
 EXPOSE 8091
