@@ -10,7 +10,7 @@ spring:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.xml
   datasource:
-    url: jdbc:postgresql://localhost:5435/mc_post
+    url: jdbc:postgresql://postgres_db/mc_post
     username: postgres
     password: postgres
   jpa:
@@ -19,12 +19,14 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: 79.174.80.200:9092
+
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8888/eureka/
+      defaultZone: http://mc-eureka-conteiner:8888/eureka/
     register-with-eureka: true
     fetch-registry: true
   instance:

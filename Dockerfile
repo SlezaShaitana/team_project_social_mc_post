@@ -1,22 +1,13 @@
-#
-# Build stage
-#
-FROM maven:3.6.3-openjdk-17-slim AS build
-WORKDIR /home/app
-COPY pom.xml .
-COPY src ./src
-RUN mvn package -DskipTests
+FROM openjdk:17-jdk-alpine
 
-#
-# Package stage
-#
-FROM openjdk:17.0.2-jdk-slim-buster
-ARG JAR_FILE=/home/app/target/*.jar
-WORKDIR /opt/app
-COPY --from=build ${JAR_FILE} /mc-post.jar
+# Устанавливаем рабочую директорию
+WORKDIR /app
 
-#ARG JAR_FILE=target/mc-post.jar
+# Копируем собранный JAR файл из предыдущего этапа
+COPY target/mc-post-0.0.1-SNAPSHOT.jar myapp.jar
 
-#COPY ${JAR_FILE} /mc-post.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","/mc-post.jar"]
+# Открываем порт, на котором будет работать приложение
+EXPOSE 8091
+
+# Запускаем приложение
+ENTRYPOINT ["java", "-jar", "myapp.jar"]
