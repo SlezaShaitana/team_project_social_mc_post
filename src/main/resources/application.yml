@@ -1,24 +1,25 @@
-server:
-  port: 8091
-  servlet:
-    context-path: /api/v1/
-
 spring:
   application:
     name: mc-post
-  liquibase:
-    enabled: true
-    change-log: classpath:/db/changelog/db.changelog-master.xml
+
+  jpa:
+    generate-ddl: false
+    open-in-view: true
+    hibernate:
+      ddl-auto: none
+
   datasource:
     url: jdbc:postgresql://postgres_db/mc_post
     username: postgres
     password: postgres
-  jpa:
-    generate-ddl: false
-
-    hibernate:
-      ddl-auto: none
+    driver-class-name: org.postgresql.Driver
     show-sql: true
+    dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+
 
   kafka:
     bootstrap-servers: 79.174.80.200:9092
@@ -32,6 +33,12 @@ eureka:
   instance:
     hostname: localhost
 
+app:
+  jwt:
+    secret: "53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855"
 
 sonar:
   - qp_097fc7d5711be538609763b02245a7bdd7703573
+
+server:
+  port: 8091
