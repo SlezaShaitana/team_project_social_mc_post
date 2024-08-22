@@ -46,7 +46,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostDto> getPosts(PostSearchDto postSearchDto, PageableDto pageableDto) {
-        Pageable pageable = PageRequest.of(0, pageableDto.getPage());
+        Pageable pageable = PageRequest.of(pageableDto.getPage(), pageableDto.getSize());
         return postRepository
                 .findPageOfPostByPublishDateBetweenOrderByPublishDate
                         (postSearchDto.getDateTo(), postSearchDto.getDateFrom(), pageable).map(PostMapper::mapToPostDto);
