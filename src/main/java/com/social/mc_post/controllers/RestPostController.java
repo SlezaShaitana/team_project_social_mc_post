@@ -5,6 +5,7 @@ import com.social.mc_post.exception.PostNotFoundException;
 import com.social.mc_post.services.CommentService;
 import com.social.mc_post.services.PostService;
 import com.social.mc_post.structure.CommentEntity;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +18,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 @Slf4j
 public class RestPostController {
 
     private final PostService postService;
     private final CommentService commentService;
 
-    @Autowired
-    public RestPostController (PostService postService, CommentService commentService){
-        this.postService = postService;
-        this.commentService = commentService;
-    }
 
     @GetMapping("/post")
     public Page<PostDto> handlerPost(PostSearchDto searchDto, PageableDto pageableDto){

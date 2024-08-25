@@ -1,3 +1,6 @@
+server:
+  port: 8091
+
 spring:
   application:
     name: mc-post
@@ -23,6 +26,7 @@ spring:
 
   kafka:
     bootstrap-servers: 79.174.80.200:9092
+    kafkaMessageTopicForNotification: "NotificationTopic"
 
 eureka:
   client:
@@ -33,12 +37,6 @@ eureka:
   instance:
     hostname: localhost
 
-app:
-  jwt:
-    secret: "53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855"
-
 sonar:
   - qp_097fc7d5711be538609763b02245a7bdd7703573
 
-server:
-  port: 8091

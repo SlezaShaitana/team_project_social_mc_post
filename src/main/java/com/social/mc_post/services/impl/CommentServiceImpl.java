@@ -6,7 +6,10 @@ import com.social.mc_post.dto.PageableDto;
 import com.social.mc_post.dto.enums.TypeComment;
 import com.social.mc_post.dto.enums.TypeLike;
 import com.social.mc_post.dto.mappers.CommentMapper;
+import com.social.mc_post.dto.notification.NotificationDTO;
+import com.social.mc_post.dto.notification.NotificationType;
 import com.social.mc_post.exception.PostNotFoundException;
+import com.social.mc_post.kafka.KafkaProducer;
 import com.social.mc_post.repository.CommentRepository;
 import com.social.mc_post.repository.LikeRepository;
 import com.social.mc_post.repository.PostRepository;
@@ -15,15 +18,20 @@ import com.social.mc_post.services.CommentService;
 import com.social.mc_post.structure.CommentEntity;
 import com.social.mc_post.structure.LikeEntity;
 import com.social.mc_post.structure.PostEntity;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class CommentServiceImpl implements CommentService {
 
@@ -32,18 +40,8 @@ public class CommentServiceImpl implements CommentService {
     private final LikeRepository likeRepository;
     private final CommentSpecification commentSpecification;
     private final CommentMapper commentMapper;
+    private final KafkaProducer producer;
 
-    @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository,
-                              PostRepository postRepository,
-                              LikeRepository likeRepository,
-                              CommentSpecification commentSpecification, CommentMapper commentMapper) {
-        this.commentRepository = commentRepository;
-        this.postRepository = postRepository;
-        this.likeRepository = likeRepository;
-        this.commentSpecification = commentSpecification;
-        this.commentMapper = commentMapper;
-    }
 
     @Override
     public CommentDto createCommentPost(CommentDto commentDto, String postId) {
@@ -54,6 +52,16 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(newComment);
 
         log.info("Comment id : {}", newComment.getId());
+
+        PostEntity post = postRepository.findPostEntityById(postId);
+        producer.sendMessageForNotification(NotificationDTO.builder()
+                        .id(UUID.randomUUID())
+                        .authorId(UUID.fromString(newComment.getAuthorId()))
+                        .content(newComment.getCommentText())
+                        .notificationType(NotificationType.POST_COMMENT)
+                        .sentTime(LocalDateTime.now())
+                        .receiverId(UUID.fromString(post.getAuthorId()))
+                .build());
         return commentMapper.mapToCommentDto(newComment);
     }
 
@@ -67,6 +75,16 @@ public class CommentServiceImpl implements CommentService {
             newSubComment.setPostId(post.getId());
             commentRepository.save(newSubComment);
             log.info("Create subcomment id: {}", newSubComment.getId());
+
+            producer.sendMessageForNotification(NotificationDTO.builder()
+                    .id(UUID.randomUUID())
+                    .authorId(UUID.fromString(subComment.getAuthorId()))
+                    .content(subComment.getCommentText())
+                    .notificationType(NotificationType.COMMENT_COMMENT)
+                    .sentTime(LocalDateTime.now())
+                    .receiverId(UUID.fromString(commentPost.getAuthorId()))
+                    .build());
+
             return commentMapper.mapToCommentDto(newSubComment);
         } else {
             throw new PostNotFoundException("Post not found");
@@ -118,6 +136,14 @@ public class CommentServiceImpl implements CommentService {
             calculateCountCommentPost(post.getId(), false);
             createNewLikeComment(comment.getId());
             calculateCountLikeComment(idComment, false);
+
+            producer.sendMessageForNotification(NotificationDTO.builder()
+                    .id(UUID.randomUUID())
+                    .content("Ваш комментарий одобрили")
+                    .notificationType(NotificationType.LIKE_COMMENT)
+                    .sentTime(LocalDateTime.now())
+                    .receiverId(UUID.fromString(comment.getAuthorId()))
+                    .build());
         } else {
             throw new BadRequestException("Bad request");
         }

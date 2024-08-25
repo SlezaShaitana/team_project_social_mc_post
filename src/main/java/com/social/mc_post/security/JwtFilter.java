@@ -23,7 +23,6 @@ import jakarta.servlet.http.*;
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtUtils jwtUtils;
     private final JwtValidation jwtValidation;
 
     private String getToken(HttpServletRequest request) {
@@ -40,12 +39,13 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            String token = getToken(request);
-            log.info("Token: '{}'", token);
+            String stringToken  = getToken(request);
+            log.info("Token: '{}'", stringToken);
 
-            if (jwtValidation.validateToken(token)) {
-                String email = jwtUtils.getEmail(token);
-                List<String> roles = jwtUtils.getRoles(token);
+            if (jwtValidation.validateToken(stringToken)) {
+                DecodedToken token = DecodedToken.getDecoded(stringToken);
+                String email = token.getEmail();
+                List<String> roles = token.getRoles();
 
                 Collection<? extends GrantedAuthority> authorities = roles.stream()
                         .map(SimpleGrantedAuthority::new)

@@ -6,7 +6,10 @@ import com.social.mc_post.dto.PostDto;
 import com.social.mc_post.dto.PostSearchDto;
 import com.social.mc_post.dto.mappers.LikeMapper;
 import com.social.mc_post.dto.mappers.PostMapper;
+import com.social.mc_post.dto.notification.NotificationDTO;
+import com.social.mc_post.dto.notification.NotificationType;
 import com.social.mc_post.exception.PostNotFoundException;
+import com.social.mc_post.kafka.KafkaProducer;
 import com.social.mc_post.repository.LikeRepository;
 import com.social.mc_post.repository.PostRepository;
 import com.social.mc_post.repository.TagRepository;
@@ -16,6 +19,7 @@ import com.social.mc_post.structure.LikeEntity;
 import com.social.mc_post.structure.PostEntity;
 import com.social.mc_post.structure.TagEntity;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,10 +29,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class PostServiceImpl implements PostService {
     private final LikeRepository likeRepository;
@@ -36,13 +44,8 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final TagRepository tagRepository;
 
-    @Autowired
-    public PostServiceImpl(PostRepository postRepository,
-                           LikeRepository likeRepository, TagRepository tagRepository) {
-        this.postRepository = postRepository;
-        this.likeRepository = likeRepository;
-        this.tagRepository = tagRepository;
-    }
+    private final KafkaProducer producer;
+
 
     @Override
     public Page<PostDto> getPosts(PostSearchDto postSearchDto, PageableDto pageableDto) {
@@ -59,6 +62,7 @@ public class PostServiceImpl implements PostService {
         PostEntity savePost = postRepository.save(post);
         PostDto savePostDto = PostMapper.mapToPostDto(savePost);
         log.info("Create new post id: {}", savePostDto.getId());
+        putNotificationAboutPost(post);
         return savePostDto;
     }
 
@@ -116,6 +120,7 @@ public class PostServiceImpl implements PostService {
         LikeEntity likePost = LikeMapper.mapToLikeEntity(likeDto);
         likePost.setItemId(post.getId());
         likeRepository.save(likePost);
+        putNotificationAboutLike(post, likePost);
         return LikeMapper.mapToLikeDto(likePost);
     }
 
@@ -132,6 +137,30 @@ public class PostServiceImpl implements PostService {
             spec.and(PostSpecification.getPostByTitle(title));
         }
         return postRepository.findAll(spec, PageRequest.of(page - 1, 5));
+    }
+
+    public void putNotificationAboutPost(PostEntity post) {
+        String titlePost = (char)27 + "[1m" + post.getTitle();
+
+        producer.sendMessageForNotification(NotificationDTO.builder()
+                .id(UUID.randomUUID())
+                .authorId(UUID.fromString(post.getAuthorId()))
+                .content(titlePost + "\n" + post.getPostText())
+                .notificationType(NotificationType.POST)
+                .sentTime(LocalDateTime.now())
+                .receiverId(UUID.fromString(post.getAuthorId()))
+                .build());
+    }
+
+    public void putNotificationAboutLike(PostEntity post, LikeEntity likePost) {
+        producer.sendMessageForNotification(NotificationDTO.builder()
+                .id(UUID.randomUUID())
+                .authorId(UUID.fromString(likePost.getAuthorId()))
+                .content("Ваш пост одобрили!")
+                .notificationType(NotificationType.LIKE_POST)
+                .sentTime(LocalDateTime.now())
+                .receiverId(UUID.fromString(post.getAuthorId()))
+                .build());
     }
 
 }
