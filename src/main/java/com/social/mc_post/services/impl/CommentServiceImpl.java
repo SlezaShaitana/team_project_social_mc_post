@@ -9,7 +9,7 @@ import com.social.mc_post.dto.mappers.CommentMapper;
 import com.social.mc_post.dto.notification.MicroServiceName;
 import com.social.mc_post.dto.notification.NotificationDTO;
 import com.social.mc_post.dto.notification.NotificationType;
-import com.social.mc_post.exception.PostNotFoundException;
+import com.social.mc_post.exception.ResourceNotFoundException;
 import com.social.mc_post.kafka.KafkaProducer;
 import com.social.mc_post.repository.CommentRepository;
 import com.social.mc_post.repository.LikeRepository;
@@ -23,12 +23,10 @@ import com.social.mc_post.structure.PostEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -93,7 +91,7 @@ public class CommentServiceImpl implements CommentService {
 
             return commentMapper.mapToCommentDto(newSubComment);
         } else {
-            throw new PostNotFoundException("Post not found");
+            throw new ResourceNotFoundException("Пост не найден");
         }
     }
 
@@ -134,7 +132,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void createLikeComment(String idPost, String idComment, String headerRequestByAuth) throws BadRequestException {
+    public void createLikeComment(String idPost, String idComment, String headerRequestByAuth) {
         PostEntity post = getPostById(idPost);
         CommentEntity comment = commentRepository.findCommentEntityById(idComment);
         if (post != null || comment != null) {
@@ -158,10 +156,10 @@ public class CommentServiceImpl implements CommentService {
                         .serviceName(MicroServiceName.POST)
                         .build());
             } catch (Exception e) {
-                throw new BadRequestException(MessageFormat.format("Error: {0}", e.getMessage()));
+                throw new ResourceNotFoundException(MessageFormat.format("Error: {0}", e.getMessage()));
             }
         } else {
-            throw new BadRequestException("Bad request");
+            throw new ResourceNotFoundException("Данного поста или комментария не существует!");
         }
     }
 

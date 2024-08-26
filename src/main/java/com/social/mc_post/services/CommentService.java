@@ -13,7 +13,7 @@ public interface CommentService {
     CommentDto createSubCommentPost(String idPost, String idComment, CommentDto subComment);
     void deleteCommentPost(String postId, String commentId);
     CommentDto updateComment(String idComment, CommentDto commentDto);
-    void createLikeComment(String idPost, String idComment, String headerRequestByAuth) throws BadRequestException;
+    void createLikeComment(String idPost, String idComment, String headerRequestByAuth);
     void removeLikeComment(String idPost, String idComment) throws BadRequestException;
     Page<CommentEntity> getAllComments(String idPost, PageableDto pageableDto,
                                        CommentSearchDto commentSearchDto);

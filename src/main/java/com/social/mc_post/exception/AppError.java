@@ -1,16 +1,18 @@
 package com.social.mc_post.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ErrorPost {
-
+public class AppError {
     private int statusCode;
-
-    private String msg;
+    private String message;
 
 }
+

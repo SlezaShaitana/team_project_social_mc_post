@@ -9,7 +9,7 @@ import com.social.mc_post.dto.mappers.PostMapper;
 import com.social.mc_post.dto.notification.MicroServiceName;
 import com.social.mc_post.dto.notification.NotificationDTO;
 import com.social.mc_post.dto.notification.NotificationType;
-import com.social.mc_post.exception.PostNotFoundException;
+import com.social.mc_post.exception.ResourceNotFoundException;
 import com.social.mc_post.kafka.KafkaProducer;
 import com.social.mc_post.repository.LikeRepository;
 import com.social.mc_post.repository.PostRepository;
@@ -22,7 +22,6 @@ import com.social.mc_post.structure.TagEntity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,7 +29,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -95,7 +93,7 @@ public class PostServiceImpl implements PostService {
             return PostMapper.mapToPostDto(post.get());
         }
         else {
-            throw new PostNotFoundException("Post not found");
+            throw new ResourceNotFoundException("Пост не найден");
         }
     }
 
@@ -106,7 +104,7 @@ public class PostServiceImpl implements PostService {
             postRepository.delete(post);
             log.info("Post delete by id: {}", post.getId());
         } else {
-            throw new PostNotFoundException("Post not found");
+            throw new ResourceNotFoundException("Пост не найден");
         }
     }
 

@@ -1,14 +1,13 @@
 package com.social.mc_post.controllers;
 
 import com.social.mc_post.dto.*;
-import com.social.mc_post.exception.PostNotFoundException;
+import com.social.mc_post.exception.ResourceNotFoundException;
 import com.social.mc_post.services.CommentService;
 import com.social.mc_post.services.PostService;
 import com.social.mc_post.structure.CommentEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -80,7 +79,7 @@ public class RestPostController {
         if (postService.checkPost(id)){
             commentService.deleteCommentPost(id, commentId);
         } else {
-            throw new PostNotFoundException("Post not found");
+            throw new ResourceNotFoundException("Пост не найден");
         }
     }
 
