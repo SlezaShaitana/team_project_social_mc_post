@@ -39,7 +39,7 @@ public class RestPostController {
     @PostMapping("/post")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseDto handlerCreatePost(@RequestBody PostDto postDto){
-        System.out.println(postDto.toString());
+        log.info(postDto.toString());
         log.info("Create new POST: {}", postDto.getTitle());
         postService.createPost(postDto);
         return new ResponseDto(HttpStatus.CREATED.value(), "Successful operation");
