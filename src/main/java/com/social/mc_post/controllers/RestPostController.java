@@ -104,8 +104,9 @@ public class RestPostController {
 
     @PostMapping("/post/{id}/comment/{commentId}/like")
     public ResponseDto handlerPostLikeComment(@PathVariable(value = "id") String idPost,
-                                                    @PathVariable(value = "commentId") String commentId) throws BadRequestException {
-        commentService.createLikeComment(idPost, commentId);
+                                              @PathVariable(value = "commentId") String commentId,
+                                              @RequestHeader("Authorization") String headerRequestByAuth) throws BadRequestException {
+        commentService.createLikeComment(idPost, commentId, headerRequestByAuth);
         return new ResponseDto(HttpStatus.CREATED.value(), "Successful operation");
     }
 

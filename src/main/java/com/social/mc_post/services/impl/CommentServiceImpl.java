@@ -6,6 +6,7 @@ import com.social.mc_post.dto.PageableDto;
 import com.social.mc_post.dto.enums.TypeComment;
 import com.social.mc_post.dto.enums.TypeLike;
 import com.social.mc_post.dto.mappers.CommentMapper;
+import com.social.mc_post.dto.notification.MicroServiceName;
 import com.social.mc_post.dto.notification.NotificationDTO;
 import com.social.mc_post.dto.notification.NotificationType;
 import com.social.mc_post.exception.PostNotFoundException;
@@ -14,6 +15,7 @@ import com.social.mc_post.repository.CommentRepository;
 import com.social.mc_post.repository.LikeRepository;
 import com.social.mc_post.repository.PostRepository;
 import com.social.mc_post.repository.specifications.CommentSpecification;
+import com.social.mc_post.security.DecodedToken;
 import com.social.mc_post.services.CommentService;
 import com.social.mc_post.structure.CommentEntity;
 import com.social.mc_post.structure.LikeEntity;
@@ -26,6 +28,8 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
@@ -61,6 +65,7 @@ public class CommentServiceImpl implements CommentService {
                         .notificationType(NotificationType.POST_COMMENT)
                         .sentTime(LocalDateTime.now())
                         .receiverId(UUID.fromString(post.getAuthorId()))
+                        .serviceName(MicroServiceName.POST)
                 .build());
         return commentMapper.mapToCommentDto(newComment);
     }
@@ -83,6 +88,7 @@ public class CommentServiceImpl implements CommentService {
                     .notificationType(NotificationType.COMMENT_COMMENT)
                     .sentTime(LocalDateTime.now())
                     .receiverId(UUID.fromString(commentPost.getAuthorId()))
+                    .serviceName(MicroServiceName.POST)
                     .build());
 
             return commentMapper.mapToCommentDto(newSubComment);
@@ -128,7 +134,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void createLikeComment(String idPost, String idComment) throws BadRequestException {
+    public void createLikeComment(String idPost, String idComment, String headerRequestByAuth) throws BadRequestException {
         PostEntity post = getPostById(idPost);
         CommentEntity comment = commentRepository.findCommentEntityById(idComment);
         if (post != null || comment != null) {
@@ -137,13 +143,23 @@ public class CommentServiceImpl implements CommentService {
             createNewLikeComment(comment.getId());
             calculateCountLikeComment(idComment, false);
 
-            producer.sendMessageForNotification(NotificationDTO.builder()
-                    .id(UUID.randomUUID())
-                    .content("Ваш комментарий одобрили")
-                    .notificationType(NotificationType.LIKE_COMMENT)
-                    .sentTime(LocalDateTime.now())
-                    .receiverId(UUID.fromString(comment.getAuthorId()))
-                    .build());
+            try {
+                String stringToken = headerRequestByAuth.substring(7);
+                DecodedToken token = DecodedToken.getDecoded(stringToken);
+                UUID idLikeAuthor = UUID.fromString(token.getId());
+
+                producer.sendMessageForNotification(NotificationDTO.builder()
+                        .id(UUID.randomUUID())
+                        .authorId(idLikeAuthor)
+                        .content("Ваш комментарий одобрили")
+                        .notificationType(NotificationType.LIKE_COMMENT)
+                        .sentTime(LocalDateTime.now())
+                        .receiverId(UUID.fromString(comment.getAuthorId()))
+                        .serviceName(MicroServiceName.POST)
+                        .build());
+            } catch (Exception e) {
+                throw new BadRequestException(MessageFormat.format("Error: {0}", e.getMessage()));
+            }
         } else {
             throw new BadRequestException("Bad request");
         }

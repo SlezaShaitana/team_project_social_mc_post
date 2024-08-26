@@ -6,6 +6,7 @@ import com.social.mc_post.dto.PostDto;
 import com.social.mc_post.dto.PostSearchDto;
 import com.social.mc_post.dto.mappers.LikeMapper;
 import com.social.mc_post.dto.mappers.PostMapper;
+import com.social.mc_post.dto.notification.MicroServiceName;
 import com.social.mc_post.dto.notification.NotificationDTO;
 import com.social.mc_post.dto.notification.NotificationType;
 import com.social.mc_post.exception.PostNotFoundException;
@@ -148,7 +149,8 @@ public class PostServiceImpl implements PostService {
                 .content(titlePost + "\n" + post.getPostText())
                 .notificationType(NotificationType.POST)
                 .sentTime(LocalDateTime.now())
-                .receiverId(UUID.fromString(post.getAuthorId()))
+                .receiverId(null)
+                .serviceName(MicroServiceName.POST)
                 .build());
     }
 
@@ -160,6 +162,7 @@ public class PostServiceImpl implements PostService {
                 .notificationType(NotificationType.LIKE_POST)
                 .sentTime(LocalDateTime.now())
                 .receiverId(UUID.fromString(post.getAuthorId()))
+                .serviceName(MicroServiceName.POST)
                 .build());
     }
 

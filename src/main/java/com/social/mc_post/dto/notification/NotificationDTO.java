@@ -15,4 +15,5 @@ public class NotificationDTO {
     private NotificationType notificationType;
     private LocalDateTime sentTime;
     private UUID receiverId;
+    private MicroServiceName serviceName;
 }
