@@ -61,7 +61,7 @@ public class PostServiceImpl implements PostService {
         PostEntity savePost = postRepository.save(post);
         PostDto savePostDto = PostMapper.mapToPostDto(savePost);
         log.info("Create new post id: {}", savePostDto.getId());
-        putNotificationAboutPost(post);
+        //putNotificationAboutPost(post);
         return savePostDto;
     }
 
@@ -119,7 +119,7 @@ public class PostServiceImpl implements PostService {
         LikeEntity likePost = LikeMapper.mapToLikeEntity(likeDto);
         likePost.setItemId(post.getId());
         likeRepository.save(likePost);
-        putNotificationAboutLike(post, likePost);
+        //putNotificationAboutLike(post, likePost);
         return LikeMapper.mapToLikeDto(likePost);
     }
 

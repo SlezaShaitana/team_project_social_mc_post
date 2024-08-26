@@ -39,17 +39,10 @@ public class RestPostController {
     @PostMapping("/post")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseDto handlerCreatePost(@RequestBody PostDto postDto){
-        if (postDto != null){
-            log.info("Create new POST: {}", postDto.getTitle());
-            postService.createPost(postDto);
-            return new ResponseDto(HttpStatus.CREATED.value(), "Successful operation");
-        } else {
-            try {
-                throw new BadRequestException("Bad request");
-            } catch (BadRequestException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        System.out.println(postDto.toString());
+        log.info("Create new POST: {}", postDto.getTitle());
+        postService.createPost(postDto);
+        return new ResponseDto(HttpStatus.CREATED.value(), "Successful operation");
     }
 
     @PutMapping("/post/{id}/comment")
