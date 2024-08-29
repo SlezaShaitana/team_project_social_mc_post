@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.cglib.core.Local;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +18,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-public class PostEntity {
+public class PostEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -50,11 +51,11 @@ public class PostEntity {
     @Column(name = "comments_count")
     private Integer commentsCount;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<TagEntity> tags;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post", orphanRemoval = true)
+    private List<TagEntity> tags = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<ReactionEntity> reactions;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post", orphanRemoval = true)
+    private List<ReactionEntity> reactions = new ArrayList<>();
 
     @Column(name = "my_reaction")
     private String myReaction;
@@ -73,8 +74,12 @@ public class PostEntity {
     private LocalDateTime publishDate;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post", orphanRemoval = true)
     private List<CommentEntity> commentEntities = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post", orphanRemoval = true)
+    private List<LikeEntity> likeEntityList;
 
     private Boolean deferred;
 

@@ -1,0 +1,44 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="mikhail" id="drop-table">
+        <dropTable  cascadeConstraints="true"
+                    schemaName="public"
+                    tableName="post_tags"/>
+
+        <dropTable  cascadeConstraints="true"
+                    schemaName="public"
+                    tableName="post_comment_entities"/>
+
+        <dropTable  cascadeConstraints="true"
+                    schemaName="public"
+                    tableName="post_reactions"/>
+        <dropTable  cascadeConstraints="true"
+                    schemaName="public"
+                    tableName="reaction"/>
+<!--        <dropTable-->
+<!--                cascadeConstraints="true"-->
+<!--                schemaName="public"-->
+<!--                tableName="tag_search"/>-->
+<!--        <dropTable-->
+<!--                cascadeConstraints="true"-->
+<!--                schemaName="public"-->
+<!--                tableName="comment_search"/>-->
+        <dropTable
+                cascadeConstraints="true"
+                schemaName="public"
+                tableName="comment"/>
+        <dropTable
+                cascadeConstraints="true"
+                schemaName="public"
+                tableName="post"/>
+        <dropTable
+                cascadeConstraints="true"
+                schemaName="public"
+                tableName="like_post"/>
+        <dropTable
+                cascadeConstraints="true"
+                schemaName="public"
+                tableName="tags"/>
+
+    </changeSet>
+</databaseChangeLog>

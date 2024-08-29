@@ -17,4 +17,8 @@ public class ReactionEntity {
     private String reactionType;
 
     private Integer count;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", referencedColumnName = "id")
+    private PostEntity post;
 }

@@ -5,7 +5,7 @@ import com.social.mc_post.dto.CommentSearchDto;
 import com.social.mc_post.dto.PageableDto;
 import com.social.mc_post.dto.enums.TypeComment;
 import com.social.mc_post.dto.enums.TypeLike;
-import com.social.mc_post.dto.mappers.CommentMapper;
+import com.social.mc_post.mapper.CommentMapper;
 import com.social.mc_post.dto.notification.MicroServiceName;
 import com.social.mc_post.dto.notification.NotificationDTO;
 import com.social.mc_post.dto.notification.NotificationType;
@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -70,12 +71,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto createSubCommentPost(String idPost, String idComment, CommentDto subComment) {
-        PostEntity post = postRepository.findPostEntityById(idPost);
-        if (post != null) {
+        Optional<PostEntity> post = postRepository.findById(idPost);
+
+        if (post.isPresent()) {
+
             CommentEntity commentPost = commentRepository.findCommentEntityById(idComment);
             CommentEntity newSubComment = commentMapper.mapToCommentEntity(subComment);
             newSubComment.setParentId(commentPost.getId());
-            newSubComment.setPostId(post.getId());
+            newSubComment.setPost(post.get());
             commentRepository.save(newSubComment);
             log.info("Create subcomment id: {}", newSubComment.getId());
 
@@ -254,6 +257,5 @@ public class CommentServiceImpl implements CommentService {
         }
 
         return commentRepository.findAll(spec, PageRequest.of(pageableDto.getPage(), pageableDto.getSize()));
-
     }
 }

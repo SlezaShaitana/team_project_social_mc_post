@@ -19,4 +19,8 @@ public class TagEntity {
     private Boolean isDeleted;
 
     private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", referencedColumnName = "id")
+    private PostEntity post;
 }

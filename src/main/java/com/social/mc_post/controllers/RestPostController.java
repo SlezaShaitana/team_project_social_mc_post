@@ -31,7 +31,6 @@ public class RestPostController {
     }
 
     @PutMapping("/post")
-    @PreAuthorize("ROLE_USER")
     public PostDto handlerUpdatePost(@RequestBody PostDto postDto){
         return postService.updatePost(postDto);
     }
@@ -81,7 +80,6 @@ public class RestPostController {
         return ResponseEntity.ok().build();
     }
 
-    //TODO Create like post
     @PostMapping("/post/{id}/like")
     @ResponseStatus(HttpStatus.CREATED)
     public LikeDto handlerLike(@PathVariable(value = "id") String id,
@@ -90,8 +88,9 @@ public class RestPostController {
     }
 
     @DeleteMapping("/post/{id}/like")
-    public ResponseEntity<?> handlerDeleteLike(@PathVariable(value = "id") String id){
-        return ResponseEntity.ok("Hello");
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void handlerDeleteLike(@PathVariable(value = "id") String id) throws BadRequestException {
+        postService.deleteLike(id);
     }
 
     @PostMapping("/post/{id}/comment/{commentId}/like")
@@ -136,6 +135,7 @@ public class RestPostController {
     @DeleteMapping("/post/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePost(@PathVariable(value = "id") String id){
+        log.info("Delete post by id: {}", id);
         postService.deletePost(id);
     }
 }

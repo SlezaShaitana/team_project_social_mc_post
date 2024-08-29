@@ -1,5 +1,6 @@
 package com.social.mc_post.structure;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.social.mc_post.dto.enums.TypeComment;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,8 +26,10 @@ public class CommentEntity {
     @Column(name = "comment_type")
     private TypeComment commentType;
 
+    @Temporal(TemporalType.TIMESTAMP)
     private Date time;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_changed")
     private Date timeChanged;
 
@@ -39,8 +42,10 @@ public class CommentEntity {
     @Column(name = "comment_text")
     private String commentText;
 
-    @Column(name = "post_id")
-    private String postId;
+    @ManyToOne
+    @JoinColumn(name = "post_id", referencedColumnName = "id")
+    @JsonIgnore
+    private PostEntity post;
 
     @Column(name = "is_blocked")
     private Boolean isBlocked;
@@ -56,7 +61,5 @@ public class CommentEntity {
 
     @Column(name = "image_path")
     private String imagePath;
-
-
 
 }

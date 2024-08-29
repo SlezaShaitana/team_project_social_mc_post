@@ -1,5 +1,6 @@
 package com.social.mc_post.structure;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.social.mc_post.dto.enums.TypeLike;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,4 +33,9 @@ public class LikeEntity {
     private TypeLike type;
 
     private String reactionType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", referencedColumnName = "id")
+    @JsonIgnore
+    private PostEntity post;
 }
