@@ -1,5 +1,9 @@
 package com.social.mc_post.security;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.social.mc_post.dto.UserDTo;
 import com.social.mc_post.feign.JwtValidation;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.NonNull;
@@ -45,9 +49,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
             if (jwtValidation.validateToken(stringToken)) {
                 DecodedToken token = DecodedToken.getDecoded(stringToken);
+
                 String email = token.getEmail();
                 List<String> roles = token.getRoles();
-
+                log.info("EMAIL USER: {}", email);
+                log.info("ID USER: {}", token.getId());
                 Collection<? extends GrantedAuthority> authorities = roles.stream()
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
@@ -74,5 +80,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private Boolean isAuthorized(){
         return true;
+    }
+
+    public UserDTo getDataUserFromToken(String payload) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(payload, UserDTo.class);
     }
 }
