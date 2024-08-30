@@ -68,8 +68,7 @@ public class PostServiceImpl implements PostService {
     public Page<PostDto> getPosts(PostSearchDto postSearchDto, PageableDto pageableDto) {
         Pageable pageable = PageRequest.of(pageableDto.getPage(), pageableDto.getSize());
         return postRepository
-                .findPageOfPostByPublishDateBetweenOrderByPublishDate
-                        (postSearchDto.getDateTo(), postSearchDto.getDateFrom(), pageable).map(PostMapper.MAPPER::mapToPostDto);
+                .getPosts(pageable).map(PostMapper.MAPPER::mapToPostDto);
     }
 
     @Override
@@ -92,7 +91,7 @@ public class PostServiceImpl implements PostService {
                 .build();
         postRepository.save(postEntity);
         log.info("Create new post: {}", postEntity.getTitle());
-        //putNotificationAboutPost(post);
+        putNotificationAboutPost(postEntity);
     }
 
     public void saveTagInDB(PostDto postDto){
@@ -149,7 +148,7 @@ public class PostServiceImpl implements PostService {
         LikeEntity likePost = likeMapper.mapToLikeEntity(likeDto);
         likePost.setItemId(post.getId());
         likeRepository.save(likePost);
-        //putNotificationAboutLike(post, likePost);
+        putNotificationAboutLike(post, likePost);
         return likeMapper.mapToLikeDto(likePost);
     }
 
