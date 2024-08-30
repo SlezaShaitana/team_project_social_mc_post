@@ -77,13 +77,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
-
     private Boolean isAuthorized(){
         return true;
-    }
-
-    public UserDTo getDataUserFromToken(String payload) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(payload, UserDTo.class);
     }
 }
