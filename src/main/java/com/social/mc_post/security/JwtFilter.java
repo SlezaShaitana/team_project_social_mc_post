@@ -43,14 +43,14 @@ public class JwtFilter extends OncePerRequestFilter {
             String stringToken  = getToken(request);
             log.info("Token: '{}'", stringToken);
 
-            if (isAuthorized()) {
-//                DecodedToken token = DecodedToken.getDecoded(stringToken);
-//                String email = token.getEmail();
-//                List<String> roles = token.getRoles();
-//
-//                Collection<? extends GrantedAuthority> authorities = roles.stream()
-//                        .map(SimpleGrantedAuthority::new)
-//                        .collect(Collectors.toList());
+            if (jwtValidation.validateToken(stringToken)) {
+                DecodedToken token = DecodedToken.getDecoded(stringToken);
+                String email = token.getEmail();
+                List<String> roles = token.getRoles();
+
+                Collection<? extends GrantedAuthority> authorities = roles.stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         stringToken, null, null);
