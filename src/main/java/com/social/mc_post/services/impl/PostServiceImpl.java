@@ -47,28 +47,25 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final TagRepository tagRepository;
     private final LikeMapper likeMapper;
-
+    private final PostMapper postMapper;
+    private final KafkaProducer producer;
     @Autowired
     public PostServiceImpl(LikeRepository likeRepository,
                            PostRepository postRepository,
                            TagRepository tagRepository,
-                           LikeMapper likeMapper,
+                           LikeMapper likeMapper, PostMapper postMapper,
                            KafkaProducer producer) {
         this.likeRepository = likeRepository;
         this.postRepository = postRepository;
         this.tagRepository = tagRepository;
         this.likeMapper = likeMapper;
+        this.postMapper = postMapper;
         this.producer = producer;
     }
 
-    private final KafkaProducer producer;
-
-
     @Override
     public Page<PostDto> getPosts(PostSearchDto postSearchDto, PageableDto pageableDto) {
-        Pageable pageable = PageRequest.of(pageableDto.getPage(), pageableDto.getSize());
-        return postRepository
-                .getPosts(pageable).map(PostMapper.MAPPER::mapToPostDto);
+        return getAllPosts(postSearchDto, pageableDto).map(postMapper::mapToPostDto);
     }
 
     @Override
@@ -169,12 +166,17 @@ public class PostServiceImpl implements PostService {
     }
 
 
-    public Page<PostEntity> find(String title, Integer page){
+    public Page<PostEntity> getAllPosts(PostSearchDto postSearchDto, PageableDto pageableDto){
         Specification<PostEntity> spec = Specification.where(null);
-        if (title != null){
-            spec.and(PostSpecification.getPostByTitle(title));
+
+        if (postSearchDto.getAuthor() != null){
+            spec.and(PostSpecification.getPostByAuthor(postSearchDto.getAuthor()));
         }
-        return postRepository.findAll(spec, PageRequest.of(page - 1, 5));
+
+        if (postSearchDto.getDateTo() != null && postSearchDto.getDateFrom() != null){
+            spec.and(PostSpecification.getPostsByPublishDateBetween(postSearchDto.getDateTo(), postSearchDto.getDateFrom()));
+        }
+        return postRepository.findAll(spec, PageRequest.of(pageableDto.getPage() - 1, pageableDto.getSize()));
     }
 
     public void putNotificationAboutPost(PostEntity post) {
