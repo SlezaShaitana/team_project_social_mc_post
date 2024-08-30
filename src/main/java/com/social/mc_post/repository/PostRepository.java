@@ -25,6 +25,4 @@ public interface PostRepository extends JpaRepository<PostEntity, String>, JpaSp
     @Query(value = "UPDATE PostEntity AS p SET p = :post WHERE p.id = :id")
     void updatePost(@Param("post") PostEntity post, @Param("id") String id);
 
-
-
 }
