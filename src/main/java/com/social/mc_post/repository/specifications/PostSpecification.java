@@ -19,7 +19,6 @@ public class PostSpecification {
                 criteriaBuilder.equal(root.get("type"), type);
     }
 
-
     public static Specification<PostEntity> getPostByAuthor(String authorId){
         return (root, criteriaQuery, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("authorId"), authorId);
@@ -40,7 +39,5 @@ public class PostSpecification {
         return (root, criteriaQuery, criteriaBuilder) ->
                 criteriaBuilder.like(root.get("postText"), text);
     }
-
-
 
 }
