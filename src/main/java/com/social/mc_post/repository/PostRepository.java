@@ -18,10 +18,10 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<PostEntity, String>, JpaSpecificationExecutor<PostEntity> {
     List<PostEntity> findAll();
+
     PostEntity findPostEntityById(String id);
 
-    @Query(value = "SELECT p FROM PostEntity AS p GROUP BY p.publishDate DESC LIMIT 5", nativeQuery = true)
-    Page<PostEntity> getPosts(Pageable page);
+    Page<PostEntity> findPostEntitesOrderByPublishDate(Pageable pageable);
 
     @Modifying
     @Query(value = "UPDATE PostEntity AS p SET p = :post WHERE p.id = :id")
