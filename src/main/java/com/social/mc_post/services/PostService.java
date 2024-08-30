@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 public interface PostService {
 
     Page<PostDto> getPosts(PostSearchDto postSearchDto, PageableDto pageableDto);
-    PostDto createPost(PostDto newPost);
+    void createPost(PostDto newPost);
     PostDto updatePost(PostDto updatePost);
     PostDto getPostById(String id);
     void deletePost(String id);

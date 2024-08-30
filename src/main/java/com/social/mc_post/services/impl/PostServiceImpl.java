@@ -4,6 +4,7 @@ import com.social.mc_post.dto.LikeDto;
 import com.social.mc_post.dto.PageableDto;
 import com.social.mc_post.dto.PostDto;
 import com.social.mc_post.dto.PostSearchDto;
+import com.social.mc_post.dto.enums.TypePost;
 import com.social.mc_post.dto.notification.MicroServiceName;
 import com.social.mc_post.dto.notification.NotificationDTO;
 import com.social.mc_post.dto.notification.NotificationType;
@@ -34,6 +35,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -71,14 +73,26 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDto createPost(PostDto newPost) {
-        PostEntity post = PostMapper.MAPPER.mapToPostEntity(newPost);
+    public void createPost(PostDto newPost) {
         saveTagInDB(newPost);
-        PostEntity savePost = postRepository.save(post);
-        PostDto savePostDto = PostMapper.MAPPER.mapToPostDto(savePost);
-        log.info("Create new post id: {}", savePostDto.getId());
+        PostEntity postEntity = PostEntity
+                .builder()
+                .imagePath(newPost.getImagePath())
+                .postText(newPost.getPostText())
+                .publishDate(newPost.getPublishDate())
+                .tags(newPost.getTags())
+                .title(newPost.getTitle())
+                .deferred(false)
+                .likeAmount(0)
+                .myLike(false)
+                .myReaction("")
+                .reactions(null)
+                .time(new Date())
+                .type(TypePost.POSTED)
+                .build();
+        postRepository.save(postEntity);
+        log.info("Create new post: {}", postEntity.getTitle());
         //putNotificationAboutPost(post);
-        return savePostDto;
     }
 
     public void saveTagInDB(PostDto postDto){
