@@ -24,6 +24,7 @@ import com.social.mc_post.structure.TagEntity;
 import jakarta.resource.spi.AuthenticationMechanism;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.coyote.BadRequestException;
@@ -70,28 +71,39 @@ public class PostServiceImpl implements PostService {
         return getAllPosts(postSearchDto, pageableDto).map(postMapper::mapToPostDto);
     }
 
+    @SneakyThrows
     @Override
-    public void createPost(PostDto newPost) {
-        DecodedToken decodedToken = new DecodedToken();
+    public void createPost(PostDto newPost, String token) {
+
+        String stringToken = token.substring(7);
+        DecodedToken decodedToken = DecodedToken.getDecoded(stringToken);
+        UUID idAuthor = UUID.fromString(decodedToken.getId());
+
         saveTagInDB(newPost);
         PostEntity postEntity = PostEntity
                 .builder()
                 .imagePath(newPost.getImagePath())
                 .postText(newPost.getPostText())
-                .publishDate(newPost.getPublishDate())
+                .publishDate(LocalDateTime.now())
                 .tags(newPost.getTags())
                 .title(newPost.getTitle())
+                .commentsCount(0)
+                .isBlocked(false)
+                .isDeleted(false)
                 .deferred(false)
                 .likeAmount(0)
                 .myLike(false)
                 .myReaction("")
                 .reactions(null)
                 .time(new Date())
-                .authorId(decodedToken.getId())
+                .authorId(idAuthor.toString())
                 .type(TypePost.POSTED)
                 .build();
+
         postRepository.save(postEntity);
+
         log.info("Create new post: {}", postEntity.getTitle());
+
         //putNotificationAboutPost(postEntity);
     }
 
