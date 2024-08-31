@@ -47,35 +47,66 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    public CommentDto createCommentPost(CommentDto commentDto, String postId) {
-        CommentEntity newComment = commentMapper.mapToCommentEntity(commentDto);
-        calculateCountCommentPost(postId, false);
-        commentRepository.save(newComment);
-        log.info("Comment id : {}", newComment.getId());
-        PostEntity post = postRepository.findPostEntityById(postId);
-        producer.sendMessageForNotification(NotificationDTO.builder()
-                        .id(UUID.randomUUID())
-                        .authorId(UUID.fromString(newComment.getAuthorId()))
-                        .content(newComment.getCommentText())
-                        .notificationType(NotificationType.POST_COMMENT)
-                        .sentTime(LocalDateTime.now())
-                        .receiverId(UUID.fromString(post.getAuthorId()))
-                        .serviceName(MicroServiceName.POST)
-                .build());
-        return commentMapper.mapToCommentDto(newComment);
+    public void createCommentPost(CommentDto commentDto, String postId, String token) {
+
+        Optional<PostEntity> post = postRepository.findById(postId);
+        if (post.isPresent()){
+            CommentEntity newComment = CommentEntity
+                    .builder()
+                    .commentsCount(0)
+                    .commentText(commentDto.getCommentText())
+                    .imagePath(commentDto.getImagePath())
+                    .authorId(GettingDataService.getUserIdFromToken(token))
+                    .isDeleted(false)
+                    .isBlocked(false)
+                    .parentId(postId)
+                    .time(new Date())
+                    .likeAmount(0)
+                    .post(post.get())
+                    .timeChanged(commentDto.getTimeChanged())
+                    .build();
+            calculateCountCommentPost(postId, false);
+            commentRepository.save(newComment);
+            log.info("Comment id : {}", newComment.getId());
+
+            producer.sendMessageForNotification(NotificationDTO.builder()
+                    .id(UUID.randomUUID())
+                    .authorId(UUID.fromString(newComment.getAuthorId()))
+                    .content(newComment.getCommentText())
+                    .notificationType(NotificationType.POST_COMMENT)
+                    .sentTime(LocalDateTime.now())
+                    .receiverId(UUID.fromString(post.get().getAuthorId()))
+                    .serviceName(MicroServiceName.POST)
+                    .build());
+        } else {
+            throw new ResourceNotFoundException("Пост не найден");
+        }
     }
 
     @Override
-    public CommentDto createSubCommentPost(String idPost, String idComment, CommentDto subComment) {
+    public void createSubCommentPost(String idPost, String idComment, CommentDto subComment, String token) {
         Optional<PostEntity> post = postRepository.findById(idPost);
 
         if (post.isPresent()) {
 
             CommentEntity commentPost = commentRepository.findCommentEntityById(idComment);
-            CommentEntity newSubComment = commentMapper.mapToCommentEntity(subComment);
-            newSubComment.setParentId(commentPost.getId());
-            newSubComment.setPost(post.get());
+
+            CommentEntity newSubComment = CommentEntity
+                    .builder()
+                    .commentText(subComment.getCommentText())
+                    .commentsCount(0)
+                    .parentId(commentPost.getId())
+                    .isBlocked(false)
+                    .authorId(GettingDataService.getUserIdFromToken(token))
+                    .imagePath(subComment.getImagePath())
+                    .likeAmount(0)
+                    .time(new Date())
+                    .isDeleted(false)
+                    .myLike(false)
+                    .build();
+
             commentRepository.save(newSubComment);
+
             log.info("Create subcomment id: {}", newSubComment.getId());
 
             producer.sendMessageForNotification(NotificationDTO.builder()
@@ -88,7 +119,6 @@ public class CommentServiceImpl implements CommentService {
                     .serviceName(MicroServiceName.POST)
                     .build());
 
-            return commentMapper.mapToCommentDto(newSubComment);
         } else {
             throw new ResourceNotFoundException("Пост не найден");
         }
@@ -103,10 +133,17 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto updateComment(String idComment, CommentDto commentDto) {
-        CommentEntity comment = commentRepository.findCommentEntityById(idComment);
-        commentRepository.updateComment(comment, idComment);
-        return commentMapper.mapToCommentDto(comment);
+    public void updateComment(String idComment, CommentDto commentDto) {
+        Optional<CommentEntity> comment = commentRepository.findById(idComment);
+
+        if (comment.isPresent()){
+            comment.get().setImagePath(commentDto.getImagePath());
+            comment.get().setCommentText(commentDto.getCommentText());
+            comment.get().setTimeChanged(new Date());
+            commentRepository.updateComment(comment.get(), idComment);
+        } else {
+            throw new ResourceNotFoundException("Данный комментарий не найден");
+        }
     }
 
     public void calculateCountCommentPost(String idPost, boolean delete) {
@@ -137,13 +174,12 @@ public class CommentServiceImpl implements CommentService {
         if (post != null || comment != null) {
 
             calculateCountCommentPost(post.getId(), false);
-            createNewLikeComment(comment.getId());
+            createNewLikeComment(comment.getId(), headerRequestByAuth);
             calculateCountLikeComment(idComment, false);
 
             try {
-                String stringToken = headerRequestByAuth.substring(7);
-                DecodedToken token = DecodedToken.getDecoded(stringToken);
-                UUID idLikeAuthor = UUID.fromString(token.getId());
+
+                UUID idLikeAuthor = UUID.fromString(GettingDataService.getUserIdFromToken(headerRequestByAuth));
 
                 producer.sendMessageForNotification(NotificationDTO.builder()
                         .id(UUID.randomUUID())
@@ -174,12 +210,13 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
-    public LikeEntity createNewLikeComment(String itemId){
+    public LikeEntity createNewLikeComment(String itemId, String token){
         LikeEntity newLike = LikeEntity.builder()
                 .time(new Date())
                 .type(TypeLike.COMMENT)
                 .itemId(itemId)
                 .isDeleted(false)
+                .authorId(GettingDataService.getUserIdFromToken(token))
                 .reactionType("")
                 .build();
         return likeRepository.save(newLike);

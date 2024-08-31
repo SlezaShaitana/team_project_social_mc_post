@@ -47,29 +47,32 @@ public class RestPostController {
     }
 
     @PutMapping("/post/{id}/comment")
-    public CommentDto handlerComment(@PathVariable(value = "id") String id,
+    public void handlerComment(@PathVariable(value = "id") String id,
                                             @RequestBody CommentDto commentDto){
-        return commentService.updateComment(id, commentDto);
+        commentService.updateComment(id, commentDto);
     }
 
     @PostMapping("/post/{id}/comment")
-    public CommentDto handlerPostComment(@PathVariable(value = "id") String id,
-                                                @RequestBody CommentDto commentDto){
-        return commentService.createCommentPost(commentDto, id);
+    @ResponseStatus(HttpStatus.CREATED)
+    public void handlerPostComment(@PathVariable(value = "id") String id,
+                                         @RequestBody CommentDto commentDto,
+                                         @RequestHeader("Authorization") String token){
+        commentService.createCommentPost(commentDto, id, token);
     }
 
     @PutMapping("/post/{id}/comment/{commentId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDto handlerPostSubComment(@PathVariable(value = "id") String id,
-                                      @PathVariable(value = "commentId") String commentId,
-                                      @RequestBody CommentDto subComment){
-        return commentService.createSubCommentPost(id, commentId, subComment);
+    public void handlerPostSubComment(@PathVariable(value = "id") String id,
+                                              @PathVariable(value = "commentId") String commentId,
+                                              @RequestBody CommentDto subComment,
+                                            @RequestHeader("Authorization") String headerRequestByAuth){
+        commentService.createSubCommentPost(id, commentId, subComment, headerRequestByAuth);
     }
 
     @DeleteMapping("/post/{id}/comment/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void handlerDeleteComment(@PathVariable(value = "id") String id,
-                                                  @PathVariable(value = "commentId") String commentId){
+                                     @PathVariable(value = "commentId") String commentId){
         if (postService.checkPost(id)){
             commentService.deleteCommentPost(id, commentId);
         } else {
@@ -84,9 +87,10 @@ public class RestPostController {
 
     @PostMapping("/post/{id}/like")
     @ResponseStatus(HttpStatus.CREATED)
-    public LikeDto handlerLike(@PathVariable(value = "id") String id,
-                                         @RequestBody LikeDto likeDto){
-        return postService.createLikePost(id, likeDto);
+    public void handlerLike(@PathVariable(value = "id") String id,
+                               @RequestBody LikeDto likeDto,
+                               @RequestHeader("Authorization") String headerRequestByAuth){
+        postService.createLikePost(id, likeDto, headerRequestByAuth);
     }
 
     @DeleteMapping("/post/{id}/like")

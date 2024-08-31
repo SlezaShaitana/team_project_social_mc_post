@@ -9,10 +9,10 @@ import org.springframework.data.domain.Page;
 
 public interface CommentService {
 
-    CommentDto createCommentPost(CommentDto commentDto, String postId);
-    CommentDto createSubCommentPost(String idPost, String idComment, CommentDto subComment);
+    void createCommentPost(CommentDto commentDto, String postId, String token);
+    void createSubCommentPost(String idPost, String idComment, CommentDto subComment, String token);
     void deleteCommentPost(String postId, String commentId);
-    CommentDto updateComment(String idComment, CommentDto commentDto);
+    void updateComment(String idComment, CommentDto commentDto);
     void createLikeComment(String idPost, String idComment, String headerRequestByAuth);
     void removeLikeComment(String idPost, String idComment) throws BadRequestException;
     Page<CommentEntity> getAllComments(String idPost, PageableDto pageableDto,

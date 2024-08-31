@@ -15,8 +15,7 @@ public interface PostService {
     void updatePost(PostDto updatePost);
     PostDto getPostById(String id);
     void deletePost(String id);
-    void createDeferredPost();
-    LikeDto createLikePost(String idPost, LikeDto likeDto);
+    void createLikePost(String idPost, LikeDto likeDto, String tokenAuth);
     Boolean checkPost(String postId);
     void deleteLike(String id) throws BadRequestException;
     Page<PostEntity> getAllPosts(PostSearchDto postSearchDto, PageableDto pageableDto);

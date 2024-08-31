@@ -35,6 +35,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -72,7 +73,7 @@ public class PostServiceImpl implements PostService {
         return getAllPosts(postSearchDto, pageableDto).map(postMapper::mapToPostDto);
     }
 
-    @SneakyThrows
+
     @Override
     public void createPost(PostDto newPost, String token) {
 
@@ -97,7 +98,7 @@ public class PostServiceImpl implements PostService {
                 .myReaction("")
                 .reactions(null)
                 .time(new Date())
-                .authorId(getUserIdFromToken(tokenAuth))
+                .authorId(GettingDataService.getUserIdFromToken(tokenAuth))
                 .build();
 
         if (publishDate == null){
@@ -107,14 +108,6 @@ public class PostServiceImpl implements PostService {
         }
 
         postRepository.save(postEntity);
-    }
-
-    @SneakyThrows
-    public String getUserIdFromToken(String userToken){
-        String stringToken = userToken.substring(7);
-        DecodedToken decodedToken = DecodedToken.getDecoded(stringToken);
-        UUID idAuthor = UUID.fromString(decodedToken.getId());
-        return idAuthor.toString();
     }
 
     public void saveTagInDB(PostDto postDto){
@@ -171,18 +164,26 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void createDeferredPost() {
+    public void createLikePost(String idPost, LikeDto likeDto, String tokenAuth) {
+        Optional<PostEntity> post = postRepository.findById(idPost);
 
-    }
-
-    @Override
-    public LikeDto createLikePost(String idPost, LikeDto likeDto) {
-        PostEntity post = postRepository.findPostEntityById(idPost);
-        LikeEntity likePost = likeMapper.mapToLikeEntity(likeDto);
-        likePost.setItemId(post.getId());
-        likeRepository.save(likePost);
-        putNotificationAboutLike(post, likePost);
-        return likeMapper.mapToLikeDto(likePost);
+       if (post.isPresent()){
+            LikeEntity likePost = LikeEntity
+                    .builder()
+                    .itemId(post.get().getId())
+                    .post(post.get())
+                    .reactionType(likeDto.getReactionType())
+                    .type(likeDto.getType())
+                    .isDeleted(false)
+                    .time(new Date())
+                    .authorId(GettingDataService.getUserIdFromToken(tokenAuth))
+                    .build();
+            likeRepository.save(likePost);
+            putNotificationAboutLike(post.get(), likePost);
+        }
+       else {
+           throw new ResourceNotFoundException("Данный пост отсутствует");
+       }
     }
 
     @Override
@@ -219,7 +220,7 @@ public class PostServiceImpl implements PostService {
     public String delayed(String token) {
         try {
             List<PostEntity> posts = postRepository.findByTypeAndAuthorId(TypePost.QUEUED,
-                    getUserIdFromToken(token));
+                    GettingDataService.getUserIdFromToken(token));
             int countPostedPost = 0;
             for (PostEntity post : posts){
                 if (post.getPublishDate().isAfter(LocalDateTime.now())){
