@@ -87,6 +87,7 @@ public class PostServiceImpl implements PostService {
                 .myReaction("")
                 .reactions(null)
                 .time(new Date())
+                .authorId(decodedToken.getId())
                 .type(TypePost.POSTED)
                 .build();
         postRepository.save(postEntity);

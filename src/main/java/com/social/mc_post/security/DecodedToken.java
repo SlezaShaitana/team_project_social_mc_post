@@ -15,7 +15,7 @@ public class DecodedToken {
 
     private String id;
     private String email;
-    private List<String> roles;
+    private List<String> role;
 
     public static DecodedToken getDecoded(String encodedToken) throws UnsupportedEncodingException {
         String[] pieces = encodedToken.split("\\.");

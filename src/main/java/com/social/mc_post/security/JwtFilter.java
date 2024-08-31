@@ -47,7 +47,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 DecodedToken token = DecodedToken.getDecoded(stringToken);
 
                 String email = token.getEmail();
-                List<String> roles = token.getRoles();
+                List<String> roles = token.getRole();
                 log.info("EMAIL USER: {}", email);
                 log.info("ID USER: {}", token.getId());
                 Collection<? extends GrantedAuthority> authorities = roles.stream()
