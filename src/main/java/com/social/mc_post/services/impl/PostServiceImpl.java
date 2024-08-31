@@ -120,11 +120,21 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public PostDto updatePost(PostDto updatePost) {
-        PostEntity post = PostMapper.MAPPER.mapToPostEntity(updatePost);
-        postRepository.updatePost(post, post.getId());
-        log.info("Update POST: {}", post.getId());
-        return PostMapper.MAPPER.mapToPostDto(post);
+    public void updatePost(PostDto updatePost) {
+        Optional<PostEntity> postEntity = postRepository.findById(updatePost.getId());
+
+        if (postEntity.isPresent()){
+            postEntity.get().setTitle(updatePost.getTitle());
+            postEntity.get().setPostText(updatePost.getPostText());
+            postEntity.get().setImagePath(updatePost.getImagePath());
+            postEntity.get().setTimeChanged(LocalDateTime.now());
+            postRepository.save(postEntity.get());
+        } else {
+            throw new ResourceNotFoundException("Данный пост отсутствует");
+        }
+
+        log.info("Update POST: {}", postEntity.get().getId());
+
     }
 
     @Override

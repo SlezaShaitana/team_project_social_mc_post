@@ -31,8 +31,9 @@ public class RestPostController {
     }
 
     @PutMapping("/post")
-    public PostDto handlerUpdatePost(@RequestBody PostDto postDto){
-        return postService.updatePost(postDto);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void handlerUpdatePost(@RequestBody PostDto postDto){
+        postService.updatePost(postDto);
     }
 
     @PostMapping("/post")

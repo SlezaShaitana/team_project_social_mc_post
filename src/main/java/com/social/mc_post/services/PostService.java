@@ -12,7 +12,7 @@ public interface PostService {
 
     Page<PostDto> getPosts(PostSearchDto postSearchDto, PageableDto pageableDto);
     void createPost(PostDto newPost, String token);
-    PostDto updatePost(PostDto updatePost);
+    void updatePost(PostDto updatePost);
     PostDto getPostById(String id);
     void deletePost(String id);
     void createDeferredPost();
