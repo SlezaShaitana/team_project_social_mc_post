@@ -6,15 +6,15 @@
         </encoder>
     </appender>
 
-    <appender name="SAVE-TO-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>logs/mc_post_log.log</file>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] ${PID:- } %-5level %logger{36}.%M - %msg%n</Pattern>
-        </encoder>
-    </appender>
+<!--    <appender name="SAVE-TO-FILE" class="ch.qos.logback.core.FileAppender">-->
+<!--        <file>logs/mc_post_log.log</file>-->
+<!--        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+<!--            <Pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] ${PID:- } %-5level %logger{36}.%M - %msg%n</Pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="SAVE-TO-FILE"/>
+<!--        <appender-ref ref="SAVE-TO-FILE"/>-->
     </root>
 </configuration>

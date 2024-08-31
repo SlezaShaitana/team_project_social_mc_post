@@ -43,17 +43,21 @@ public class JwtFilter extends OncePerRequestFilter {
             String stringToken  = getToken(request);
             log.info("Token: '{}'", stringToken);
 
-            if (isAuthorized()) {
-//                DecodedToken token = DecodedToken.getDecoded(stringToken);
-//                String email = token.getEmail();
-//                List<String> roles = token.getRoles();
-//
+            if (jwtValidation.validateToken(stringToken)) {
+                DecodedToken token = DecodedToken.getDecoded(stringToken);
+
+                String email = token.getEmail();
+                List<String> roles = token.getRole();
+                log.info("EMAIL USER: {}", email);
+                log.info("ID USER: {}", token.getId());
 //                Collection<? extends GrantedAuthority> authorities = roles.stream()
 //                        .map(SimpleGrantedAuthority::new)
 //                        .collect(Collectors.toList());
 
+
+
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        stringToken, null, null);
+                        email, null, List.of());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
@@ -71,7 +75,6 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
-
     private Boolean isAuthorized(){
         return true;
     }

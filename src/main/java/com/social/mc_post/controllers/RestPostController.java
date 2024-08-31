@@ -9,10 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -26,21 +30,30 @@ public class RestPostController {
 
 
     @GetMapping("/post")
-    public Page<PostDto> handlerPost(PostSearchDto searchDto, PageableDto pageableDto){
-        return postService.getPosts(searchDto, pageableDto);
+    public Page<PostDto> handlerPost(@RequestBody PostSearchDto searchDto,
+                                     @RequestBody PageableDto pageableDto,
+                                     @RequestHeader("Authorization") String token){
+        List<PostDto> posts = postService.getPosts(searchDto, pageableDto, token);
+
+        Pageable pageable = (Pageable) pageableDto;
+        Page<PostDto> pages = new PageImpl<PostDto>(posts, pageable, posts.size());
+        return pages;
+        // не работает
     }
 
     @PutMapping("/post")
-    public PostDto handlerUpdatePost(@RequestBody PostDto postDto){
-        return postService.updatePost(postDto);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void handlerUpdatePost(@RequestBody PostDto postDto){
+        postService.updatePost(postDto);
     }
 
     @PostMapping("/post")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseDto handlerCreatePost(@RequestBody PostDto postDto){
+    public ResponseDto handlerCreatePost(@RequestBody PostDto postDto,
+                                         @RequestHeader("Authorization") String token){
         log.info(postDto.toString());
         log.info("Create new POST: {}", postDto.getTitle());
-        postService.createPost(postDto);
+        postService.createPost(postDto, token);
         return new ResponseDto(HttpStatus.CREATED.value(), "Successful operation");
     }
 
@@ -76,8 +89,8 @@ public class RestPostController {
     }
 
     @PutMapping("/post/delayed")
-    public ResponseEntity handlerDeferredPost(){
-        return ResponseEntity.ok().build();
+    public String handlerDeferredPost(@RequestHeader("Authorization") String token){
+        return postService.delayed(token);
     }
 
     @PostMapping("/post/{id}/like")
