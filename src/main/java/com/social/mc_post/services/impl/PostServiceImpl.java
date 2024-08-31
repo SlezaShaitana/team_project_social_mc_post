@@ -50,7 +50,7 @@ public class PostServiceImpl implements PostService {
     private final LikeMapper likeMapper;
     private final PostMapper postMapper;
     private final KafkaProducer producer;
-    private DecodedToken decodedToken;
+
     @Autowired
     public PostServiceImpl(LikeRepository likeRepository,
                            PostRepository postRepository,
@@ -67,12 +67,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostDto> getPosts(PostSearchDto postSearchDto, PageableDto pageableDto) {
-//        log.info("Author id: {}", decodedToken.getId());
         return getAllPosts(postSearchDto, pageableDto).map(postMapper::mapToPostDto);
     }
 
     @Override
     public void createPost(PostDto newPost) {
+        DecodedToken decodedToken = new DecodedToken();
         saveTagInDB(newPost);
         PostEntity postEntity = PostEntity
                 .builder()
