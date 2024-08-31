@@ -137,7 +137,6 @@ public class RestPostController {
     @DeleteMapping("/post/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePost(@PathVariable(value = "id") String id){
-        log.info("Delete post by id: {}", id);
         postService.deletePost(id);
     }
 }

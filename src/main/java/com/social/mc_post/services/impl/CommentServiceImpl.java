@@ -50,12 +50,8 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto createCommentPost(CommentDto commentDto, String postId) {
         CommentEntity newComment = commentMapper.mapToCommentEntity(commentDto);
         calculateCountCommentPost(postId, false);
-
-        log.info("Text : {}", newComment.getCommentText());
         commentRepository.save(newComment);
-
         log.info("Comment id : {}", newComment.getId());
-
         PostEntity post = postRepository.findPostEntityById(postId);
         producer.sendMessageForNotification(NotificationDTO.builder()
                         .id(UUID.randomUUID())
@@ -211,7 +207,7 @@ public class CommentServiceImpl implements CommentService {
             spec.and(commentSpecification.findCommentsByPostId(idPost));
         }
 
-        if (commentSearchDto.getCommentType().equals(TypeComment.COMMENT)){
+        if (commentSearchDto.getCommentType().equals(TypeComment.COMMENT.toString())){
             spec.and(commentSpecification.findCommentsByCommentType(TypeComment.COMMENT));
         }
 
