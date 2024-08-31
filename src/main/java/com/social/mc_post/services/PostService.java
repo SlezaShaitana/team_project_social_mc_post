@@ -20,4 +20,5 @@ public interface PostService {
     Boolean checkPost(String postId);
     void deleteLike(String id) throws BadRequestException;
     Page<PostEntity> getAllPosts(PostSearchDto postSearchDto, PageableDto pageableDto);
+    String delayed(String token);
 }

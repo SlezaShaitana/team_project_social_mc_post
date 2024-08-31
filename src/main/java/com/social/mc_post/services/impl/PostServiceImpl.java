@@ -34,8 +34,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -43,7 +45,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-
 @Slf4j
 public class PostServiceImpl implements PostService {
     private final LikeRepository likeRepository;
@@ -72,16 +73,21 @@ public class PostServiceImpl implements PostService {
         return getAllPosts(postSearchDto, pageableDto).map(postMapper::mapToPostDto);
     }
 
-    @SneakyThrows
     @Override
     public void createPost(PostDto newPost, String token) {
+            try {
+                saveTagInDB(newPost);
+                PostEntity postEntity = savePostDB(newPost, token);
 
-            saveTagInDB(newPost);
-            savePostDB(newPost, newPost.getPublishDate(), token);
-            //putNotificationAboutPost(postEntity);
+                String titlePost = (char)27 + "[1m" + postEntity.getTitle();
+                String content = titlePost + "\n" + postEntity.getPostText();
+                // putNotification(UUID.fromString(postEntity.getAuthorId()), content, NotificationType.POST, null);
+            }catch (Exception e){
+                throw new ResourceNotFoundException("Error: " + e.getMessage());
+            }
     }
 
-    public void savePostDB(PostDto dto, LocalDateTime publishDate, String tokenAuth){
+    public PostEntity savePostDB(PostDto dto, String tokenAuth) throws UnsupportedEncodingException {
         PostEntity postEntity = PostEntity
                 .builder()
                 .imagePath(dto.getImagePath())
@@ -92,7 +98,7 @@ public class PostServiceImpl implements PostService {
                 .commentsCount(0)
                 .isBlocked(false)
                 .isDeleted(false)
-                .deferred(false)
+               // .deferred(false)
                 .likeAmount(0)
                 .myLike(false)
                 .myReaction("")
@@ -101,17 +107,17 @@ public class PostServiceImpl implements PostService {
                 .authorId(getUserIdFromToken(tokenAuth))
                 .build();
 
-        if (publishDate == null){
+        if (dto.getPublishDate() == null){
             postEntity.setType(TypePost.POSTED);
         } else {
             postEntity.setType(TypePost.QUEUED);
         }
 
         postRepository.save(postEntity);
+        return postEntity;
     }
 
-    @SneakyThrows
-    public String getUserIdFromToken(String userToken){
+    public String getUserIdFromToken(String userToken) throws UnsupportedEncodingException {
         String stringToken = userToken.substring(7);
         DecodedToken decodedToken = DecodedToken.getDecoded(stringToken);
         UUID idAuthor = UUID.fromString(decodedToken.getId());
@@ -182,7 +188,8 @@ public class PostServiceImpl implements PostService {
         LikeEntity likePost = likeMapper.mapToLikeEntity(likeDto);
         likePost.setItemId(post.getId());
         likeRepository.save(likePost);
-        putNotificationAboutLike(post, likePost);
+
+       // putNotification(UUID.fromString(likePost.getAuthorId()), "Ваш пост одобрили", NotificationType.LIKE_POST, UUID.fromString(post.getAuthorId()));
         return likeMapper.mapToLikeDto(likePost);
     }
 
@@ -216,30 +223,37 @@ public class PostServiceImpl implements PostService {
         return postRepository.findAll(spec, PageRequest.of(pageableDto.getPage(), pageableDto.getSize()));
     }
 
-    public void putNotificationAboutPost(PostEntity post) {
-        String titlePost = (char)27 + "[1m" + post.getTitle();
+    @Override
+    public String delayed(String token){
+        try {
+            List<PostEntity> posts = postRepository.findByTypeAndAuthorId(TypePost.QUEUED,
+                    getUserIdFromToken(token));
+            int countPostedPost = 0;
+            for (PostEntity post : posts){
+                if (post.getPublishDate().isAfter(LocalDateTime.now())){
+                    countPostedPost++;
+                    post.setType(TypePost.POSTED);
+                    postRepository.save(post);
+                }
+            }
+            return "Published " + countPostedPost + " posts \n " +
+                    "The count remaining deferred posts: " + (posts.size() - countPostedPost);
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Error: " + e.getMessage());
+        }
+    }
 
+    public void putNotification(UUID authorId, String content, NotificationType type, UUID receiverId) {
         producer.sendMessageForNotification(NotificationDTO.builder()
                 .id(UUID.randomUUID())
-                .authorId(UUID.fromString(post.getAuthorId()))
-                .content(titlePost + "\n" + post.getPostText())
-                .notificationType(NotificationType.POST)
+                .authorId(authorId)
+                .content(content)
+                .notificationType(type)
                 .sentTime(LocalDateTime.now())
-                .receiverId(null)
+                .receiverId(receiverId)
                 .serviceName(MicroServiceName.POST)
                 .build());
     }
 
-    public void putNotificationAboutLike(PostEntity post, LikeEntity likePost) {
-        producer.sendMessageForNotification(NotificationDTO.builder()
-                .id(UUID.randomUUID())
-                .authorId(UUID.fromString(likePost.getAuthorId()))
-                .content("Ваш пост одобрили!")
-                .notificationType(NotificationType.LIKE_POST)
-                .sentTime(LocalDateTime.now())
-                .receiverId(UUID.fromString(post.getAuthorId()))
-                .serviceName(MicroServiceName.POST)
-                .build());
-    }
 
 }

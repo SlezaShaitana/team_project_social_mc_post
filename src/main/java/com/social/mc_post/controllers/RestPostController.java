@@ -78,8 +78,8 @@ public class RestPostController {
     }
 
     @PutMapping("/post/delayed")
-    public ResponseEntity handlerDeferredPost(){
-        return ResponseEntity.ok().build();
+    public String handlerDeferredPost(@RequestHeader("Authorization") String token){
+        return postService.delayed(token);
     }
 
     @PostMapping("/post/{id}/like")

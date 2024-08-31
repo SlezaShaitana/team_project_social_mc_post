@@ -1,5 +1,6 @@
 package com.social.mc_post.repository;
 
+import com.social.mc_post.dto.enums.TypePost;
 import com.social.mc_post.structure.PostEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,5 +25,8 @@ public interface PostRepository extends JpaRepository<PostEntity, String>, JpaSp
     @Modifying
     @Query(value = "UPDATE PostEntity AS p SET p = :post WHERE p.id = :id")
     void updatePost(@Param("post") PostEntity post, @Param("id") String id);
+
+    @Query("select p from PostEntity as p WHERE p.type =:type and p.authorId =:authorId")
+    List<PostEntity> findByTypeAndAuthorId(TypePost type, String authorId);
 
 }
