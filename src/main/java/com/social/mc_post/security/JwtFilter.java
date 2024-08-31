@@ -1,9 +1,5 @@
 package com.social.mc_post.security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.social.mc_post.dto.UserDTo;
 import com.social.mc_post.feign.JwtValidation;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.NonNull;

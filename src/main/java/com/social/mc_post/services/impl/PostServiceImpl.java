@@ -67,7 +67,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostDto> getPosts(PostSearchDto postSearchDto, PageableDto pageableDto) {
-        log.info("Author id: {}", decodedToken.getId());
+//        log.info("Author id: {}", decodedToken.getId());
         return getAllPosts(postSearchDto, pageableDto).map(postMapper::mapToPostDto);
     }
 
@@ -91,7 +91,7 @@ public class PostServiceImpl implements PostService {
                 .build();
         postRepository.save(postEntity);
         log.info("Create new post: {}", postEntity.getTitle());
-        putNotificationAboutPost(postEntity);
+        //putNotificationAboutPost(postEntity);
     }
 
     public void saveTagInDB(PostDto postDto){
@@ -169,6 +169,7 @@ public class PostServiceImpl implements PostService {
     }
 
 
+    @Override
     public Page<PostEntity> getAllPosts(PostSearchDto postSearchDto, PageableDto pageableDto){
         Specification<PostEntity> spec = Specification.where(null);
 
@@ -179,7 +180,7 @@ public class PostServiceImpl implements PostService {
         if (postSearchDto.getDateTo() != null && postSearchDto.getDateFrom() != null){
             spec.and(PostSpecification.getPostsByPublishDateBetween(postSearchDto.getDateTo(), postSearchDto.getDateFrom()));
         }
-        return postRepository.findAll(spec, PageRequest.of(pageableDto.getPage() - 1, pageableDto.getSize()));
+        return postRepository.findAll(spec, PageRequest.of(pageableDto.getPage(), pageableDto.getSize()));
     }
 
     public void putNotificationAboutPost(PostEntity post) {
