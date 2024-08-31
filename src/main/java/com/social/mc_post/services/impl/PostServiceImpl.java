@@ -43,6 +43,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+
 @Slf4j
 public class PostServiceImpl implements PostService {
     private final LikeRepository likeRepository;
@@ -75,18 +76,19 @@ public class PostServiceImpl implements PostService {
     @Override
     public void createPost(PostDto newPost, String token) {
 
-        String stringToken = token.substring(7);
-        DecodedToken decodedToken = DecodedToken.getDecoded(stringToken);
-        UUID idAuthor = UUID.fromString(decodedToken.getId());
+            saveTagInDB(newPost);
+            savePostDB(newPost, newPost.getPublishDate(), token);
+            //putNotificationAboutPost(postEntity);
+    }
 
-        saveTagInDB(newPost);
+    public void savePostDB(PostDto dto, LocalDateTime publishDate, String tokenAuth){
         PostEntity postEntity = PostEntity
                 .builder()
-                .imagePath(newPost.getImagePath())
-                .postText(newPost.getPostText())
-                .publishDate(LocalDateTime.now())
-                .tags(newPost.getTags())
-                .title(newPost.getTitle())
+                .imagePath(dto.getImagePath())
+                .postText(dto.getPostText())
+                .publishDate(dto.getPublishDate())
+                .tags(dto.getTags())
+                .title(dto.getTitle())
                 .commentsCount(0)
                 .isBlocked(false)
                 .isDeleted(false)
@@ -96,15 +98,24 @@ public class PostServiceImpl implements PostService {
                 .myReaction("")
                 .reactions(null)
                 .time(new Date())
-                .authorId(idAuthor.toString())
-                .type(TypePost.POSTED)
+                .authorId(getUserIdFromToken(tokenAuth))
                 .build();
 
+        if (publishDate == null){
+            postEntity.setType(TypePost.POSTED);
+        } else {
+            postEntity.setType(TypePost.QUEUED);
+        }
+
         postRepository.save(postEntity);
+    }
 
-        log.info("Create new post: {}", postEntity.getTitle());
-
-        //putNotificationAboutPost(postEntity);
+    @SneakyThrows
+    public String getUserIdFromToken(String userToken){
+        String stringToken = userToken.substring(7);
+        DecodedToken decodedToken = DecodedToken.getDecoded(stringToken);
+        UUID idAuthor = UUID.fromString(decodedToken.getId());
+        return idAuthor.toString();
     }
 
     public void saveTagInDB(PostDto postDto){
@@ -190,7 +201,6 @@ public class PostServiceImpl implements PostService {
             throw new BadRequestException("Like not found.");
         }
     }
-
 
     @Override
     public Page<PostEntity> getAllPosts(PostSearchDto postSearchDto, PageableDto pageableDto){
