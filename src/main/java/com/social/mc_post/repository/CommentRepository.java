@@ -1,21 +1,25 @@
 package com.social.mc_post.repository;
 
-import com.social.mc_post.structure.CommentEntity;
-import com.social.mc_post.structure.PostEntity;
+import com.social.mc_post.dto.CommentDto;
+import com.social.mc_post.model.Comment;
+import com.social.mc_post.model.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
-public interface CommentRepository extends JpaRepository<CommentEntity, String>, JpaSpecificationExecutor<CommentEntity> {
+public interface CommentRepository extends JpaRepository<Comment, String>, JpaSpecificationExecutor<CommentDto> {
+    @Override
+    @Query("select c from Comment as c WHERE c.id =:id")
+    Optional<Comment> findById(String id);
 
-    CommentEntity findCommentEntityById(String id);
-    @Modifying
-    @Query(value = "UPDATE CommentEntity AS c SET c = :comment WHERE c.id = :id")
-    void updateComment(@Param("comment") CommentEntity comment, @Param("id") String id);
+    @Query("select c from Comment as c WHERE c.post =:post")
+    List<Comment> findByPost(Post post);
 
-    void deleteCommentEntityById(String id);
+    @Query("select count(*) from Comment as c WHERE c.post =:post")
+    Integer countByPost(Post post);
 }

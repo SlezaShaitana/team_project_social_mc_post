@@ -1,8 +1,6 @@
 package com.social.mc_post.dto;
 
 import com.social.mc_post.dto.enums.TypePost;
-import com.social.mc_post.structure.ReactionEntity;
-import com.social.mc_post.structure.TagEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,7 +15,7 @@ public class PostDto {
 
     private Boolean isDeleted;
 
-    private Date time;
+    private LocalDateTime time;
 
     private LocalDateTime timeChanged;
 
@@ -33,9 +31,9 @@ public class PostDto {
 
     private Integer commentsCount;
 
-    private List<TagEntity> tags;
+    private List<TagDto> tags;
 
-    private List<ReactionEntity> reactions;
+    private List<ReactionDto> reactions;
 
     private String myReaction;
 

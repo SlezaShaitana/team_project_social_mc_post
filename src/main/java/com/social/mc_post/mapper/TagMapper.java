@@ -1,19 +1,18 @@
 package com.social.mc_post.mapper;
 
 import com.social.mc_post.dto.TagDto;
-import com.social.mc_post.structure.TagEntity;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import com.social.mc_post.model.Post;
+import com.social.mc_post.model.Tag;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
+@Component
+public class TagMapper {
 
-@Mapper(componentModel = "spring")
-public interface TagMapper {
+    public Tag mapDtoToEntity(TagDto tagDto, Post post){
+        return new Tag(null, false, tagDto.getName(), post);
+    }
 
-    TagMapper MAPPER = Mappers.getMapper(TagMapper.class);
-
-    TagDto mapToTagDto(TagEntity tagEntity);
-    TagEntity mapToTagEntity(TagDto tagDto);
-    List<TagEntity> mapToListTagEntity(List<TagDto> tagDtos);
-    List<TagDto> mapToListTagDto(List<TagEntity> tagEntities);
+    public TagDto mapEntityToDto(Tag tag){
+        return new TagDto(tag.getId(), tag.getIsDeleted(),tag.getName());
+    }
 }

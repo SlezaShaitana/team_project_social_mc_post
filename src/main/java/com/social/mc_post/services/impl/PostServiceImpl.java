@@ -1,242 +1,161 @@
 package com.social.mc_post.services.impl;
 
-import com.social.mc_post.dto.LikeDto;
-import com.social.mc_post.dto.PageableDto;
-import com.social.mc_post.dto.PostDto;
-import com.social.mc_post.dto.PostSearchDto;
+import com.social.mc_post.dto.*;
+import com.social.mc_post.dto.enums.TypeLike;
 import com.social.mc_post.dto.enums.TypePost;
 import com.social.mc_post.dto.notification.MicroServiceName;
 import com.social.mc_post.dto.notification.NotificationDTO;
 import com.social.mc_post.dto.notification.NotificationType;
 import com.social.mc_post.exception.ResourceNotFoundException;
 import com.social.mc_post.kafka.KafkaProducer;
-import com.social.mc_post.mapper.LikeMapper;
 import com.social.mc_post.mapper.PostMapper;
+import com.social.mc_post.mapper.TagMapper;
+import com.social.mc_post.model.Comment;
+import com.social.mc_post.model.Like;
+import com.social.mc_post.model.Post;
+import com.social.mc_post.model.Tag;
+import com.social.mc_post.repository.CommentRepository;
 import com.social.mc_post.repository.LikeRepository;
 import com.social.mc_post.repository.PostRepository;
 import com.social.mc_post.repository.TagRepository;
-import com.social.mc_post.repository.specifications.PostSpecification;
-import com.social.mc_post.repository.specifications.SpecificationPost;
 import com.social.mc_post.security.DecodedToken;
 import com.social.mc_post.services.PostService;
-import com.social.mc_post.structure.LikeEntity;
-import com.social.mc_post.structure.PostEntity;
-import com.social.mc_post.structure.TagEntity;
-import jakarta.resource.spi.AuthenticationMechanism;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.coyote.BadRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class PostServiceImpl implements PostService {
+    private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
     private final PostRepository postRepository;
     private final TagRepository tagRepository;
-    private final LikeMapper likeMapper;
+    private final TagMapper tagMapper;
     private final PostMapper postMapper;
     private final KafkaProducer producer;
 
-    @Autowired
-    public PostServiceImpl(LikeRepository likeRepository,
-                           PostRepository postRepository,
-                           TagRepository tagRepository,
-                           LikeMapper likeMapper, PostMapper postMapper,
-                           KafkaProducer producer) {
-        this.likeRepository = likeRepository;
-        this.postRepository = postRepository;
-        this.tagRepository = tagRepository;
-        this.likeMapper = likeMapper;
-        this.postMapper = postMapper;
-        this.producer = producer;
-    }
 
     @Override
-    public List<PostDto> getPosts(PostSearchDto postSearchDto, PageableDto pageableDto, String token) {
-        if(postSearchDto.getIds().size() == 1){
-            List<PostEntity> posts = postRepository.findAll(SpecificationPost.withFilter(postSearchDto)
-                    ,PageRequest.of(pageableDto.getPage(), pageableDto.getSize())).getContent();
-            return posts.stream().map(postMapper::mapToPostDto).toList();
+    public List<PostDto> getPosts(PageableDto pageableDto, String headerRequestByAuth) {
+        try {
+            return postRepository.findAllByAuthorId(getAuthorId(headerRequestByAuth),
+                    PageRequest.of(pageableDto.getPage(), pageableDto.getSize())).getContent().stream()
+                    .map(postMapper::mapEntityToDto)
+                    .toList();
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Error: " + e.getMessage());
         }
 
-        return List.of();
     }
 
     @Override
-    public void createPost(PostDto newPost, String token) {
+    public String createPost(PostDto postDto, String headerRequestByAuth) {
             try {
-                saveTagInDB(newPost);
-                PostEntity postEntity = savePostDB(newPost, token);
+                Post post = createPostDB(postDto, headerRequestByAuth);
+                List<Tag> tags = createTags(postDto.getTags(), post);
+                postRepository.save(post);
+                for (Tag tag : tags){
+                    tagRepository.save(tag);
+                }
+                log.info("Create new POST: {}", postDto.getTitle());
 
-                String titlePost = (char)27 + "[1m" + postEntity.getTitle();
-                String content = titlePost + "\n" + postEntity.getPostText();
-                // putNotification(UUID.fromString(postEntity.getAuthorId()), content, NotificationType.POST, null);
+                String titlePost = (char)27 + "[1m" + post.getTitle();
+                String content = titlePost + "\n" + post.getPostText();
+                //putNotification(UUID.fromString(post.getAuthorId()), content, NotificationType.POST, null);
+
+                return "Post created";
             }catch (Exception e){
                 throw new ResourceNotFoundException("Error: " + e.getMessage());
             }
     }
 
-    public PostEntity savePostDB(PostDto dto, String tokenAuth) throws UnsupportedEncodingException {
-        PostEntity postEntity = PostEntity
-                .builder()
-                .imagePath(dto.getImagePath())
-                .postText(dto.getPostText())
-                .publishDate(dto.getPublishDate())
-                .tags(dto.getTags())
-                .title(dto.getTitle())
-                .commentsCount(0)
-                .isBlocked(false)
-                .isDeleted(false)
-                .likeAmount(0)
-                .myLike(false)
-                .myReaction("")
-                .reactions(null)
-                .time(new Date())
-                .authorId(getUserIdFromToken(tokenAuth))
-                .build();
-
-        if (dto.getPublishDate() == null){
-            postEntity.setType(TypePost.POSTED);
-        } else {
-            postEntity.setType(TypePost.QUEUED);
-        }
-
-        postRepository.save(postEntity);
-        return postEntity;
-    }
-
-    public String getUserIdFromToken(String userToken) throws UnsupportedEncodingException {
-        String stringToken = userToken.substring(7);
-        DecodedToken decodedToken = DecodedToken.getDecoded(stringToken);
-        UUID idAuthor = UUID.fromString(decodedToken.getId());
-        return idAuthor.toString();
-    }
-
-    public void saveTagInDB(PostDto postDto){
-        List<TagEntity> tags = postDto.getTags();
-        for (TagEntity tag : tags){
-            TagEntity newTag = TagEntity.builder()
-                    .name(tag.getName())
-                    .isDeleted(tag.getIsDeleted())
-                    .build();
-            tagRepository.save(newTag);
-        }
-    }
-
     @Override
-    @Transactional
-    public void updatePost(PostDto updatePost) {
-        Optional<PostEntity> postEntity = postRepository.findById(updatePost.getId());
+    public String updatePost(PostDto postDto) {
+        Post post = postRepository.findById(postDto.getId()).orElseThrow(
+                () -> new ResourceNotFoundException("Post not found!"));
 
-        if (postEntity.isPresent()){
-            postEntity.get().setTitle(updatePost.getTitle());
-            postEntity.get().setPostText(updatePost.getPostText());
-            postEntity.get().setImagePath(updatePost.getImagePath());
-            postEntity.get().setTimeChanged(LocalDateTime.now());
-            postRepository.save(postEntity.get());
+        post.setTimeChanged(LocalDateTime.now());
+        post.setTitle(postDto.getTitle());
+        post.setPostText(postDto.getPostText());
+        post.setImagePath(postDto.getImagePath());
+        post.setPublishDate(postDto.getPublishDate());
+
+        if (postDto.getPublishDate() == null){
+            post.setType(TypePost.POSTED);
         } else {
-            throw new ResourceNotFoundException("Данный пост отсутствует");
+            post.setType(TypePost.QUEUED);
         }
 
-        log.info("Update POST: {}", postEntity.get().getId());
-
-    }
-
-    @Override
-    public PostDto getPostById(String id) {
-        Optional<PostEntity> post = postRepository.findById(id);
-        if (post.isPresent()){
-            log.info("GET post id: {}", post.get().getId());
-            return PostMapper.MAPPER.mapToPostDto(post.get());
-        }
-        else {
-            throw new ResourceNotFoundException("Пост не найден");
-        }
+        postRepository.save(post);
+        log.info("Update POST: {}", post.getId());
+        return "Post updated";
     }
 
     @Override
     public void deletePost(String id) {
-        PostEntity post = postRepository.findPostEntityById(id);
-        if (post != null) {
-            postRepository.delete(post);
-            log.info("Post delete by id: {}", post.getId());
-        } else {
-            throw new ResourceNotFoundException("Пост не найден");
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Post not found!"));
+
+        List<Comment> comments = commentRepository.findByPost(post);
+        comments.forEach(comment -> {
+            List<Like> likes = likeRepository.findByComment(comment);
+            likes.forEach(like -> {
+                likeRepository.delete(like);
+                log.info("delete like comment");
+            });
+            commentRepository.delete(comment);
+            log.info("Delete comment");
+        });
+        List<Like> likes = likeRepository.findByPost(post);
+        likes.forEach( like -> {
+            likeRepository.delete(like);
+            log.info("delete like post");
+        });
+
+        postRepository.delete(post);
+        log.info("Post delete by id: {}", post.getId());
+    }
+
+    @Override
+    public String createLikePost(String idPost, LikeDto likeDto, String headerRequestByAuth) {
+        Post post = postRepository.findById(idPost).orElseThrow(
+                () -> new ResourceNotFoundException("Post not found!"));
+        try {
+            Like like = createLike(likeDto, post, headerRequestByAuth);
+            likeRepository.save(like);
+            log.info("Like for post created");
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Error: " + e.getMessage());
         }
-    }
-
-    @Override
-    public void createDeferredPost() {
-
-    }
-
-    @Override
-    public LikeDto createLikePost(String idPost, LikeDto likeDto) {
-        PostEntity post = postRepository.findPostEntityById(idPost);
-        LikeEntity likePost = likeMapper.mapToLikeEntity(likeDto);
-        likePost.setItemId(post.getId());
-        likeRepository.save(likePost);
-
        // putNotification(UUID.fromString(likePost.getAuthorId()), "Ваш пост одобрили", NotificationType.LIKE_POST, UUID.fromString(post.getAuthorId()));
-        return likeMapper.mapToLikeDto(likePost);
+        return "Like for post created";
     }
 
-    @Override
-    public Boolean checkPost(String postId){
-        Optional<PostEntity> post = postRepository.findById(postId);
-        return post.isPresent();
-    }
 
     @Override
-    public void deleteLike(String id) throws BadRequestException {
-        Optional<LikeEntity> like = likeRepository.findById(id);
-        if (like.isPresent()){
-            likeRepository.delete(like.get());
-        } else {
-            throw new BadRequestException("Like not found.");
-        }
-    }
-
-    @Override
-    public Page<PostEntity> getAllPosts(PostSearchDto postSearchDto, PageableDto pageableDto){
-        Specification<PostEntity> spec = Specification.where(null);
-
-        if (postSearchDto.getAuthor() != null){
-            spec.and(PostSpecification.getPostByAuthor(postSearchDto.getAuthor()));
-        }
-
-        if (postSearchDto.getDateTo() != null && postSearchDto.getDateFrom() != null){
-            spec.and(PostSpecification.getPostsByPublishDateBetween(postSearchDto.getDateTo(), postSearchDto.getDateFrom()));
-        }
-        return postRepository.findAll(spec, PageRequest.of(pageableDto.getPage(), pageableDto.getSize()));
+    public void deleteLike(String id){
+        Like like = likeRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Like not found!"));
+        likeRepository.delete(like);
+        log.info("Like deleted");
     }
 
     @Override
     public String delayed(String token){
         try {
-            List<PostEntity> posts = postRepository.findByTypeAndAuthorId(TypePost.QUEUED,
-                    getUserIdFromToken(token));
+            List<Post> posts = postRepository.findByTypeAndAuthorId(TypePost.QUEUED,
+                    getAuthorId(token));
             int countPostedPost = 0;
-            for (PostEntity post : posts){
+            for (Post post : posts){
                 if (post.getPublishDate().isAfter(LocalDateTime.now())){
                     countPostedPost++;
                     post.setType(TypePost.POSTED);
@@ -250,7 +169,62 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    public void putNotification(UUID authorId, String content, NotificationType type, UUID receiverId) {
+    @Override
+    public PostDto getPostDtoById(String id) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Post not found!"));
+        return postMapper.mapEntityToDto(post);
+    }
+
+    public List<Tag> createTags(List<TagDto> tagDtoList, Post post){
+        return tagDtoList.stream()
+                .map(tagDto -> tagMapper.mapDtoToEntity(tagDto, post))
+                .toList();
+    }
+
+    private Like createLike(LikeDto likeDto, Post post, String headerRequestByAuth) throws UnsupportedEncodingException {
+        return new Like(
+                null,
+                false,
+                getAuthorId(headerRequestByAuth),
+                LocalDateTime.now(),
+                post,
+                null,
+                TypeLike.POST,
+                likeDto.getReactionType());
+    }
+
+    private Post createPostDB(PostDto dto, String headerRequestByAuth) throws UnsupportedEncodingException {
+        Post post = new Post(
+                null,
+                false,
+                LocalDateTime.now(),
+                null,
+                getAuthorId(headerRequestByAuth),
+                dto.getTitle(),
+                null,
+                dto.getPostText(),
+                false,
+                dto.getMyReaction(),
+                false,
+                dto.getImagePath(),
+                dto.getPublishDate());
+
+        if (dto.getPublishDate() == null){
+            post.setType(TypePost.POSTED);
+        } else {
+            post.setType(TypePost.QUEUED);
+        }
+        return post;
+    }
+
+    private String getAuthorId(String headerRequestByAuth) throws UnsupportedEncodingException {
+        String stringToken = headerRequestByAuth.substring(7);
+        DecodedToken decodedToken = DecodedToken.getDecoded(stringToken);
+        return decodedToken.getId();
+    }
+
+    private void putNotification(UUID authorId, String content, NotificationType type, UUID receiverId) {
         producer.sendMessageForNotification(NotificationDTO.builder()
                 .id(UUID.randomUUID())
                 .authorId(authorId)

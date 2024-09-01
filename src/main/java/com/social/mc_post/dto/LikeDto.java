@@ -6,8 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -19,7 +18,7 @@ public class LikeDto {
 
     private String authorId;
 
-    private Date time;
+    private LocalDateTime time;
 
     private String itemId;
 
