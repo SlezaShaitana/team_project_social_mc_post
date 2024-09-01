@@ -29,8 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -55,27 +54,25 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostDto> getPosts(PostSearchDto searchDto, PageDto pageDto) {
-        log.info("Starting getListPosts with SearchDTO: {}", searchDto);
-        log.info("Page information: page = {}, size = {}, sort = {}", pageDto.getPage(), pageDto.getSize(), pageDto.getSort());
+        log.info(searchDto.toString());
+        log.info(pageDto.toString());
 
-        Sort sort = Sort.unsorted();
+        Specification<Post> spec = Specification.where(null);
 
-        Pageable pageable;
-        if (pageDto.getSort() == null) {
-            pageable = PageRequest.of(0, 10, sort);
-        } else {
-            pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
+        if (searchDto.getAuthor() != null){
+            spec.and(PostSpecification.getPostByAuthor(searchDto.getAuthor()));
         }
+//        if (searchDto.getWithFriends()){
+//            List<String> ids = searchDto.getIds();
+//            List<String> idFriends = friendClient.getFriendsIdListByUserId(searchDto.getIds().get(0));
+//            ids.addAll(idFriends);
+//            searchDto.setIds(ids);
+//        }
 
-        log.info("Pageable created: page = {}, size = {}", pageable.getPageNumber(), pageable.getPageSize());
-
-        if (searchDto.getWithFriends()){
-            List<String> ids = searchDto.getIds();
-            List<String> idFriends = friendClient.getFriendsIdListByUserId(searchDto.getIds().get(0));
-            ids.addAll(idFriends);
-            searchDto.setIds(ids);
+        if (searchDto.getDateTo() != null && searchDto.getDateFrom() != null){
+            spec.and(PostSpecification.byDateToFrom(searchDto.getDateTo(), searchDto.getDateFrom()));
         }
-        return postRepository.findAll(PostSpecification.findWithFilter(searchDto), pageable)
+        return postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize()))
                 .map(postMapper::mapEntityToDto);
     }
 

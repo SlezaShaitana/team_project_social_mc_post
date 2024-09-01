@@ -27,19 +27,8 @@ public class PostController {
 
 
     @GetMapping("/post")
-    public Page<PostDto> getListPosts(@RequestParam(required = false) List<String> ids,
-                                      @RequestParam(required = false) Boolean isDeleted,
-                                      @RequestParam(required = false) Boolean withFriends,
-                                      @Valid @RequestParam(required = false) PageDto pageable,
-                                      HttpServletRequest request){
-        String url = request.getQueryString();
-        PageDto pageDto = UrlParseUtils.getPageable(url);
-
-        PostSearchDto searchDTO = UrlParseUtils.getSearchDTO(url);
-        searchDTO.setIds(ids);
-        searchDTO.setWithFriends(withFriends);
-        searchDTO.setIsDeleted(isDeleted);
-        return postService.getPosts(searchDTO, pageDto);
+    public Page<PostDto> getListPosts(PostSearchDto searchDto, PageDto pageableDto){
+        return postService.getPosts(searchDto, pageableDto);
     }
 
     @PutMapping("/post")
