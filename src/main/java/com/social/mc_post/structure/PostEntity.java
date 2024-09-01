@@ -54,9 +54,6 @@ public class PostEntity implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "post", orphanRemoval = true)
     private List<TagEntity> tags = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post", orphanRemoval = true)
-    private List<ReactionEntity> reactions = new ArrayList<>();
-
     @Column(name = "my_reaction")
     private String myReaction;
 
