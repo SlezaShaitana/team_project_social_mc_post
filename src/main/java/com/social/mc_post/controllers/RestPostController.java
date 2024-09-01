@@ -40,8 +40,6 @@ public class RestPostController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseDto handlerCreatePost(@RequestBody PostDto postDto,
                                          @RequestHeader("Authorization") String token){
-        log.info(postDto.toString());
-        log.info("Create new POST: {}", postDto.getTitle());
         postService.createPost(postDto, token);
         return new ResponseDto(HttpStatus.CREATED.value(), "Successful operation");
     }
