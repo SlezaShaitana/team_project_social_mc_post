@@ -12,9 +12,6 @@
         <dropTable  cascadeConstraints="true"
                     schemaName="public"
                     tableName="post_reactions"/>
-        <dropTable  cascadeConstraints="true"
-                    schemaName="public"
-                    tableName="reaction"/>
         <dropTable
                 cascadeConstraints="true"
                 schemaName="public"
