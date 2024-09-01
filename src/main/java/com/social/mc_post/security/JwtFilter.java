@@ -43,43 +43,37 @@ public class JwtFilter extends OncePerRequestFilter {
             String stringToken  = getToken(request);
             log.info("Token: '{}'", stringToken);
 
-            DecodedToken token = DecodedToken.getDecoded(stringToken);
+            if (jwtValidation.validateToken(stringToken)) {
+                DecodedToken token = DecodedToken.getDecoded(stringToken);
 
-            String email = token.getEmail();
-            List<String> roles = token.getRole();
-            log.info("EMAIL USER: {}", email);
-            log.info("ID USER: {}", token.getId());
+                String email = token.getEmail();
+                List<String> roles = token.getRole();
+                log.info("EMAIL USER: {}", email);
+                log.info("ID USER: {}", token.getId());
 //                Collection<? extends GrantedAuthority> authorities = roles.stream()
 //                        .map(SimpleGrantedAuthority::new)
 //                        .collect(Collectors.toList());
 
 
 
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    email, null, List.of());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-//            if (jwtValidation.validateToken(stringToken)) {
-//
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//                return;
-//            }
-//        } catch (MalformedJwtException e) {
-//            log.error("Invalid JWT token format: {}", e.getMessage());
-//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            return;
-//        } catch (Exception e) {
-//            log.error("JWT token validation failed: {}", e.getMessage());
-//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            return;
-//        }
-        filterChain.doFilter(request, response);
-    } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ServletException e) {
-            throw new RuntimeException(e);
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        email, null, List.of());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+        } catch (MalformedJwtException e) {
+            log.error("Invalid JWT token format: {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        } catch (Exception e) {
+            log.error("JWT token validation failed: {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
         }
+        filterChain.doFilter(request, response);
     }
     private Boolean isAuthorized(){
         return true;
