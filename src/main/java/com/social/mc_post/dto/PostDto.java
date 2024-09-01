@@ -1,7 +1,6 @@
 package com.social.mc_post.dto;
 
 import com.social.mc_post.dto.enums.TypePost;
-import com.social.mc_post.structure.ReactionEntity;
 import com.social.mc_post.structure.TagEntity;
 import lombok.*;
 
@@ -35,7 +34,7 @@ public class PostDto {
 
     private List<TagEntity> tags;
 
-    private List<ReactionEntity> reactions;
+    private List<String> reactions;
 
     private String myReaction;
 
