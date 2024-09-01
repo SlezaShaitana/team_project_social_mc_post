@@ -15,7 +15,6 @@ import com.social.mc_post.repository.CommentRepository;
 import com.social.mc_post.repository.LikeRepository;
 import com.social.mc_post.repository.PostRepository;
 import com.social.mc_post.repository.specifications.CommentSpecification;
-import com.social.mc_post.security.DecodedToken;
 import com.social.mc_post.services.CommentService;
 import com.social.mc_post.structure.CommentEntity;
 import com.social.mc_post.structure.LikeEntity;

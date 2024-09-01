@@ -9,6 +9,8 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
+
+
     CommentEntity mapToCommentEntity(CommentDto commentDto);
     CommentDto mapToCommentDto(CommentEntity commentEntity);
     List<CommentEntity> mapToListCommentEntity(List<CommentDto> commentDtoList);

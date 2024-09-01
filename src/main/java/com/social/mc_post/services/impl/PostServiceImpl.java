@@ -16,13 +16,11 @@ import com.social.mc_post.repository.LikeRepository;
 import com.social.mc_post.repository.PostRepository;
 import com.social.mc_post.repository.TagRepository;
 import com.social.mc_post.repository.specifications.PostSpecification;
-import com.social.mc_post.security.DecodedToken;
 import com.social.mc_post.services.PostService;
 import com.social.mc_post.structure.LikeEntity;
 import com.social.mc_post.structure.PostEntity;
 import com.social.mc_post.structure.TagEntity;
 import jakarta.transaction.Transactional;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.coyote.BadRequestException;
@@ -35,7 +33,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -96,7 +93,6 @@ public class PostServiceImpl implements PostService {
                 .likeAmount(0)
                 .myLike(false)
                 .myReaction("")
-                .reactions(null)
                 .time(new Date())
                 .authorId(GettingDataService.getUserIdFromToken(tokenAuth))
                 .build();

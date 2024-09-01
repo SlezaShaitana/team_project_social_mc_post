@@ -8,6 +8,9 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface LikeMapper {
+
+
+
     LikeEntity mapToLikeEntity(LikeDto likeDto);
     LikeDto mapToLikeDto(LikeEntity likeEntity);
     List<LikeDto> mapToLikeDtoList(List<LikeEntity> likeEntityList);
