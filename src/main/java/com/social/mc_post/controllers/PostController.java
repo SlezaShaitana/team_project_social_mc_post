@@ -1,15 +1,12 @@
 package com.social.mc_post.controllers;
 
 import com.social.mc_post.dto.*;
-import com.social.mc_post.exception.ResourceNotFoundException;
 import com.social.mc_post.services.CommentService;
 import com.social.mc_post.services.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,10 +24,10 @@ public class PostController {
 
 
     @GetMapping("/post")
-    public List<PostDto> handlerPost(@RequestBody PageableDto pageableDto,
-                                     @RequestHeader("Authorization") String headerRequestByAuth){
-
-        return postService.getPosts(pageableDto,headerRequestByAuth);
+    public Page<PostDto> handlerPost(PostSearchDto searchDto, PageableDto pageableDto){
+        log.info(searchDto.toString());
+        log.info(searchDto.toString());
+        return postService.getPosts(searchDto, pageableDto);
     }
 
     @PutMapping("/post")

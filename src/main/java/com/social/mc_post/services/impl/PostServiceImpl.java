@@ -23,6 +23,7 @@ import com.social.mc_post.services.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -45,16 +46,10 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public List<PostDto> getPosts(PageableDto pageableDto, String headerRequestByAuth) {
-        try {
-            return postRepository.findAllByAuthorId(getAuthorId(headerRequestByAuth),
-                    PageRequest.of(pageableDto.getPage(), pageableDto.getSize())).getContent().stream()
-                    .map(postMapper::mapEntityToDto)
-                    .toList();
-        }catch (Exception e){
-            throw new ResourceNotFoundException("Error: " + e.getMessage());
-        }
+    public Page<PostDto> getPosts(PostSearchDto searchDto, PageableDto pageableDto) {
 
+        return postRepository.findAll(PageRequest.of(pageableDto.getPage(), pageableDto.getSize()))
+                .map(postMapper::mapEntityToDto);
     }
 
     @Override
