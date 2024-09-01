@@ -28,7 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -57,23 +59,21 @@ public class PostServiceImpl implements PostService {
         log.info(searchDto.toString());
         log.info(pageDto.toString());
 
-        Specification<Post> spec = Specification.where(null);
-
-        if (searchDto.getAuthor() != null){
-            spec.and(PostSpecification.getPostByAuthor(searchDto.getAuthor()));
+        if (searchDto.getWithFriends()){
+            List<String> ids = searchDto.getAccountIds();
+            ids.addAll(friendClient.getFriendsIdListByUserId(searchDto.getIds().get(0)));
+            searchDto.setIds(ids);
         }
-//        if (searchDto.getWithFriends()){
-//            List<String> ids = searchDto.getIds();
-//            List<String> idFriends = friendClient.getFriendsIdListByUserId(searchDto.getIds().get(0));
-//            ids.addAll(idFriends);
-//            searchDto.setIds(ids);
-//        }
 
-        if (searchDto.getDateTo() != null && searchDto.getDateFrom() != null){
-            spec.and(PostSpecification.byDateToFrom(searchDto.getDateTo(), searchDto.getDateFrom()));
-        }
-        return postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize()))
-                .map(postMapper::mapEntityToDto);
+        List<PostDto> posts = postRepository.findAll(PostSpecification.findWithFilter(searchDto),
+                        PageRequest.of(pageDto.getPage(), pageDto.getSize())).stream()
+                .filter(postDto -> searchDto.getAccountIds().contains(postDto.getAuthorId()))
+                .map(postMapper::mapEntityToDto)
+                .toList();
+        Pageable pageable = (Pageable) pageDto;
+
+        return new PageImpl<>(posts, pageable, posts.size());
+
     }
 
     @Override

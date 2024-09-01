@@ -2,6 +2,7 @@ package com.social.mc_post.dto;
 
 import jakarta.validation.constraints.Min;
 import lombok.Data;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
