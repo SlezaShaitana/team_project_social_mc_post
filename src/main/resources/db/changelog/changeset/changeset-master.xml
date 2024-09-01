@@ -8,7 +8,7 @@
   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
 <!--    <include file="v1/create-tables-mc-post.xml" relativeToChangelogFile="true"/>-->
-<!--    <include file="v2/drop-table.xml" relativeToChangelogFile="true"/>-->
+    <include file="v2/drop-table.xml" relativeToChangelogFile="true"/>
     <include file="v3/v3-create-tables-mc_post.xml" relativeToChangelogFile="true"/>
     <include file="v3/add-column-tables.xml" relativeToChangelogFile="true"/>
     <include file="v4/delete-column-defered.xml" relativeToChangelogFile="true"/>
