@@ -1,11 +1,12 @@
 package com.social.mc_post.services;
 
 import com.social.mc_post.dto.*;
+import org.springframework.data.domain.Page;
 
 
 public interface PostService {
 
-    PostPageDTO getPosts(PostSearchDto searchDto, Page pageable);
+    Page<PostDto> getPosts(PostSearchDto searchDto, PageDto pageable);
     String createPost(PostDto newPost, String headerRequestByAuth);
     PostDto updatePost(PostDto updatePost);
     void deletePost(String id);

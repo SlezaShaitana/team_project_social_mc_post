@@ -9,11 +9,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 
 @RestController
@@ -27,18 +27,19 @@ public class PostController {
 
 
     @GetMapping("/post")
-    public PostPageDTO getListPosts(@RequestParam(required = false) List<String> ids,
+    public Page<PostDto> getListPosts(@RequestParam(required = false) List<String> ids,
                                       @RequestParam(required = false) Boolean isDeleted,
-                                    @RequestParam(required = false) Boolean withFriends,
-                                      @Valid @RequestParam(required = false) Page pageable,
+                                      @RequestParam(required = false) Boolean withFriends,
+                                      @Valid @RequestParam(required = false) PageDto pageable,
                                       HttpServletRequest request){
         String url = request.getQueryString();
-        Page page = UrlParseUtils.getPageable(url);
+        PageDto pageDto = UrlParseUtils.getPageable(url);
 
         PostSearchDto searchDTO = UrlParseUtils.getSearchDTO(url);
         searchDTO.setIds(ids);
         searchDTO.setWithFriends(withFriends);
-        return postService.getPosts(searchDTO, page);
+        searchDTO.setIsDeleted(isDeleted);
+        return postService.getPosts(searchDTO, pageDto);
     }
 
     @PutMapping("/post")
