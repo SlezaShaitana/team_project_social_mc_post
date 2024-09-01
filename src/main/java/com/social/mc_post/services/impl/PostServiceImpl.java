@@ -268,9 +268,10 @@ public class PostServiceImpl implements PostService {
 
         List<PostEntity> listPosts = postRepository.findAll().stream()
                 .filter(p -> LocalDateTime.now().equals(p.getPublishDate()))
-                .map(p -> PostEntity
+                .map(p -> p = PostEntity
                         .builder()
                         .type(TypePost.POSTED)
+                        .publishDate(null)
                         .time(new Date())
                         .build())
                 .toList();
