@@ -1,13 +1,12 @@
 package com.social.mc_post.dto;
 
-import lombok.*;
 import jakarta.validation.constraints.Min;
+import lombok.Data;
+
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class PageableDto {
+public class Page {
     @Min(value = 0, message = "The page value must be greater than or equal to 0.")
     private int page;
 

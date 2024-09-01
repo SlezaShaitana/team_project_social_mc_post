@@ -1,11 +1,7 @@
 package com.social.mc_post.services;
 
 import com.social.mc_post.dto.CommentDto;
-import com.social.mc_post.dto.CommentSearchDto;
 import com.social.mc_post.dto.LikeDto;
-import com.social.mc_post.dto.PageableDto;
-
-import java.util.List;
 
 public interface CommentService {
 

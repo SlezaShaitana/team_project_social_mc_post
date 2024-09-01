@@ -3,14 +3,17 @@ package com.social.mc_post.controllers;
 import com.social.mc_post.dto.*;
 import com.social.mc_post.services.CommentService;
 import com.social.mc_post.services.PostService;
+import com.social.mc_post.utils.UrlParseUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -24,16 +27,23 @@ public class PostController {
 
 
     @GetMapping("/post")
-    public Page<PostDto> handlerPost(PostSearchDto searchDto, PageableDto pageableDto){
-        log.info(searchDto.toString());
-        log.info(searchDto.toString());
-        return postService.getPosts(searchDto, pageableDto);
+    public PostPageDTO getListPosts(@RequestParam(required = false) List<String> ids,
+                                      @RequestParam(required = false) Boolean isDeleted,
+                                    @RequestParam(required = false) Boolean withFriends,
+                                      @Valid @RequestParam(required = false) Page pageable,
+                                      HttpServletRequest request){
+        String url = request.getQueryString();
+        Page page = UrlParseUtils.getPageable(url);
+
+        PostSearchDto searchDTO = UrlParseUtils.getSearchDTO(url);
+        searchDTO.setIds(ids);
+        searchDTO.setWithFriends(withFriends);
+        return postService.getPosts(searchDTO, page);
     }
 
     @PutMapping("/post")
-    public ResponseDto handlerUpdatePost(@RequestBody PostDto postDto){
-        return new ResponseDto(HttpStatus.OK.value(),
-                postService.updatePost(postDto));
+    public PostDto handlerUpdatePost(@RequestBody PostDto postDto){
+        return postService.updatePost(postDto);
     }
 
     @PostMapping("/post")
@@ -82,7 +92,7 @@ public class PostController {
 
     @PostMapping("/post/{id}/like")
     @ResponseStatus(HttpStatus.CREATED)
-    public String handlerLike(@PathVariable(value = "id") String id,
+    public LikeDto handlerLike(@PathVariable(value = "id") String id,
                                @RequestBody LikeDto likeDto,
                                @RequestHeader("Authorization") String headerRequestByAuth){
         return postService.createLikePost(id, likeDto, headerRequestByAuth);
@@ -111,15 +121,13 @@ public class PostController {
     }
 
     @GetMapping("/post/{postId}/comment")
-    public List<CommentDto> getComments(@PathVariable(value = "postId") String postId,
-                                           CommentSearchDto searchDto, PageableDto page){
+    public List<CommentDto> getComments(@PathVariable(value = "postId") String postId){
         return List.of();
     }
 
     @GetMapping("/post/{postId}/comment/{commentId}/subcomment")
     public List<CommentDto> getSubComments(@PathVariable(value = "postId") String postId,
-                                         @PathVariable(value = "commentId") String commentId,
-                                         CommentSearchDto searchDto, PageableDto page){
+                                         @PathVariable(value = "commentId") String commentId){
 
         return List.of();
     }

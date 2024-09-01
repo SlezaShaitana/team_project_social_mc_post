@@ -13,9 +13,6 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, String>, JpaSpecificationExecutor<CommentDto> {
-    @Override
-    @Query("select c from Comment as c WHERE c.id =:id")
-    Optional<Comment> findById(String id);
 
     @Query("select c from Comment as c WHERE c.post =:post")
     List<Comment> findByPost(Post post);

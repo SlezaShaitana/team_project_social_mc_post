@@ -14,9 +14,6 @@ import java.util.Optional;
 @Repository
 public interface LikeRepository extends JpaRepository<Like, String> {
 
-    @Query("select l from Like as l WHERE l.id =:id")
-    Optional<Like> findById(String id);
-
     @Query("select l from Like as l WHERE l.comment =:comment")
     List<Like> findByComment(Comment comment);
 

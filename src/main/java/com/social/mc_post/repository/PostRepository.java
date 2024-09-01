@@ -16,12 +16,9 @@ import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, String>, JpaSpecificationExecutor<Post> {
-    Page<Post> findAllByAuthorId(String authorId, Pageable pageable);
-
-    @Query("select p from Post as p WHERE p.id =:id")
-    Optional<Post> findById(String id);
-
     @Query("select p from Post as p WHERE p.type =:type and p.authorId =:authorId")
     List<Post> findByTypeAndAuthorId(TypePost type, String authorId);
 
+    @Query("select p from Post as p WHERE p.authorId =:authorId")
+    List<Post> findByAuthorId(String authorId);
 }

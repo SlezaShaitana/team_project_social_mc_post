@@ -7,7 +7,9 @@ import com.social.mc_post.dto.notification.MicroServiceName;
 import com.social.mc_post.dto.notification.NotificationDTO;
 import com.social.mc_post.dto.notification.NotificationType;
 import com.social.mc_post.exception.ResourceNotFoundException;
+import com.social.mc_post.feign.FriendClient;
 import com.social.mc_post.kafka.KafkaProducer;
+import com.social.mc_post.mapper.LikeMapper;
 import com.social.mc_post.mapper.PostMapper;
 import com.social.mc_post.mapper.TagMapper;
 import com.social.mc_post.model.Comment;
@@ -20,15 +22,19 @@ import com.social.mc_post.repository.PostRepository;
 import com.social.mc_post.repository.TagRepository;
 import com.social.mc_post.security.DecodedToken;
 import com.social.mc_post.services.PostService;
+import com.social.mc_post.specification.PostSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,14 +48,80 @@ public class PostServiceImpl implements PostService {
     private final TagRepository tagRepository;
     private final TagMapper tagMapper;
     private final PostMapper postMapper;
+    private final LikeMapper likeMapper;
     private final KafkaProducer producer;
+    private final FriendClient friendClient;
 
 
     @Override
-    public Page<PostDto> getPosts(PostSearchDto searchDto, PageableDto pageableDto) {
+    public PostPageDTO getPosts(PostSearchDto searchDto, Page pageDto) {
+        log.info("Starting getListPosts with SearchDTO: {}", searchDto);
+        log.info("Page information: page = {}, size = {}, sort = {}", pageDto.getPage(), pageDto.getSize(), pageDto.getSort());
 
-        return postRepository.findAll(PageRequest.of(pageableDto.getPage(), pageableDto.getSize()))
-                .map(postMapper::mapEntityToDto);
+        Sort sort = Sort.unsorted();
+
+        Pageable pageable;
+        if (pageDto.getSort() == null) {
+            pageable = PageRequest.of(0, 10, sort);
+        } else {
+            pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
+        }
+
+        log.info("Pageable created: page = {}, size = {}", pageable.getPageNumber(), pageable.getPageSize());
+
+        org.springframework.data.domain.Page<Post> postsPage = postRepository.findAll(PostSpecification.findWithFilter(searchDto), pageable);
+
+        if (postsPage == null) {
+            log.error("PostsPage is null");
+            throw new IllegalStateException("Page cannot be null");
+        }
+
+        List<Post> postsEntity = postsPage.getContent();
+        if (searchDto.getWithFriends()){
+            List<String> idFriends = friendClient.getFriendsIdListByUserId(searchDto.getIds().get(0));
+            idFriends.forEach(id -> {
+                postsEntity.addAll(postRepository.findByAuthorId(id));
+            });
+        }
+
+        List<PostDto> posts = postsEntity.stream().map(postMapper::mapEntityToDto).toList();
+
+        log.info("Number of posts found: {}", posts.size());
+
+        int totalPages = postsPage.getTotalPages();
+        long totalElements = postsPage.getTotalElements();
+        int numberOfElements = postsPage.getNumberOfElements();
+
+        PageableDTO pageableDTO = PageableDTO.builder()
+                .sort(List.of())
+                .unpaged(pageable.isUnpaged())
+                .paged(pageable.isPaged())
+                .pageSize(pageable.getPageSize())
+                .pageNumber(pageable.getPageNumber())
+                .offset((int) pageable.getOffset())
+                .build();
+
+        boolean isFirst = postsPage.isFirst();
+        boolean isLast = postsPage.isLast();
+        int size = postsPage.getSize();
+        int number = postsPage.getNumber();
+        boolean empty = posts.isEmpty();
+
+        PostPageDTO result = PostPageDTO.builder()
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .sort(List.of())
+                .numberOfElements(numberOfElements)
+                .pageable(pageableDTO)
+                .first(isFirst)
+                .last(isLast)
+                .size(size)
+                .content(posts)
+                .number(number)
+                .empty(empty)
+                .build();
+
+        return result;
     }
 
     @Override
@@ -74,7 +146,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public String updatePost(PostDto postDto) {
+    public PostDto updatePost(PostDto postDto) {
         Post post = postRepository.findById(postDto.getId()).orElseThrow(
                 () -> new ResourceNotFoundException("Post not found!"));
 
@@ -92,7 +164,7 @@ public class PostServiceImpl implements PostService {
 
         postRepository.save(post);
         log.info("Update POST: {}", post.getId());
-        return "Post updated";
+        return postMapper.mapEntityToDto(post);
     }
 
     @Override
@@ -121,18 +193,18 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public String createLikePost(String idPost, LikeDto likeDto, String headerRequestByAuth) {
+    public LikeDto createLikePost(String idPost, LikeDto likeDto, String headerRequestByAuth) {
         Post post = postRepository.findById(idPost).orElseThrow(
                 () -> new ResourceNotFoundException("Post not found!"));
         try {
             Like like = createLike(likeDto, post, headerRequestByAuth);
             likeRepository.save(like);
             log.info("Like for post created");
+            // putNotification(UUID.fromString(likePost.getAuthorId()), "Ваш пост одобрили", NotificationType.LIKE_POST, UUID.fromString(post.getAuthorId()));
+            return likeMapper.mapEntityToDto(like);
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
         }
-       // putNotification(UUID.fromString(likePost.getAuthorId()), "Ваш пост одобрили", NotificationType.LIKE_POST, UUID.fromString(post.getAuthorId()));
-        return "Like for post created";
     }
 
 
