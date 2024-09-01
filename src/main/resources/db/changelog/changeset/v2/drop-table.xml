@@ -17,6 +17,5 @@
                 cascadeConstraints="true"
                 schemaName="public"
                 tableName="tags"/>
-
     </changeSet>
 </databaseChangeLog>
