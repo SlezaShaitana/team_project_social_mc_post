@@ -15,14 +15,14 @@
         <dropTable  cascadeConstraints="true"
                     schemaName="public"
                     tableName="reaction"/>
-<!--        <dropTable-->
-<!--                cascadeConstraints="true"-->
-<!--                schemaName="public"-->
-<!--                tableName="tag_search"/>-->
-<!--        <dropTable-->
-<!--                cascadeConstraints="true"-->
-<!--                schemaName="public"-->
-<!--                tableName="comment_search"/>-->
+        <dropTable
+                cascadeConstraints="true"
+                schemaName="public"
+                tableName="tag_search"/>
+        <dropTable
+                cascadeConstraints="true"
+                schemaName="public"
+                tableName="comment_search"/>
         <dropTable
                 cascadeConstraints="true"
                 schemaName="public"
