@@ -81,8 +81,6 @@ public class PostEntity implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "post", orphanRemoval = true)
     private List<LikeEntity> likeEntityList;
 
-//    private Boolean deferred;
-
     public PostEntity(){}
 
 }

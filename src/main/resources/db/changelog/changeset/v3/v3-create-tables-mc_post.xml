@@ -34,7 +34,7 @@
         </createTable>
     </changeSet>
     <changeSet author="mikhail" id="V3-3">
-        <createTable tableName="posts">
+        <createTable tableName="post">
             <column name="comments_count" type="INTEGER"/>
             <column name="deferred" type="BOOLEAN"/>
             <column name="is_blocked" type="BOOLEAN"/>
