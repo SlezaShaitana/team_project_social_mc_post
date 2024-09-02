@@ -11,4 +11,5 @@
 <!--    <include file="v2/drop-table.xml" relativeToChangelogFile="true"/>-->
     <include file="v3/v3-create-tables-mc_post.xml" relativeToChangelogFile="true"/>
     <include file="v3/add-column-tables.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

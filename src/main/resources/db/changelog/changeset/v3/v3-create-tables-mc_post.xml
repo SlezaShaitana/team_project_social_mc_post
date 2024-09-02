@@ -36,7 +36,6 @@
     <changeSet author="mikhail" id="V3-3">
         <createTable tableName="post">
             <column name="comments_count" type="INTEGER"/>
-            <column name="deferred" type="BOOLEAN"/>
             <column name="is_blocked" type="BOOLEAN"/>
             <column name="is_deleted" type="BOOLEAN"/>
             <column name="like_amount" type="INTEGER"/>
@@ -50,7 +49,7 @@
             </column>
             <column name="image_path" type="VARCHAR(255)"/>
             <column name="my_reaction" type="VARCHAR(255)"/>
-            <column name="post_text" type="VARCHAR(255)"/>
+            <column name="post_text" type="VARCHAR(25550)"/>
             <column name="title" type="VARCHAR(255)"/>
             <column name="type" type="VARCHAR(255)"/>
         </createTable>
