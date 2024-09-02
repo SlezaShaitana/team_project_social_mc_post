@@ -27,10 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -56,17 +53,29 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostDto> getPosts(PostSearchDto searchDto, PageDto pageDto) {
-//        if (searchDto.getWithFriends()){
-//            List<String> ids = searchDto.getAccountIds();
-//            ids.addAll(friendClient.getFriendsIdListByUserId(searchDto.getIds().get(0)));
-//            searchDto.setIds(ids);
-//        }
-        Specification<Post> spec = Specification.where(null);
+        if (searchDto.getWithFriends() != null && searchDto.getWithFriends()){
+            List<String> ids = searchDto.getAccountIds();
+            ids.addAll(friendClient.getFriendsIdListByUserId(searchDto.getIds().get(0)));
+            searchDto.setIds(ids);
+        }
+        Specification<Post> spec = PostSpecification.findWithFilter(searchDto);
         log.info(searchDto.toString());
         log.info(pageDto.toString());
 
-        return postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize()))
-                .map(postMapper::mapEntityToDto);
+        List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize()))
+                .filter(post -> searchDto.getAccountIds().contains(post.getAuthorId()))
+                .map(postMapper::mapEntityToDto)
+                .toList();
+        Sort sort = Sort.unsorted();
+
+        Pageable pageable;
+        if (pageDto.getSort() == null) {
+            pageable = PageRequest.of(0, 10, sort);
+        } else {
+            pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
+        }
+
+        return new PageImpl<>(posts,pageable, pageDto.getSize());
     }
 
     @Override
