@@ -53,6 +53,7 @@ public class CommentServiceImpl implements CommentService {
             if (commentDto.getParentId() != null){
                 comment.setType(TypeComment.COMMENT);
                 comment.setParentCommentId(commentDto.getParentId());
+                commentRepository.save(comment);
                 return "SubComment created";
             }
             comment.setType(TypeComment.POST);
