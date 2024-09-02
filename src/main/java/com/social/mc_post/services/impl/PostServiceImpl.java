@@ -56,11 +56,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostDto> getPosts(PostSearchDto searchDto, PageDto pageDto) {
-        if (searchDto.getWithFriends()){
-            List<String> ids = searchDto.getAccountIds();
-            ids.addAll(friendClient.getFriendsIdListByUserId(searchDto.getIds().get(0)));
-            searchDto.setIds(ids);
-        }
+//        if (searchDto.getWithFriends()){
+//            List<String> ids = searchDto.getAccountIds();
+//            ids.addAll(friendClient.getFriendsIdListByUserId(searchDto.getIds().get(0)));
+//            searchDto.setIds(ids);
+//        }
         Specification<Post> spec = Specification.where(null);
         log.info(searchDto.toString());
         log.info(pageDto.toString());
