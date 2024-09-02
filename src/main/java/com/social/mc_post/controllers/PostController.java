@@ -2,6 +2,7 @@ package com.social.mc_post.controllers;
 
 import com.social.mc_post.dto.*;
 import com.social.mc_post.exception.ResourceNotFoundException;
+import com.social.mc_post.security.DecodedToken;
 import com.social.mc_post.services.CommentService;
 import com.social.mc_post.services.PostService;
 import com.social.mc_post.utils.UrlParseUtils;
@@ -28,8 +29,14 @@ public class PostController {
 
 
     @GetMapping("/post")
-    public Page<PostDto> getListPosts(PostSearchDto searchDto, PageDto pageableDto){
+    public Page<PostDto> getListPosts(PostSearchDto searchDto, PageDto pageableDto,
+                                      @RequestHeader("Authorization") String headerRequestByAuth){
         try {
+            if (searchDto == null){
+                searchDto = new PostSearchDto();
+                DecodedToken token = DecodedToken.getDecoded(headerRequestByAuth);
+                searchDto.setAccountIds(List.of(token.getId()));
+            }
             return postService.getPosts(searchDto, pageableDto);
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
