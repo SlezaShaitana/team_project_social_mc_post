@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -31,7 +32,18 @@ public class PostController {
     @GetMapping("/post")
     public Page<PostDto> getListPosts(PostSearchDto searchDto, PageDto pageableDto,
                                       @RequestHeader("Authorization") String headerRequestByAuth){
-
+        try {
+            DecodedToken token = DecodedToken.getDecoded(headerRequestByAuth);
+            if (searchDto == null){
+                searchDto = new PostSearchDto();
+                searchDto.setAccountIds(List.of(token.getId()));
+            }
+            if (searchDto.getIds() == null){
+                searchDto.setIds(List.of(token.getId()));
+            }
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Error: " + e.getMessage());
+        }
             return postService.getPosts(searchDto, pageableDto, headerRequestByAuth);
     }
 
