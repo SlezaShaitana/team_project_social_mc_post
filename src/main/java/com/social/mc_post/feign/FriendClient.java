@@ -12,5 +12,5 @@ import java.util.UUID;
 public interface FriendClient {
 
     @GetMapping("/friendId/{id}")
-    List<String> getFriendsIdListByUserId(@PathVariable("id") String id);
+    List<UUID> getFriendsIdListByUserId(@PathVariable("id") String id);
 }

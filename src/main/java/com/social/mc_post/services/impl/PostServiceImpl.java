@@ -55,7 +55,8 @@ public class PostServiceImpl implements PostService {
     public Page<PostDto> getPosts(PostSearchDto searchDto, PageDto pageDto) {
         if (searchDto.getWithFriends() != null && searchDto.getWithFriends()){
             List<String> ids = searchDto.getAccountIds();
-            ids.addAll(friendClient.getFriendsIdListByUserId(searchDto.getIds().get(0)));
+            ids.addAll(friendClient.getFriendsIdListByUserId(searchDto.getIds().get(0)).stream()
+                    .map(UUID::toString).toList());
             searchDto.setIds(ids);
         }
         Specification<Post> spec = PostSpecification.findWithFilter(searchDto);
