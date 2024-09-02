@@ -235,7 +235,7 @@ public class PostServiceImpl implements PostService {
         Post post = new Post(
                 null,
                 false,
-                LocalDateTime.now(),
+                LocalDateTime.now().plusHours(3),
                 null,
                 getAuthorId(headerRequestByAuth),
                 dto.getTitle(),

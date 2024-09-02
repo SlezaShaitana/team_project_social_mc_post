@@ -228,7 +228,7 @@ public class CommentServiceImpl implements CommentService {
                 null,
                 false,
                 null,
-                LocalDateTime.now(),
+                LocalDateTime.now().plusHours(3),
                 null,
                 getAuthorId(headerRequestByAuth),
                 null,
