@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -63,7 +64,8 @@ public class PostServiceImpl implements PostService {
                 searchDto.setIds(List.of(token.getId()));
             }
             if (searchDto.getWithFriends() != null && searchDto.getWithFriends()){
-                List<String> ids = searchDto.getAccountIds();
+                List<String> ids = new ArrayList<>();
+                ids.addAll(searchDto.getAccountIds());
                 ids.addAll(friendClient.getFriendsIdListByUserId(headerRequestByAuth,token.getId()).stream()
                         .map(UUID::toString).toList());
                 searchDto.setIds(ids);
