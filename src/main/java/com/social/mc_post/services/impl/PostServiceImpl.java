@@ -9,6 +9,7 @@ import com.social.mc_post.dto.notification.MicroServiceName;
 import com.social.mc_post.dto.notification.NotificationDTO;
 import com.social.mc_post.dto.notification.NotificationType;
 import com.social.mc_post.exception.ResourceNotFoundException;
+import com.social.mc_post.feign.FriendClient;
 import com.social.mc_post.kafka.KafkaProducer;
 import com.social.mc_post.mapper.LikeMapper;
 import com.social.mc_post.mapper.PostMapper;
@@ -26,8 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -50,24 +50,47 @@ public class PostServiceImpl implements PostService {
     private final LikeMapper likeMapper;
     private final PostMapper postMapper;
     private final KafkaProducer producer;
+    private final FriendClient friendClient;
 
     @Autowired
     public PostServiceImpl(LikeRepository likeRepository,
                            PostRepository postRepository,
                            TagRepository tagRepository,
                            LikeMapper likeMapper, PostMapper postMapper,
-                           KafkaProducer producer) {
+                           KafkaProducer producer, FriendClient friendClient) {
         this.likeRepository = likeRepository;
         this.postRepository = postRepository;
         this.tagRepository = tagRepository;
         this.likeMapper = likeMapper;
         this.postMapper = postMapper;
         this.producer = producer;
+        this.friendClient = friendClient;
     }
 
     @Override
     public Page<PostDto> getPosts(PostSearchDto postSearchDto, PageableDto pageableDto) {
-        return getAllPosts(postSearchDto, pageableDto).map(postMapper::mapToPostDto);
+        if (postSearchDto.getWithFriends() != null && postSearchDto.getWithFriends()){
+            List<String> ids = postSearchDto.getAccountIds();
+            ids.addAll(friendClient.getFriendsIdListByUserId(postSearchDto.getIds().get(0)));
+            postSearchDto.setIds(ids);
+        }
+        Specification<PostEntity> spec = PostSpecification.findWithFilter(postSearchDto);
+
+        List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageableDto.getPage(), pageableDto.getSize()))
+                .filter(post -> postSearchDto.getAccountIds().contains(post.getAuthorId()))
+                .map(postMapper::mapToPostDto)
+                .toList();
+        Sort sort = Sort.unsorted();
+
+        Pageable pageable;
+        if (pageableDto.getSort() == null) {
+            pageable = PageRequest.of(0, 10, sort);
+        } else {
+            pageable = PageRequest.of(pageableDto.getPage(), pageableDto.getSize(), sort);
+        }
+
+        return new PageImpl<>(posts,pageable, pageableDto.getSize());
+
     }
 
 

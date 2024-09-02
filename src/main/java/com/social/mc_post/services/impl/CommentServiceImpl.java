@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -289,5 +290,17 @@ public class CommentServiceImpl implements CommentService {
         }
 
         return commentRepository.findAll(spec, PageRequest.of(pageableDto.getPage(), pageableDto.getSize()));
+    }
+
+
+    @Override
+    public Page<CommentEntity> getCommentsPost(String postId, PageableDto page, CommentSearchDto searchDto){
+        PostEntity post = postRepository.findById(postId).orElseThrow(
+                () -> new ResourceNotFoundException("Post not found!"));
+        Sort sort = Sort.by("time");
+        Pageable pageable = PageRequest.of(page.getSize(), page.getPage(), sort);
+
+        return commentRepository.findByCommentTypeAndPostId(TypeComment.POST, post.getId(), pageable);
+
     }
 }

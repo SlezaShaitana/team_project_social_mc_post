@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -46,7 +48,7 @@ public class RestPostController {
 
     @PutMapping("/post/{id}/comment")
     public void handlerComment(@PathVariable(value = "id") String id,
-                                            @RequestBody CommentDto commentDto){
+                               @RequestBody CommentDto commentDto){
         commentService.updateComment(id, commentDto);
     }
 
@@ -120,7 +122,7 @@ public class RestPostController {
             page.setPage(1);
         }
 
-        return commentService.getAllComments(postId, page, searchDto);
+        return commentService.getCommentsPost(postId, page, searchDto);
     }
 
     @GetMapping("/post/{postId}/comment/{commentId}/subcomment")

@@ -7,6 +7,8 @@ import com.social.mc_post.structure.CommentEntity;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface CommentService {
 
     void createCommentPost(CommentDto commentDto, String postId, String token);
@@ -19,4 +21,5 @@ public interface CommentService {
                                        CommentSearchDto commentSearchDto);
     Page<CommentEntity> getAllSubComments(String idPost, String commentId, PageableDto pageableDto,
                                           CommentSearchDto commentSearchDto);
+    Page<CommentEntity> getCommentsPost(String postId, PageableDto page, CommentSearchDto searchDto);
 }
