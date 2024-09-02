@@ -70,11 +70,13 @@ public class CommentServiceImpl implements CommentService {
             subComment.setParentCommentId(comment.getId());
             commentRepository.save(subComment);
             log.info("Create subComment");
-//            putNotification(UUID.fromString(subComment.getAuthorId()), subComment.getCommentText(),NotificationType.COMMENT_COMMENT, UUID.fromString(comment.getAuthorId()));
+//            putNotification(UUID.fromString(subComment.getAuthorId()),
+//            subComment.getCommentText(),NotificationType.COMMENT_COMMENT,
+//            UUID.fromString(comment.getAuthorId()));
+            return subComment.toString();
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
         }
-        return "Create subComment";
     }
 
     @Override
@@ -177,7 +179,7 @@ public class CommentServiceImpl implements CommentService {
                     .toList());
         }
         Sort sort = Sort.unsorted();
-
+        log.info(comments.toString());
         Pageable pageable;
         if (pageableDto.getSort() == null) {
             pageable = PageRequest.of(0, 10, sort);
