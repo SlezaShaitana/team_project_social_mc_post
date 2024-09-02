@@ -13,14 +13,14 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAmount;
 import java.util.Date;
 
-public interface PostSpecification {
+public class PostSpecification {
 
-    static Specification<Post> findWithFilter(PostSearchDto filter) {
+    public static Specification<Post> findWithFilter(PostSearchDto filter) {
         return Specification.where(byDateToFrom(filter.getDateTo(), filter.getDateFrom()))
                 .and(byIsDeleted(filter.getIsDeleted()));
     }
 
-    static Specification<Post> byIsDeleted(Boolean isDeleted){
+    private static Specification<Post> byIsDeleted(Boolean isDeleted){
         return (root, query, criteriaBuilder) -> {
             if (isDeleted == null) {
                 return criteriaBuilder.conjunction();
@@ -30,7 +30,7 @@ public interface PostSpecification {
     }
 
 
-    static Specification<Post> byDateToFrom(Date to, Date from){
+    private static Specification<Post> byDateToFrom(Date to, Date from){
         return (Root<Post> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
             LocalDate now = LocalDate.now();
             TemporalAmount amountTo = (TemporalAmount) to;
