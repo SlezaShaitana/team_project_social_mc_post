@@ -285,7 +285,6 @@ public class PostServiceImpl implements PostService {
 
     @Scheduled(fixedRate = 30000)
     public void publishingDeferredPosts(){
-
       List<Post> postList = postRepository.findByType(TypePost.QUEUED);
       for (Post p : postList){
           if (p.getPublishDate().isAfter(LocalDateTime.now())){
@@ -293,8 +292,6 @@ public class PostServiceImpl implements PostService {
               p.setType(TypePost.POSTED);
               p.setPublishDate(null);
               postRepository.save(p);
-
-              log.info("Публикация отложенного поста: {}", p.getId());
           }
       }
     }
