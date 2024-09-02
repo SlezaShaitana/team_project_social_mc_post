@@ -60,6 +60,9 @@ public class PostServiceImpl implements PostService {
                 searchDto = new PostSearchDto();
                 searchDto.setAccountIds(List.of(token.getId()));
             }
+            if (searchDto.getAccountIds() == null){
+                searchDto.setAccountIds(List.of(token.getId()));
+            }
             if (searchDto.getIds() == null){
                 searchDto.setIds(List.of(token.getId()));
             }
