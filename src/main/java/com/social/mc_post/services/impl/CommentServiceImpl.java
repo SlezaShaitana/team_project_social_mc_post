@@ -48,7 +48,13 @@ public class CommentServiceImpl implements CommentService {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new ResourceNotFoundException("Post not found!"));
         try {
+
             Comment comment = createComment(commentDto, post, headerRequestByAuth);
+            if (commentDto.getParentId() != null){
+                comment.setType(TypeComment.COMMENT);
+                comment.setParentCommentId(commentDto.getParentId());
+                return "SubComment created";
+            }
             comment.setType(TypeComment.POST);
             commentRepository.save(comment);
         }catch (Exception e){
