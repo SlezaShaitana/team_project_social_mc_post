@@ -101,6 +101,7 @@ public class PostServiceImpl implements PostService {
             pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
         }
 
+        log.info(posts.toString());
         return new PageImpl<>(posts,pageable, pageDto.getSize());
     }
 
