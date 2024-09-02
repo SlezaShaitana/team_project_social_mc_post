@@ -27,11 +27,7 @@ public class PostController {
 
 
     @GetMapping("/post")
-    public Page<PostDto> getListPosts(@RequestParam(required = false) String accountIds,
-                                      PostSearchDto searchDto, PageDto pageableDto){
-        if (accountIds != null){
-            searchDto.setAccountIds(List.of(accountIds));
-        }
+    public Page<PostDto> getListPosts(PostSearchDto searchDto, PageDto pageableDto){
         return postService.getPosts(searchDto, pageableDto);
     }
 
