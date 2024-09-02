@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,4 +23,7 @@ public interface CommentRepository extends JpaRepository<Comment, String>, JpaSp
 
     @Query("select count(*) from Comment as c WHERE c.parentCommentId =:parentCommentId")
     Integer countByParentCommentId(String parentCommentId);
+
+    @Query("select c from Comment as c WHERE c.parentCommentId =:parentId")
+    List<Comment> findByParentCommentId(String parentId);
 }

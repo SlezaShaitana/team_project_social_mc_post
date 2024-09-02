@@ -166,6 +166,27 @@ public class CommentServiceImpl implements CommentService {
         return new PageImpl<>(comments,pageable, pageableDto.getSize());
     }
 
+    @Override
+    public Page<CommentDto> getSubCommentsByPostIdAndCommentId(CommentSearchDto searchDto, PageDto pageableDto) {
+        Post post = postRepository.findById(searchDto.getPostId()).orElse(null);
+        Comment comment = commentRepository.findById(searchDto.getParentId()).orElse(null);
+        List<CommentDto> comments = new ArrayList<>();
+        if (post != null && comment != null){
+            comments.addAll(commentRepository.findByParentCommentId(searchDto.getParentId()).stream()
+                    .map(commentMapper::mapEntityToDto)
+                    .toList());
+        }
+        Sort sort = Sort.unsorted();
+
+        Pageable pageable;
+        if (pageableDto.getSort() == null) {
+            pageable = PageRequest.of(0, 10, sort);
+        } else {
+            pageable = PageRequest.of(pageableDto.getPage(), pageableDto.getSize(), sort);
+        }
+        return new PageImpl<>(comments,pageable, pageableDto.getSize());
+    }
+
 
     private Like createLike(LikeDto likeDto, Post post, Comment comment, String authorId){
         return new Like(

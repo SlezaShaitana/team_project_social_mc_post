@@ -58,7 +58,6 @@ public class PostServiceImpl implements PostService {
             DecodedToken token = DecodedToken.getDecoded(headerRequestByAuth);
             if (searchDto == null){
                 searchDto = new PostSearchDto();
-                searchDto.setAccountIds(List.of(token.getId()));
             }
             if (searchDto.getAccountIds() == null){
                 searchDto.setAccountIds(List.of(token.getId()));
@@ -77,8 +76,6 @@ public class PostServiceImpl implements PostService {
         }
 
         Specification<Post> spec = PostSpecification.findWithFilter(searchDto);
-        log.info("{} POST", searchDto.toString());
-        log.info("{} POST", pageDto.toString());
 
         PostSearchDto finalSearchDto = searchDto;
         List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize())).stream()

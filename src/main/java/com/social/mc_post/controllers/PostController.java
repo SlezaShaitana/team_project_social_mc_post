@@ -120,8 +120,8 @@ public class PostController {
         try {
             if (searchDto == null){
                 searchDto = new CommentSearchDto();
-                searchDto.setPostId(postId);
             }
+            searchDto.setPostId(postId);
             return commentService.getCommentsByPostId(searchDto, pageableDto);
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
@@ -129,10 +129,19 @@ public class PostController {
     }
 
     @GetMapping("/post/{postId}/comment/{commentId}/subcomment")
-    public List<CommentDto> getSubComments(@PathVariable(value = "postId") String postId,
-                                         @PathVariable(value = "commentId") String commentId){
-
-        return List.of();
+    public Page<CommentDto> getSubComments(@PathVariable(value = "postId") String postId,
+                                         @PathVariable(value = "commentId") String commentId,
+                                           CommentSearchDto searchDto, PageDto pageableDto){
+        try {
+            if (searchDto == null){
+                searchDto = new CommentSearchDto();
+            }
+            searchDto.setPostId(postId);
+            searchDto.setParentId(commentId);
+            return commentService.getSubCommentsByPostIdAndCommentId(searchDto, pageableDto);
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Error: " + e.getMessage());
+        }
     }
 
     @GetMapping("/post/{id}")

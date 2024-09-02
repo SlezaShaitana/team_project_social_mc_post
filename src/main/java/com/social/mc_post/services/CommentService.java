@@ -15,4 +15,5 @@ public interface CommentService {
     String createLikeComment(String idPost, String idComment, LikeDto likeDto, String headerRequestByAuth);
     void removeLikeComment(String idPost, String idComment);
     Page<CommentDto> getCommentsByPostId(CommentSearchDto searchDto, PageDto pageableDto);
+    Page<CommentDto> getSubCommentsByPostIdAndCommentId(CommentSearchDto searchDto, PageDto pageableDto);
 }
