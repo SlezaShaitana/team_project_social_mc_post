@@ -90,7 +90,6 @@ public class PostServiceImpl implements PostService {
         List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize())).stream()
                 .filter(post -> finalSearchDto.getAccountIds().contains(post.getAuthorId()))
                 .filter(post -> post.getType().equals(TypePost.POSTED))
-                .filter(post -> post.getType().equals(TypePost.QUEUED))
                 .map(postMapper::mapEntityToDto)
                 .toList();
         Sort sort = Sort.unsorted();
@@ -285,18 +284,21 @@ public class PostServiceImpl implements PostService {
                 .build());
     }
 
-    @Scheduled(cron = "0 35 * * * *")
+    @Scheduled(fixedRate = 300000)
     public void publishingDeferredPosts(){
 
-        List<Post> postList = postRepository.findByPublishDate(LocalDateTime.now());
+      List<Post> postList = postRepository.findByType(TypePost.QUEUED);
+      for (Post p : postList){
+          if (p.getPublishDate().isBefore(LocalDateTime.now())){
+              p.setTime(LocalDateTime.now());
+              p.setType(TypePost.POSTED);
+              p.setPublishDate(null);
+              postRepository.save(p);
 
-        for (Post p : postList){
-            p.setTime(LocalDateTime.now());
-            p.setType(TypePost.POSTED);
-            p.setPublishDate(null);
-            postRepository.save(p);
-            log.info("Публикация отложенного поста: {}", p.getId());
-        }
+              log.info("Публикация отложенного поста: {}", p.getId());
+          }
+
+      }
 
 
     }
