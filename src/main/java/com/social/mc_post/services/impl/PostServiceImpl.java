@@ -56,18 +56,17 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostDto> getPosts(PostSearchDto searchDto, PageDto pageDto) {
-        log.info(searchDto.toString());
-        log.info(pageDto.toString());
-
         if (searchDto.getWithFriends()){
             List<String> ids = searchDto.getAccountIds();
             ids.addAll(friendClient.getFriendsIdListByUserId(searchDto.getIds().get(0)));
             searchDto.setIds(ids);
         }
+        Specification<Post> spec = Specification.where(null);
+        log.info(searchDto.toString());
+        log.info(pageDto.toString());
 
-        return postRepository.findAll(PostSpecification.findWithFilter(searchDto),
-                PageRequest.of(pageDto.getPage(), pageDto.getSize())).map(postMapper::mapEntityToDto);
-
+        return postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize()))
+                .map(postMapper::mapEntityToDto);
     }
 
     @Override
