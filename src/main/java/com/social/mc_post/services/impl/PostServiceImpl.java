@@ -285,16 +285,17 @@ public class PostServiceImpl implements PostService {
                 .build());
     }
 
-    @Scheduled(cron = "0 5 * * * *")
+    @Scheduled(cron = "0 15 * * * *")
     public void publishingDeferredPosts(){
 
         List<Post> postList = postRepository.findByPublishDate(LocalDateTime.now());
-        postList.stream().map(post -> {
-            post.setTime(LocalDateTime.now());
-            post.setType(TypePost.POSTED);
-            post.setPublishDate(null);
-            return postRepository.save(post);
-        });
+
+        for (Post p : postList){
+            p.setTime(LocalDateTime.now());
+            p.setType(TypePost.POSTED);
+            p.setPublishDate(null);
+            postRepository.save(p);
+        }
 
         log.info("Публикация отложенного поста");
     }
