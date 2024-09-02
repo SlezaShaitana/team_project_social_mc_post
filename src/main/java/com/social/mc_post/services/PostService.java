@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 
 public interface PostService {
 
-    Page<PostDto> getPosts(PostSearchDto searchDto, PageDto pageable);
+    Page<PostDto> getPosts(PostSearchDto searchDto, PageDto pageable, String headerRequestByAuth);
     String createPost(PostDto newPost, String headerRequestByAuth);
     PostDto updatePost(PostDto updatePost);
     void deletePost(String id);

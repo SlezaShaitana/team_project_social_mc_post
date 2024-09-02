@@ -52,19 +52,32 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public Page<PostDto> getPosts(PostSearchDto searchDto, PageDto pageDto) {
-        if (searchDto.getWithFriends() != null && searchDto.getWithFriends()){
-            List<String> ids = searchDto.getAccountIds();
-            ids.addAll(friendClient.getFriendsIdListByUserId(searchDto.getIds().get(0)).stream()
-                    .map(UUID::toString).toList());
-            searchDto.setIds(ids);
+    public Page<PostDto> getPosts(PostSearchDto searchDto, PageDto pageDto, String headerRequestByAuth) {
+        try {
+            DecodedToken token = DecodedToken.getDecoded(headerRequestByAuth);
+            if (searchDto == null){
+                searchDto = new PostSearchDto();
+                searchDto.setAccountIds(List.of(token.getId()));
+            }
+            if (searchDto.getIds() == null){
+                searchDto.setIds(List.of(token.getId()));
+            }
+            if (searchDto.getWithFriends() != null && searchDto.getWithFriends()){
+                List<String> ids = searchDto.getAccountIds();
+                ids.addAll(friendClient.getFriendsIdListByUserId(headerRequestByAuth,searchDto.getIds().get(0)).stream()
+                        .map(UUID::toString).toList());
+                searchDto.setIds(ids);
+            }
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Error: " + e.getMessage());
         }
         Specification<Post> spec = PostSpecification.findWithFilter(searchDto);
         log.info("{} POST", searchDto.toString());
         log.info("{} POST", pageDto.toString());
 
+        PostSearchDto finalSearchDto = searchDto;
         List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize())).stream()
-                .filter(post -> searchDto.getAccountIds().contains(post.getAuthorId()))
+                .filter(post -> finalSearchDto.getAccountIds().contains(post.getAuthorId()))
                 .map(postMapper::mapEntityToDto)
                 .toList();
         Sort sort = Sort.unsorted();

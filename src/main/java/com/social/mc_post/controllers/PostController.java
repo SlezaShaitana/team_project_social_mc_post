@@ -31,20 +31,8 @@ public class PostController {
     @GetMapping("/post")
     public Page<PostDto> getListPosts(PostSearchDto searchDto, PageDto pageableDto,
                                       @RequestHeader("Authorization") String headerRequestByAuth){
-        try {
-            DecodedToken token = DecodedToken.getDecoded(headerRequestByAuth);
-            if (searchDto == null){
-                searchDto = new PostSearchDto();
-                searchDto.setAccountIds(List.of(token.getId()));
-            }
-            if (searchDto.getIds() == null){
-                searchDto.setIds(List.of(token.getId()));
-            }
-            return postService.getPosts(searchDto, pageableDto);
-        }catch (Exception e){
-            throw new ResourceNotFoundException("Error: " + e.getMessage());
-        }
 
+            return postService.getPosts(searchDto, pageableDto, headerRequestByAuth);
     }
 
     @PutMapping("/post")
