@@ -65,14 +65,8 @@ public class PostServiceImpl implements PostService {
             searchDto.setIds(ids);
         }
 
-        List<PostDto> posts = postRepository.findAll(PostSpecification.findWithFilter(searchDto),
-                        PageRequest.of(pageDto.getPage(), pageDto.getSize())).stream()
-                .filter(postDto -> searchDto.getAccountIds().contains(postDto.getAuthorId()))
-                .map(postMapper::mapEntityToDto)
-                .toList();
-        Pageable pageable = (Pageable) pageDto;
-
-        return new PageImpl<>(posts, pageable, posts.size());
+        return postRepository.findAll(PostSpecification.findWithFilter(searchDto),
+                PageRequest.of(pageDto.getPage(), pageDto.getSize())).map(postMapper::mapEntityToDto);
 
     }
 
