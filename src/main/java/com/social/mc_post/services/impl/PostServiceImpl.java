@@ -89,6 +89,7 @@ public class PostServiceImpl implements PostService {
         PostSearchDto finalSearchDto = searchDto;
         List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize())).stream()
                 .filter(post -> finalSearchDto.getAccountIds().contains(post.getAuthorId()))
+                .filter(post -> post.getType().equals(TypePost.POSTED))
                 .map(postMapper::mapEntityToDto)
                 .toList();
         Sort sort = Sort.unsorted();
