@@ -27,19 +27,25 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@EnableAsync
 @Slf4j
+@ConditionalOnProperty(name = "scheduler.enabled", matchIfMissing = true)
 public class PostServiceImpl implements PostService {
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
@@ -58,6 +64,7 @@ public class PostServiceImpl implements PostService {
             DecodedToken token = DecodedToken.getDecoded(headerRequestByAuth);
             if (searchDto == null){
                 searchDto = new PostSearchDto();
+                searchDto.setAccountIds(List.of(token.getId()));
             }
             if (searchDto.getAccountIds() == null){
                 searchDto.setAccountIds(List.of(token.getId()));
@@ -76,6 +83,8 @@ public class PostServiceImpl implements PostService {
         }
 
         Specification<Post> spec = PostSpecification.findWithFilter(searchDto);
+        log.info("{} POST", searchDto.toString());
+        log.info("{} POST", pageDto.toString());
 
         PostSearchDto finalSearchDto = searchDto;
         List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize())).stream()
@@ -235,7 +244,7 @@ public class PostServiceImpl implements PostService {
         Post post = new Post(
                 null,
                 false,
-                LocalDateTime.now().plusHours(3),
+                LocalDateTime.now(),
                 null,
                 getAuthorId(headerRequestByAuth),
                 dto.getTitle(),
@@ -273,5 +282,15 @@ public class PostServiceImpl implements PostService {
                 .build());
     }
 
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void publishingDeferredPosts(){
 
+        List<Post> postList = postRepository.findByPublishDate(LocalDateTime.now());
+        postList.stream().map(post -> {
+            post.setTime(LocalDateTime.now());
+            post.setType(TypePost.POSTED);
+            post.setPublishDate(null);
+            return postRepository.save(post);
+        });
+    }
 }
