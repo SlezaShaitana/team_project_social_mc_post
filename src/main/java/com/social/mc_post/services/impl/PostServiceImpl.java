@@ -282,7 +282,7 @@ public class PostServiceImpl implements PostService {
                 .build());
     }
 
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 5 * * * *")
     public void publishingDeferredPosts(){
 
         List<Post> postList = postRepository.findByPublishDate(LocalDateTime.now());
@@ -292,5 +292,7 @@ public class PostServiceImpl implements PostService {
             post.setPublishDate(null);
             return postRepository.save(post);
         });
+
+        log.info("Публикация отложенного поста");
     }
 }
