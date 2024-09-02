@@ -101,7 +101,6 @@ public class PostServiceImpl implements PostService {
             pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
         }
 
-        log.info(posts.toString());
         return new PageImpl<>(posts,pageable, pageDto.getSize());
     }
 
@@ -284,12 +283,12 @@ public class PostServiceImpl implements PostService {
                 .build());
     }
 
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(fixedRate = 30000)
     public void publishingDeferredPosts(){
 
       List<Post> postList = postRepository.findByType(TypePost.QUEUED);
       for (Post p : postList){
-          if (p.getPublishDate().isBefore(LocalDateTime.now())){
+          if (p.getPublishDate().isAfter(LocalDateTime.now())){
               p.setTime(LocalDateTime.now());
               p.setType(TypePost.POSTED);
               p.setPublishDate(null);
@@ -297,9 +296,6 @@ public class PostServiceImpl implements PostService {
 
               log.info("Публикация отложенного поста: {}", p.getId());
           }
-
       }
-
-
     }
 }
