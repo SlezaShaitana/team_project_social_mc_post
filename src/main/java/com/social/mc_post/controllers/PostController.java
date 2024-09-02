@@ -32,10 +32,13 @@ public class PostController {
     public Page<PostDto> getListPosts(PostSearchDto searchDto, PageDto pageableDto,
                                       @RequestHeader("Authorization") String headerRequestByAuth){
         try {
+            DecodedToken token = DecodedToken.getDecoded(headerRequestByAuth);
             if (searchDto == null){
                 searchDto = new PostSearchDto();
-                DecodedToken token = DecodedToken.getDecoded(headerRequestByAuth);
                 searchDto.setAccountIds(List.of(token.getId()));
+            }
+            if (searchDto.getIds() == null){
+                searchDto.setIds(List.of(token.getId()));
             }
             return postService.getPosts(searchDto, pageableDto);
         }catch (Exception e){
