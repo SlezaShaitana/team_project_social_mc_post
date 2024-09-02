@@ -22,4 +22,7 @@ public interface LikeRepository extends JpaRepository<Like, String> {
 
     @Query("select count(*) from Like as l WHERE l.post =:post")
     Integer countByPost(Post post);
+
+    @Query("select count(*) from Like as l WHERE l.comment =:comment")
+    Integer countByComment(Comment comment);
 }

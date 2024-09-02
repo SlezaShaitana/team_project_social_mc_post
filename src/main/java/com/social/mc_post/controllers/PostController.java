@@ -124,8 +124,17 @@ public class PostController {
     }
 
     @GetMapping("/post/{postId}/comment")
-    public List<CommentDto> getComments(@PathVariable(value = "postId") String postId){
-        return List.of();
+    public Page<CommentDto> getComments(@PathVariable(value = "postId") String postId,
+                                        CommentSearchDto searchDto, PageDto pageableDto){
+        try {
+            if (searchDto == null){
+                searchDto = new CommentSearchDto();
+                searchDto.setPostId(postId);
+            }
+            return commentService.getCommentsByPostId(searchDto, pageableDto);
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Error: " + e.getMessage());
+        }
     }
 
     @GetMapping("/post/{postId}/comment/{commentId}/subcomment")

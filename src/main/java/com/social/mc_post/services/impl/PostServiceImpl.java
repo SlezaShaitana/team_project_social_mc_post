@@ -59,10 +59,10 @@ public class PostServiceImpl implements PostService {
             searchDto.setIds(ids);
         }
         Specification<Post> spec = PostSpecification.findWithFilter(searchDto);
-        log.info(searchDto.toString());
-        log.info(pageDto.toString());
+        log.info("{} POST", searchDto.toString());
+        log.info("{} POST", pageDto.toString());
 
-        List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize()))
+        List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize())).stream()
                 .filter(post -> searchDto.getAccountIds().contains(post.getAuthorId()))
                 .map(postMapper::mapEntityToDto)
                 .toList();

@@ -19,4 +19,7 @@ public interface CommentRepository extends JpaRepository<Comment, String>, JpaSp
 
     @Query("select count(*) from Comment as c WHERE c.post =:post")
     Integer countByPost(Post post);
+
+    @Query("select count(*) from Comment as c WHERE c.parentCommentId =:parentCommentId")
+    Integer countByParentCommentId(String parentCommentId);
 }

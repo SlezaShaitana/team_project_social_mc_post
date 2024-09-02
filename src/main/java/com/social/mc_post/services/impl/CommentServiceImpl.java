@@ -1,7 +1,9 @@
 package com.social.mc_post.services.impl;
 
 import com.social.mc_post.dto.CommentDto;
+import com.social.mc_post.dto.CommentSearchDto;
 import com.social.mc_post.dto.LikeDto;
+import com.social.mc_post.dto.PageDto;
 import com.social.mc_post.dto.enums.TypeComment;
 import com.social.mc_post.dto.enums.TypeLike;
 import com.social.mc_post.dto.notification.MicroServiceName;
@@ -9,6 +11,7 @@ import com.social.mc_post.dto.notification.NotificationDTO;
 import com.social.mc_post.dto.notification.NotificationType;
 import com.social.mc_post.exception.ResourceNotFoundException;
 import com.social.mc_post.kafka.KafkaProducer;
+import com.social.mc_post.mapper.CommentMapper;
 import com.social.mc_post.model.Comment;
 import com.social.mc_post.model.Like;
 import com.social.mc_post.model.Post;
@@ -19,10 +22,12 @@ import com.social.mc_post.security.DecodedToken;
 import com.social.mc_post.services.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,6 +40,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
     private final KafkaProducer producer;
+    private final CommentMapper commentMapper;
 
 
     @Override
@@ -138,6 +144,26 @@ public class CommentServiceImpl implements CommentService {
             likeRepository.delete(like);
             log.info("Like for comment deleted");
         });
+    }
+
+    @Override
+    public Page<CommentDto> getCommentsByPostId(CommentSearchDto searchDto, PageDto pageableDto) {
+        Post post = postRepository.findById(searchDto.getPostId()).orElse(null);
+        List<CommentDto> comments = new ArrayList<>();
+        if (post !=null){
+            comments.addAll(commentRepository.findByPost(post).stream()
+                    .map(commentMapper::mapEntityToDto)
+                    .toList());
+        }
+        Sort sort = Sort.unsorted();
+
+        Pageable pageable;
+        if (pageableDto.getSort() == null) {
+            pageable = PageRequest.of(0, 10, sort);
+        } else {
+            pageable = PageRequest.of(pageableDto.getPage(), pageableDto.getSize(), sort);
+        }
+        return new PageImpl<>(comments,pageable, pageableDto.getSize());
     }
 
 
