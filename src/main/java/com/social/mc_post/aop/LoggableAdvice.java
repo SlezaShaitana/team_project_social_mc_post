@@ -13,19 +13,26 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LoggableAdvice {
 
-    @Pointcut(value = "execution(publishingDeferredPosts())")
-    public void allLoginMethodPublishPointcut() {
+    @Pointcut(value = "execution(* publishingDeferredPosts())")
+    public void logMethodPublishPointcut() {
     }
 
-    @Before("allLoginMethodPublishPointcut()")
+    @Before("logMethodPublishPointcut()")
     public void beforeLoggingMethodPublish(JoinPoint joinPoint){
         log.info("Поиск отложенных постов {}", joinPoint.getTarget().getClass().getSimpleName());
     }
 
-    @After("allLoginMethodPublishPointcut()")
+    @After("logMethodPublishPointcut()")
     public void afterLoggingMethodPublish(JoinPoint joinPoint) {
         log.info("Публикация отложенных постов {}", joinPoint.getTarget().getClass().getSimpleName());
     }
 
+    @Pointcut(value = "execution(* getPosts(..))")
+    public void logMethodGetPosts(){}
+
+    @After("logMethodGetPosts()")
+    public void afterLoggingMethodGetPosts(JoinPoint joinPoint) {
+        log.info("Получение постов {}", joinPoint.getTarget().toString());
+    }
 
 }
