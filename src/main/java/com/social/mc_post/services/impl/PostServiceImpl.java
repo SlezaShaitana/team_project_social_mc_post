@@ -76,7 +76,7 @@ public class PostServiceImpl implements PostService {
                         .stream()
                         .map(UUID::toString).toList();
                 ids.add(token.getId());
-                searchDto.setAccountIds(ids);
+                searchDto.setIds(ids);
             }
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
@@ -86,7 +86,7 @@ public class PostServiceImpl implements PostService {
 
         PostSearchDto finalSearchDto = searchDto;
         List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize())).stream()
-                .filter(post -> finalSearchDto.getAccountIds().contains(post.getAuthorId()))
+                .filter(post -> finalSearchDto.getIds().contains(post.getAuthorId()))
                 .filter(post -> post.getType().equals(TypePost.POSTED))
                 .map(postMapper::mapEntityToDto)
                 .toList();
@@ -108,6 +108,7 @@ public class PostServiceImpl implements PostService {
                 Post post = createPostDB(postDto, headerRequestByAuth);
                 List<Tag> tags = createTags(postDto.getTags(), post);
                 postRepository.save(post);
+
                 for (Tag tag : tags){
                     tagRepository.save(tag);
                 }
