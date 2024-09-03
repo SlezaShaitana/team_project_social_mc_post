@@ -59,31 +59,19 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostDto> getPosts(PostSearchDto searchDto, PageDto pageDto, String headerRequestByAuth) {
+        log.info(searchDto.toString());
         try {
             DecodedToken token = DecodedToken.getDecoded(headerRequestByAuth);
-            if (searchDto == null){
-                searchDto = new PostSearchDto();
-            }
-            if (searchDto.getAccountIds() == null){
-                searchDto.setAccountIds(List.of(token.getId()));
-            }
-            if (searchDto.getIds() == null){
-                searchDto.setIds(List.of(token.getId()));
-            }
-            List<String> ids = new ArrayList<>();
-            ids.add(token.getId());
-            if (searchDto.getWithFriends() != null && searchDto.getWithFriends()){
+            boolean withFriends = searchDto.getWithFriends() != null && searchDto.getWithFriends();
+            ArrayList<String> ids = new ArrayList<>();
+            if (withFriends){
                 ids.addAll(friendClient.getFriendsIdListByUserId(headerRequestByAuth,token.getId())
                         .stream()
                         .map(UUID::toString).toList());
-                searchDto.setAccountIds(ids);
             }
-
-            log.info(ids.toString());
-            Specification<Post> spec = PostSpecification.findWithFilter(searchDto);
-
-            List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize())).stream()
+            List<PostDto> posts = postRepository.getAll().stream()
                     .filter(post -> ids.contains(post.getAuthorId()))
+                    .filter(post -> post.getType().equals(TypePost.POSTED))
                     .map(postMapper::mapEntityToDto)
                     .toList();
             Sort sort = Sort.unsorted();
