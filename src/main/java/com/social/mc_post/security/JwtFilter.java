@@ -1,5 +1,6 @@
 package com.social.mc_post.security;
 
+import com.social.mc_post.aop.JwtTokenException;
 import com.social.mc_post.feign.JwtValidation;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.NonNull;
@@ -26,17 +27,18 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtValidation jwtValidation;
 
+    @JwtTokenException
     private String getToken(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
 
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
             return headerAuth.substring(7);
         }
-        log.error("Request is empty or damaged");
         throw new IllegalArgumentException("Authorization header is missing or malformed");
     }
 
     @Override
+    @JwtTokenException
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         try {
@@ -48,8 +50,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 String email = token.getEmail();
                 List<String> roles = token.getRole();
-                log.info("EMAIL USER: {}", email);
-                log.info("ID USER: {}", token.getId());
 //                Collection<? extends GrantedAuthority> authorities = roles.stream()
 //                        .map(SimpleGrantedAuthority::new)
 //                        .collect(Collectors.toList());
@@ -65,11 +65,9 @@ public class JwtFilter extends OncePerRequestFilter {
                 return;
             }
         } catch (MalformedJwtException e) {
-            log.error("Invalid JWT token format: {}", e.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         } catch (Exception e) {
-            log.error("JWT token validation failed: {}", e.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }

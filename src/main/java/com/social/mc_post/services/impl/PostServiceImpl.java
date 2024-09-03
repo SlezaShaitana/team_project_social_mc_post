@@ -27,8 +27,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -40,6 +43,8 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@EnableAsync
+@ConditionalOnProperty(name = "scheduler.enabled", matchIfMissing = true)
 public class PostServiceImpl implements PostService {
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
@@ -274,6 +279,17 @@ public class PostServiceImpl implements PostService {
                 .serviceName(MicroServiceName.POST)
                 .build());
     }
+    @Scheduled(fixedRate = 300000)
+    public void publishingDeferredPosts() {
 
-
+        List<Post> postList = postRepository.findByType(TypePost.QUEUED);
+        for (Post p : postList) {
+            if (p.getPublishDate().isBefore(LocalDateTime.now())) {
+                p.setTime(LocalDateTime.now());
+                p.setType(TypePost.POSTED);
+                p.setPublishDate(null);
+                postRepository.save(p);
+            }
+        }
+    }
 }
