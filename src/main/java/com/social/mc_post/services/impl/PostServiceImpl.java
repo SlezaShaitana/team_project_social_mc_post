@@ -69,7 +69,7 @@ public class PostServiceImpl implements PostService {
                         .stream()
                         .map(UUID::toString).toList());
             }
-            List<PostDto> posts = postRepository.getAll().stream()
+            List<PostDto> posts = postRepository.getAll(token.getId()).stream()
                     .filter(post -> ids.contains(post.getAuthorId()))
                     .filter(post -> post.getType().equals(TypePost.POSTED))
                     .map(postMapper::mapEntityToDto)
