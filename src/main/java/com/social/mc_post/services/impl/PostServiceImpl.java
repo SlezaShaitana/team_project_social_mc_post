@@ -71,8 +71,8 @@ public class PostServiceImpl implements PostService {
                 ids.addAll(friendClient.getFriendsIdListByUserId(headerRequestByAuth,token.getId())
                         .stream()
                         .map(UUID::toString).toList());
-                log.info(ids.toString());
-                searchDto.setIds(ids);
+                log.info("{}   QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ", ids.toString());
+                searchDto.setAccountIds(ids);
 
             }
         }catch (Exception e){
