@@ -185,7 +185,13 @@ public class PostServiceImpl implements PostService {
     public LikeDto createLikePost(String idPost, LikeDto likeDto, String headerRequestByAuth) {
         Post post = postRepository.findById(idPost).orElse(null);
         if (post != null){
+
             try {
+                String authorId = getAuthorId(headerRequestByAuth);
+                if (post.getMyLike()){
+                    Like like = likeRepository.findByAuthorIdAndPost(authorId, post);
+                    likeRepository.delete(like);
+                }
                 Like like = createLike(likeDto, post, headerRequestByAuth);
                 likeRepository.save(like);
                 log.info("Like for post created");

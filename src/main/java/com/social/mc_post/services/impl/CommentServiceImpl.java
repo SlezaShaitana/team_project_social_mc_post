@@ -146,20 +146,23 @@ public class CommentServiceImpl implements CommentService {
         Post post = postRepository.findById(idPost).orElse(null);
         Comment comment = commentRepository.findById(idComment).orElse(null);
         if (post != null && comment != null){
-            String authorId = "";
             try {
-                authorId = getAuthorId(headerRequestByAuth);
+                String authorId = getAuthorId(headerRequestByAuth);
+                if (comment.getMyLike()){
+                    Like like = likeRepository.findByAuthorIdAndComment(authorId, comment);
+                    likeRepository.delete(like);
+                }
+                Like like = createLike(likeDto,post, comment, authorId);
+                likeRepository.save(like);
+                log.info("Like for comment created ");
+                if (like.getAuthorId().equals(like.getAuthorId())){
+                    comment.setMyLike(true);
+                    commentRepository.save(comment);
+                }
+                return "Like for comment created";
             }catch (Exception e){
                 throw new ResourceNotFoundException("Error: " + e.getMessage());
             }
-            Like like = createLike(likeDto,post, comment, authorId);
-            likeRepository.save(like);
-            log.info("Like for comment created ");
-            if (like.getAuthorId().equals(like.getAuthorId())){
-                comment.setMyLike(true);
-                commentRepository.save(comment);
-            }
-            return "Like for comment created";
         }
        return null;
     }
