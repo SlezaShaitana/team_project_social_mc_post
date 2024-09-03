@@ -27,25 +27,25 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
-@EnableAsync
 @Slf4j
-@ConditionalOnProperty(name = "scheduler.enabled", matchIfMissing = true)
 public class PostServiceImpl implements PostService {
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
@@ -64,7 +64,6 @@ public class PostServiceImpl implements PostService {
             DecodedToken token = DecodedToken.getDecoded(headerRequestByAuth);
             if (searchDto == null){
                 searchDto = new PostSearchDto();
-                searchDto.setAccountIds(List.of(token.getId()));
             }
             if (searchDto.getAccountIds() == null){
                 searchDto.setAccountIds(List.of(token.getId()));
@@ -83,8 +82,6 @@ public class PostServiceImpl implements PostService {
         }
 
         Specification<Post> spec = PostSpecification.findWithFilter(searchDto);
-        log.info("{} POST", searchDto.toString());
-        log.info("{} POST", pageDto.toString());
 
         PostSearchDto finalSearchDto = searchDto;
         List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize())).stream()
@@ -110,6 +107,18 @@ public class PostServiceImpl implements PostService {
                 Post post = createPostDB(postDto, headerRequestByAuth);
                 List<Tag> tags = createTags(postDto.getTags(), post);
                 postRepository.save(post);
+
+                if (post.getType().equals(TypePost.QUEUED)){
+                    long dateNow = new Date().getTime();
+                    long publishDate = post.getPublishDate().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+                    long timeSleep = publishDate - dateNow;
+                    ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
+                    service.schedule(() -> {
+                        post.setType(TypePost.POSTED);
+                        postRepository.save(post);
+                        log.info("Post is published");
+                    }, timeSleep, TimeUnit.MILLISECONDS);
+                }
                 for (Tag tag : tags){
                     tagRepository.save(tag);
                 }
@@ -126,91 +135,119 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDto updatePost(PostDto postDto) {
-        Post post = postRepository.findById(postDto.getId()).orElseThrow(
-                () -> new ResourceNotFoundException("Post not found!"));
-
-        post.setTimeChanged(LocalDateTime.now());
-        post.setTitle(postDto.getTitle());
-        post.setPostText(postDto.getPostText());
-        post.setImagePath(postDto.getImagePath());
-        post.setPublishDate(postDto.getPublishDate());
-
-        if (postDto.getPublishDate() == null){
-            post.setType(TypePost.POSTED);
-        } else {
-            post.setType(TypePost.QUEUED);
-        }
-
-        postRepository.save(post);
-        log.info("Update POST: {}", post.getId());
-        return postMapper.mapEntityToDto(post);
-    }
-
-    @Override
-    public void deletePost(String id) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Post not found!"));
-
-        List<Comment> comments = commentRepository.findByPost(post);
-        comments.forEach(comment -> {
-            List<Like> likes = likeRepository.findByComment(comment);
-            likes.forEach(like -> {
-                likeRepository.delete(like);
-                log.info("delete like comment");
-            });
-            commentRepository.delete(comment);
-            log.info("Delete comment");
-        });
-        List<Like> likes = likeRepository.findByPost(post);
-        likes.forEach( like -> {
-            likeRepository.delete(like);
-            log.info("delete like post");
-        });
-
-        postRepository.delete(post);
-        log.info("Post delete by id: {}", post.getId());
-    }
-
-    @Override
-    public LikeDto createLikePost(String idPost, LikeDto likeDto, String headerRequestByAuth) {
-        Post post = postRepository.findById(idPost).orElseThrow(
-                () -> new ResourceNotFoundException("Post not found!"));
+    public String updatePost(PostDto postDto, String headerRequestByAuth) {
+        Post post = postRepository.findById(postDto.getId()).orElse(null);
         try {
-            Like like = createLike(likeDto, post, headerRequestByAuth);
-            likeRepository.save(like);
-            log.info("Like for post created");
-            // putNotification(UUID.fromString(likePost.getAuthorId()), "Ваш пост одобрили", NotificationType.LIKE_POST, UUID.fromString(post.getAuthorId()));
-            return likeMapper.mapEntityToDto(like);
+            if (post != null){
+                if (!post.getAuthorId().equals(getAuthorId(headerRequestByAuth))){
+                    return "Изменять пост может только его создатель!";
+                }
+                post.setTimeChanged(LocalDateTime.now());
+                post.setTitle(postDto.getTitle());
+                post.setPostText(postDto.getPostText());
+                post.setImagePath(postDto.getImagePath());
+                post.setPublishDate(postDto.getPublishDate());
+
+                if (postDto.getPublishDate() == null){
+                    post.setType(TypePost.POSTED);
+                } else {
+                    post.setType(TypePost.QUEUED);
+                }
+
+                postRepository.save(post);
+                log.info("Update POST: {}", post.getId());
+                return "Post is update";
+            }
+            return null;
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
         }
     }
 
-
     @Override
-    public void deleteLike(String id){
-        Like like = likeRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Like not found!"));
-        likeRepository.delete(like);
-        log.info("Like deleted");
+    public void deletePost(String id, String headerRequestByAuth) {
+        Post post = postRepository.findById(id).orElse(null);
+        if (post != null){
+            List<Comment> comments = commentRepository.findByPost(post);
+            comments.forEach(comment -> {
+                List<Like> likes = likeRepository.findByComment(comment);
+                likes.forEach(like -> {
+                    likeRepository.delete(like);
+                    log.info("delete like comment");
+                });
+                commentRepository.delete(comment);
+                log.info("Delete comment");
+            });
+            List<Like> likes = likeRepository.findByPost(post);
+            likes.forEach( like -> {
+                likeRepository.delete(like);
+                log.info("delete like post");
+            });
+
+            postRepository.delete(post);
+            log.info("Post delete by id: {}", post.getId());
+        }
     }
 
     @Override
-    public String delayed(String token){
+    public LikeDto createLikePost(String idPost, LikeDto likeDto, String headerRequestByAuth) {
+        Post post = postRepository.findById(idPost).orElse(null);
+        if (post != null){
+            try {
+                Like like = createLike(likeDto, post, headerRequestByAuth);
+                likeRepository.save(like);
+                log.info("Like for post created");
+                if (post.getAuthorId().equals(like.getAuthorId())){
+                    post.setMyLike(true);
+                    post.setMyReaction(like.getReaction());
+                    postRepository.save(post);
+                }
+                // putNotification(UUID.fromString(likePost.getAuthorId()), "Ваш пост одобрили", NotificationType.LIKE_POST, UUID.fromString(post.getAuthorId()));
+                return likeMapper.mapEntityToDto(like);
+            }catch (Exception e){
+                throw new ResourceNotFoundException("Error: " + e.getMessage());
+            }
+        }
+        return null;
+    }
+
+
+    @Override
+    public void deleteLike(String id,  String headerRequestByAuth){
+        Like like = likeRepository.findById(id).orElse(null);
         try {
-            List<Post> posts = postRepository.findByTypeAndAuthorId(TypePost.QUEUED,
-                    getAuthorId(token));
+            if (like != null && like.getAuthorId().equals(getAuthorId(headerRequestByAuth))){
+                likeRepository.delete(like);
+                log.info("Like deleted");
+                if (like.getPost() != null){
+                    Post post = like.getPost();
+                    if (post.getAuthorId().equals(like.getAuthorId())){
+                        post.setMyLike(false);
+                        post.setMyReaction(null);
+                        postRepository.save(post);
+                    }
+                }
+            }
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    @Scheduled(cron = "0 15 * * * *")
+    public void delayed(){
+        try {
+            List<Post> posts = postRepository.findByType(TypePost.QUEUED);
             int countPostedPost = 0;
             for (Post post : posts){
-                if (post.getPublishDate().isAfter(LocalDateTime.now())){
+                if (post.getPublishDate().isBefore(LocalDateTime.now())){
                     countPostedPost++;
                     post.setType(TypePost.POSTED);
                     postRepository.save(post);
                 }
             }
-            return "Published " + countPostedPost + " posts \n " +
-                    "The count remaining deferred posts: " + (posts.size() - countPostedPost);
+            log.info("Published {} posts; " +
+                    "The count remaining deferred posts: {}", countPostedPost, posts.size() - countPostedPost);
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
         }
@@ -218,9 +255,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto getPostDtoById(String id) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Post not found!"));
-        return postMapper.mapEntityToDto(post);
+        Post post = postRepository.findById(id).orElse(null);
+        if (post != null){
+            return postMapper.mapEntityToDto(post);
+        }
+        return null;
     }
 
     public List<Tag> createTags(List<TagDto> tagDtoList, Post post){
@@ -245,7 +284,7 @@ public class PostServiceImpl implements PostService {
         Post post = new Post(
                 null,
                 false,
-                LocalDateTime.now(),
+                LocalDateTime.now().plusHours(3),
                 null,
                 getAuthorId(headerRequestByAuth),
                 dto.getTitle(),
@@ -283,16 +322,5 @@ public class PostServiceImpl implements PostService {
                 .build());
     }
 
-    @Scheduled(fixedRate = 30000)
-    public void publishingDeferredPosts(){
-      List<Post> postList = postRepository.findByType(TypePost.QUEUED);
-      for (Post p : postList){
-          if (p.getPublishDate().isAfter(LocalDateTime.now())){
-              p.setTime(LocalDateTime.now());
-              p.setType(TypePost.POSTED);
-              p.setPublishDate(null);
-              postRepository.save(p);
-          }
-      }
-    }
+
 }

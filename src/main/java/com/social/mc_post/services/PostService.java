@@ -8,10 +8,10 @@ public interface PostService {
 
     Page<PostDto> getPosts(PostSearchDto searchDto, PageDto pageable, String headerRequestByAuth);
     String createPost(PostDto newPost, String headerRequestByAuth);
-    PostDto updatePost(PostDto updatePost);
-    void deletePost(String id);
+    String updatePost(PostDto updatePost, String headerRequestByAuth);
+    void deletePost(String id, String headerRequestByAuth);
     LikeDto createLikePost(String idPost, LikeDto likeDto, String headerRequestByAuth);
-    void deleteLike(String id);
-    String delayed(String token);
+    void deleteLike(String id, String headerRequestByAuth);
+    void delayed();
     PostDto getPostDtoById(String id);
 }

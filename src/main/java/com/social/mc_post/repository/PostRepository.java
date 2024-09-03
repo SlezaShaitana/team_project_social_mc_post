@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +22,6 @@ public interface PostRepository extends JpaRepository<Post, String>, JpaSpecific
     @Query("select p from Post as p WHERE p.authorId =:authorId")
     List<Post> findByAuthorId(String authorId);
 
-    @Query("select p from Post as p WHERE p.type = :type")
+    @Query("select p from Post as p WHERE p.type =:type")
     List<Post> findByType(TypePost type);
 }
