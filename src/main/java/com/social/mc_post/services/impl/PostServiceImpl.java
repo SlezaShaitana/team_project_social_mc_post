@@ -280,7 +280,7 @@ public class PostServiceImpl implements PostService {
                 .serviceName(MicroServiceName.POST)
                 .build());
     }
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(fixedRate = 30000)
     public void publishingDeferredPosts() {
 
         List<Post> postList = postRepository.findByType(TypePost.QUEUED);
