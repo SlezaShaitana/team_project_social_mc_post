@@ -108,18 +108,6 @@ public class PostServiceImpl implements PostService {
                 Post post = createPostDB(postDto, headerRequestByAuth);
                 List<Tag> tags = createTags(postDto.getTags(), post);
                 postRepository.save(post);
-
-//                if (post.getType().equals(TypePost.QUEUED)){
-//                    long dateNow = new Date().getTime();
-//                    long publishDate = post.getPublishDate().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-//                    long timeSleep = publishDate - dateNow;
-//                    ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
-//                    service.schedule(() -> {
-//                        post.setType(TypePost.POSTED);
-//                        postRepository.save(post);
-//                        log.info("Post is published");
-//                    }, timeSleep, TimeUnit.MILLISECONDS);
-//                }
                 for (Tag tag : tags){
                     tagRepository.save(tag);
                 }
