@@ -65,33 +65,33 @@ public class PostServiceImpl implements PostService {
             if (searchDto.getIds() == null){
                 searchDto.setIds(List.of(token.getId()));
             }
-            List<String> ids = new ArrayList<>();
-            ids.add(token.getId());
             if (searchDto.getWithFriends() != null && searchDto.getWithFriends()){
-                ids.addAll(friendClient.getFriendsIdListByUserId(headerRequestByAuth,token.getId())
+                List<String> ids = friendClient.getFriendsIdListByUserId(headerRequestByAuth,token.getId())
                         .stream()
-                        .map(UUID::toString).toList());
-                log.info("{}   QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ", ids);
+                        .map(UUID::toString).toList();
+                searchDto.setIds(ids);
             }
-
-            Specification<Post> spec = PostSpecification.findWithFilter(searchDto);
-
-            List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize())).stream()
-                    .filter(post -> ids.contains(post.getAuthorId()))
-                    .map(postMapper::mapEntityToDto)
-                    .toList();
-            Sort sort = Sort.unsorted();
-
-            Pageable pageable;
-            if (pageDto.getSort() == null) {
-                pageable = PageRequest.of(0, 10, sort);
-            } else {
-                pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
-            }
-            return new PageImpl<>(posts,pageable, pageDto.getSize());
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
         }
+
+        Specification<Post> spec = PostSpecification.findWithFilter(searchDto);
+
+        PostSearchDto finalSearchDto = searchDto;
+        List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize())).stream()
+                .filter(post -> finalSearchDto.getAccountIds().contains(post.getAuthorId()))
+                .map(postMapper::mapEntityToDto)
+                .toList();
+        Sort sort = Sort.unsorted();
+
+        Pageable pageable;
+        if (pageDto.getSort() == null) {
+            pageable = PageRequest.of(0, 10, sort);
+        } else {
+            pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
+        }
+
+        return new PageImpl<>(posts,pageable, pageDto.getSize());
     }
 
     @Override
