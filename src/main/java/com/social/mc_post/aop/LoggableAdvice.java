@@ -1,5 +1,6 @@
 package com.social.mc_post.aop;
 
+import com.social.mc_post.dto.PostDto;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +8,8 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Aspect
 @Component
@@ -30,9 +33,9 @@ public class LoggableAdvice {
     @Pointcut(value = "execution(* getPosts(..))")
     public void logMethodGetPosts(){}
 
-    @After("logMethodGetPosts()")
-    public void afterLoggingMethodGetPosts(JoinPoint joinPoint) {
-        log.info("Получение постов {}", joinPoint.getTarget().toString());
+    @AfterReturning(pointcut = "logMethodGetPosts()", returning = "postDtoList")
+    public void afterLoggingMethodGetPosts(JoinPoint joinPoint, List<PostDto> postDtoList) {
+        log.info("Получение постов {}", postDtoList.toString());
     }
 
 }
