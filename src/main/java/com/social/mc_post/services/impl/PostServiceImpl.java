@@ -273,7 +273,7 @@ public class PostServiceImpl implements PostService {
 
         List<Post> postList = postRepository.findByType(TypePost.QUEUED);
         for (Post p : postList) {
-            if (p.getPublishDate().isBefore(LocalDateTime.now())) {
+            if (p.getPublishDate().isAfter(LocalDateTime.now())) {
                 p.setTime(LocalDateTime.now());
                 p.setType(TypePost.POSTED);
                 p.setPublishDate(null);
