@@ -29,19 +29,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -75,7 +69,6 @@ public class PostServiceImpl implements PostService {
                 List<String> ids = friendClient.getFriendsIdListByUserId(headerRequestByAuth,token.getId())
                         .stream()
                         .map(UUID::toString).toList();
-                ids.add(token.getId());
                 searchDto.setIds(ids);
             }
         }catch (Exception e){
@@ -84,12 +77,9 @@ public class PostServiceImpl implements PostService {
 
         Specification<Post> spec = PostSpecification.findWithFilter(searchDto);
 
-
         PostSearchDto finalSearchDto = searchDto;
-        log.info(finalSearchDto.getIds().toString());
         List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize())).stream()
-                .filter(post -> finalSearchDto.getIds().contains(post.getAuthorId()))
-                .filter(post -> post.getType().equals(TypePost.POSTED))
+                .filter(post -> finalSearchDto.getAccountIds().contains(post.getAuthorId()))
                 .map(postMapper::mapEntityToDto)
                 .toList();
         Sort sort = Sort.unsorted();
@@ -110,7 +100,6 @@ public class PostServiceImpl implements PostService {
                 Post post = createPostDB(postDto, headerRequestByAuth);
                 List<Tag> tags = createTags(postDto.getTags(), post);
                 postRepository.save(post);
-
                 for (Tag tag : tags){
                     tagRepository.save(tag);
                 }
@@ -127,125 +116,91 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public String updatePost(PostDto postDto, String headerRequestByAuth) {
-        Post post = postRepository.findById(postDto.getId()).orElse(null);
-        try {
-            if (post != null){
-                if (!post.getAuthorId().equals(getAuthorId(headerRequestByAuth))){
-                    return "Изменять пост может только его создатель!";
-                }
-                post.setTimeChanged(LocalDateTime.now());
-                post.setTitle(postDto.getTitle());
-                post.setPostText(postDto.getPostText());
-                post.setImagePath(postDto.getImagePath());
-                post.setPublishDate(postDto.getPublishDate());
+    public PostDto updatePost(PostDto postDto) {
+        Post post = postRepository.findById(postDto.getId()).orElseThrow(
+                () -> new ResourceNotFoundException("Post not found!"));
 
-                if (postDto.getPublishDate() == null){
-                    post.setType(TypePost.POSTED);
-                } else {
-                    post.setType(TypePost.QUEUED);
-                }
+        post.setTimeChanged(LocalDateTime.now());
+        post.setTitle(postDto.getTitle());
+        post.setPostText(postDto.getPostText());
+        post.setImagePath(postDto.getImagePath());
+        post.setPublishDate(postDto.getPublishDate());
 
-                postRepository.save(post);
-                log.info("Update POST: {}", post.getId());
-                return "Post is update";
-            }
-            return null;
-        }catch (Exception e){
-            throw new ResourceNotFoundException("Error: " + e.getMessage());
+        if (postDto.getPublishDate() == null){
+            post.setType(TypePost.POSTED);
+        } else {
+            post.setType(TypePost.QUEUED);
         }
+
+        postRepository.save(post);
+        log.info("Update POST: {}", post.getId());
+        return postMapper.mapEntityToDto(post);
     }
 
     @Override
-    public void deletePost(String id, String headerRequestByAuth) {
-        Post post = postRepository.findById(id).orElse(null);
-        if (post != null){
-            List<Comment> comments = commentRepository.findByPost(post);
-            comments.forEach(comment -> {
-                List<Like> likes = likeRepository.findByComment(comment);
-                likes.forEach(like -> {
-                    likeRepository.delete(like);
-                    log.info("delete like comment");
-                });
-                commentRepository.delete(comment);
-                log.info("Delete comment");
-            });
-            List<Like> likes = likeRepository.findByPost(post);
-            likes.forEach( like -> {
-                likeRepository.delete(like);
-                log.info("delete like post");
-            });
+    public void deletePost(String id) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Post not found!"));
 
-            postRepository.delete(post);
-            log.info("Post delete by id: {}", post.getId());
-        }
+        List<Comment> comments = commentRepository.findByPost(post);
+        comments.forEach(comment -> {
+            List<Like> likes = likeRepository.findByComment(comment);
+            likes.forEach(like -> {
+                likeRepository.delete(like);
+                log.info("delete like comment");
+            });
+            commentRepository.delete(comment);
+            log.info("Delete comment");
+        });
+        List<Like> likes = likeRepository.findByPost(post);
+        likes.forEach( like -> {
+            likeRepository.delete(like);
+            log.info("delete like post");
+        });
+
+        postRepository.delete(post);
+        log.info("Post delete by id: {}", post.getId());
     }
 
     @Override
     public LikeDto createLikePost(String idPost, LikeDto likeDto, String headerRequestByAuth) {
-        Post post = postRepository.findById(idPost).orElse(null);
-        if (post != null){
-
-            try {
-                String authorId = getAuthorId(headerRequestByAuth);
-                if (post.getMyLike()){
-                    Like like = likeRepository.findByAuthorIdAndPost(authorId, post);
-                    likeRepository.delete(like);
-                }
-                Like like = createLike(likeDto, post, headerRequestByAuth);
-                likeRepository.save(like);
-                log.info("Like for post created");
-                if (post.getAuthorId().equals(like.getAuthorId())){
-                    post.setMyLike(true);
-                    post.setMyReaction(like.getReaction());
-                    postRepository.save(post);
-                }
-                // putNotification(UUID.fromString(likePost.getAuthorId()), "Ваш пост одобрили", NotificationType.LIKE_POST, UUID.fromString(post.getAuthorId()));
-                return likeMapper.mapEntityToDto(like);
-            }catch (Exception e){
-                throw new ResourceNotFoundException("Error: " + e.getMessage());
-            }
-        }
-        return null;
-    }
-
-
-    @Override
-    public void deleteLike(String id,  String headerRequestByAuth){
-        Like like = likeRepository.findById(id).orElse(null);
+        Post post = postRepository.findById(idPost).orElseThrow(
+                () -> new ResourceNotFoundException("Post not found!"));
         try {
-            if (like != null && like.getAuthorId().equals(getAuthorId(headerRequestByAuth))){
-                likeRepository.delete(like);
-                log.info("Like deleted");
-                if (like.getPost() != null){
-                    Post post = like.getPost();
-                    if (post.getAuthorId().equals(like.getAuthorId())){
-                        post.setMyLike(false);
-                        post.setMyReaction(null);
-                        postRepository.save(post);
-                    }
-                }
-            }
+            Like like = createLike(likeDto, post, headerRequestByAuth);
+            likeRepository.save(like);
+            log.info("Like for post created");
+            // putNotification(UUID.fromString(likePost.getAuthorId()), "Ваш пост одобрили", NotificationType.LIKE_POST, UUID.fromString(post.getAuthorId()));
+            return likeMapper.mapEntityToDto(like);
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
         }
     }
 
+
     @Override
-    @Scheduled(cron = "0 15 * * * *")
-    public void delayed(){
+    public void deleteLike(String id){
+        Like like = likeRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Like not found!"));
+        likeRepository.delete(like);
+        log.info("Like deleted");
+    }
+
+    @Override
+    public String delayed(String token){
         try {
-            List<Post> posts = postRepository.findByType(TypePost.QUEUED);
+            List<Post> posts = postRepository.findByTypeAndAuthorId(TypePost.QUEUED,
+                    getAuthorId(token));
             int countPostedPost = 0;
             for (Post post : posts){
-                if (post.getPublishDate().isBefore(LocalDateTime.now())){
+                if (post.getPublishDate().isAfter(LocalDateTime.now())){
                     countPostedPost++;
                     post.setType(TypePost.POSTED);
                     postRepository.save(post);
                 }
             }
-            log.info("Published {} posts; " +
-                    "The count remaining deferred posts: {}", countPostedPost, posts.size() - countPostedPost);
+            return "Published " + countPostedPost + " posts \n " +
+                    "The count remaining deferred posts: " + (posts.size() - countPostedPost);
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
         }
@@ -253,11 +208,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto getPostDtoById(String id) {
-        Post post = postRepository.findById(id).orElse(null);
-        if (post != null){
-            return postMapper.mapEntityToDto(post);
-        }
-        return null;
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Post not found!"));
+        return postMapper.mapEntityToDto(post);
     }
 
     public List<Tag> createTags(List<TagDto> tagDtoList, Post post){

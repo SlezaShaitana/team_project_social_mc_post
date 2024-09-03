@@ -5,6 +5,9 @@ import com.social.mc_post.exception.ResourceNotFoundException;
 import com.social.mc_post.security.DecodedToken;
 import com.social.mc_post.services.CommentService;
 import com.social.mc_post.services.PostService;
+import com.social.mc_post.utils.UrlParseUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -33,10 +36,8 @@ public class PostController {
     }
 
     @PutMapping("/post")
-    public ResponseDto handlerUpdatePost(@RequestBody PostDto postDto,
-                                     @RequestHeader("Authorization") String headerRequestByAuth){
-        return new ResponseDto(HttpStatus.CREATED.value(),
-                postService.updatePost(postDto, headerRequestByAuth));
+    public PostDto handlerUpdatePost(@RequestBody PostDto postDto){
+        return postService.updatePost(postDto);
     }
 
     @PostMapping("/post")
@@ -49,10 +50,9 @@ public class PostController {
 
     @PutMapping("/post/{id}/comment")
     public ResponseDto handlerComment(@PathVariable(value = "id") String id,
-                                     @RequestBody CommentDto commentDto,
-                                      @RequestHeader("Authorization") String headerRequestByAuth){
+                                     @RequestBody CommentDto commentDto){
         return new ResponseDto(HttpStatus.CREATED.value()
-                ,commentService.updateComment(id, commentDto, headerRequestByAuth));
+                ,commentService.updateComment(id, commentDto));
     }
 
     @PostMapping("/post/{id}/comment")
@@ -75,14 +75,13 @@ public class PostController {
     @DeleteMapping("/post/{id}/comment/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void handlerDeleteComment(@PathVariable(value = "id") String id,
-                                                  @PathVariable(value = "commentId") String commentId,
-                                     @RequestHeader("Authorization") String headerRequestByAuth){
-        commentService.deleteCommentPost(id, commentId, headerRequestByAuth);
+                                                  @PathVariable(value = "commentId") String commentId){
+        commentService.deleteCommentPost(id, commentId);
     }
 
     @PutMapping("/post/delayed")
-    public void handlerDeferredPost(){
-         postService.delayed();
+    public String handlerDeferredPost(@RequestHeader("Authorization") String token){
+        return postService.delayed(token);
     }
 
     @PostMapping("/post/{id}/like")
@@ -95,9 +94,8 @@ public class PostController {
 
     @DeleteMapping("/post/{id}/like")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void handlerDeleteLike(@PathVariable String id,
-                                  @RequestHeader("Authorization") String headerRequestByAuth){
-        postService.deleteLike(id, headerRequestByAuth);
+    public void handlerDeleteLike(@PathVariable(value = "id") String id) throws BadRequestException {
+        postService.deleteLike(id);
     }
 
     @PostMapping("/post/{id}/comment/{commentId}/like")
@@ -111,9 +109,8 @@ public class PostController {
 
     @DeleteMapping("/post/{id}/comment/{commentId}/like")
     public ResponseDto handlerDeleteLikeComment(@PathVariable(value = "id") String idPost,
-                                                    @PathVariable(value = "commentId") String commentId,
-                                                @RequestHeader("Authorization") String headerRequestByAuth) throws BadRequestException {
-        commentService.removeLikeComment(idPost, commentId, headerRequestByAuth);
+                                                    @PathVariable(value = "commentId") String commentId) throws BadRequestException {
+        commentService.removeLikeComment(idPost, commentId);
         return new ResponseDto(HttpStatus.OK.value(), "Successful operation");
     }
 
@@ -154,8 +151,7 @@ public class PostController {
 
     @DeleteMapping("/post/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePost(@PathVariable String id,
-                           @RequestHeader("Authorization") String headerRequestByAuth){
-        postService.deletePost(id, headerRequestByAuth);
+    public void deletePost(@PathVariable String id){
+        postService.deletePost(id);
     }
 }
