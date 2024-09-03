@@ -84,7 +84,9 @@ public class PostServiceImpl implements PostService {
 
         Specification<Post> spec = PostSpecification.findWithFilter(searchDto);
 
+
         PostSearchDto finalSearchDto = searchDto;
+        log.info(finalSearchDto.getIds().toString());
         List<PostDto> posts = postRepository.findAll(spec, PageRequest.of(pageDto.getPage(), pageDto.getSize())).stream()
                 .filter(post -> finalSearchDto.getIds().contains(post.getAuthorId()))
                 .filter(post -> post.getType().equals(TypePost.POSTED))
