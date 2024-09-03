@@ -66,10 +66,11 @@ public class PostServiceImpl implements PostService {
                 searchDto.setIds(List.of(token.getId()));
             }
             if (searchDto.getWithFriends() != null && searchDto.getWithFriends()){
-                List<String> ids = friendClient.getFriendsIdListByUserId(headerRequestByAuth,token.getId())
-                        .stream()
-                        .map(UUID::toString).toList();
+                List<String> ids = new ArrayList<>();
                 ids.add(token.getId());
+                ids.addAll(friendClient.getFriendsIdListByUserId(headerRequestByAuth,token.getId())
+                        .stream()
+                        .map(UUID::toString).toList());
                 log.info(ids.toString());
                 searchDto.setIds(ids);
 
