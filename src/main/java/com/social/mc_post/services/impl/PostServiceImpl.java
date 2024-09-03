@@ -109,6 +109,8 @@ public class PostServiceImpl implements PostService {
                 postRepository.save(post);
 
                 if (post.getType().equals(TypePost.QUEUED)){
+                    log.info(post.getPublishDate().toString());
+                    log.info(LocalDateTime.now().toString());
                     long dateNow = new Date().getTime();
                     long publishDate = post.getPublishDate().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
                     long timeSleep = publishDate - dateNow;
