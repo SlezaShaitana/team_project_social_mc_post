@@ -35,22 +35,4 @@ public class LoggableAdvice {
         log.info("Получение постов {}", joinPoint.getTarget().toString());
     }
 
-    @Pointcut(value = "@annotation(com.social.mc_post.aop.JwtTokenException)")
-    public void jwtException(){
-    }
-
-    @AfterThrowing(pointcut = "jwtException()", throwing = "ex")
-    public void afterThrowingAdvice(Exception ex) {
-
-        if (ex instanceof IllegalArgumentException){
-            log.error("Request is empty or damaged: {}", ex.getLocalizedMessage());
-        }
-        else if (ex instanceof MalformedJwtException){
-            log.error("Invalid JWT token format: {}", ex.getMessage());
-        }
-        else if(ex instanceof Exception){
-            log.error("JWT token validation failed: {}", ex.getMessage());
-        }
-    }
-
 }

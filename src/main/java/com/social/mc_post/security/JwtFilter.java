@@ -27,18 +27,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtValidation jwtValidation;
 
-    @JwtTokenException
     private String getToken(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
 
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
             return headerAuth.substring(7);
         }
+        log.error("Request is empty or damaged");
         throw new IllegalArgumentException("Authorization header is missing or malformed");
     }
 
     @Override
-    @JwtTokenException
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         try {
@@ -62,12 +61,15 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
                 return;
             }
         } catch (MalformedJwtException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            log.error("Invalid JWT token format: {}", e.getMessage());
             return;
         } catch (Exception e) {
+            log.error("JWT token validation failed: {}", e.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
