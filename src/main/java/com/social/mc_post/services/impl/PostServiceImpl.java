@@ -70,7 +70,9 @@ public class PostServiceImpl implements PostService {
                         .stream()
                         .map(UUID::toString).toList();
                 ids.add(token.getId());
-                searchDto.setAccountIds(ids);
+                log.info(ids.toString());
+                searchDto.setIds(ids);
+
             }
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
