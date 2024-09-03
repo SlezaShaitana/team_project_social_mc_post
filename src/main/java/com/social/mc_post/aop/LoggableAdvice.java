@@ -33,9 +33,9 @@ public class LoggableAdvice {
     @Pointcut(value = "execution(* getPosts(..))")
     public void logMethodGetPosts(){}
 
-    @AfterReturning(pointcut = "logMethodGetPosts()", returning = "postDtoList")
-    public void afterLoggingMethodGetPosts(JoinPoint joinPoint, List<PostDto> postDtoList) {
-        log.info("Получение постов {}", postDtoList.toString());
+    @After("logMethodGetPosts()")
+    public void afterLoggingMethodGetPosts(JoinPoint joinPoint) {
+        log.info("Получение постов {}", joinPoint.getSignature().getName());
     }
 
 }

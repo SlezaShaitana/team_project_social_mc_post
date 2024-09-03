@@ -278,6 +278,7 @@ public class PostServiceImpl implements PostService {
                 p.setType(TypePost.POSTED);
                 p.setPublishDate(null);
                 postRepository.save(p);
+                log.info("Публикация поста: {}", p.getId());
             }
         }
     }
