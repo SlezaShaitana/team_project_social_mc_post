@@ -75,7 +75,8 @@ public class PostServiceImpl implements PostService {
                 List<String> ids = friendClient.getFriendsIdListByUserId(headerRequestByAuth,token.getId())
                         .stream()
                         .map(UUID::toString).toList();
-                searchDto.setIds(ids);
+                ids.add(token.getId());
+                searchDto.setAccountIds(ids);
             }
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
@@ -108,19 +109,17 @@ public class PostServiceImpl implements PostService {
                 List<Tag> tags = createTags(postDto.getTags(), post);
                 postRepository.save(post);
 
-                if (post.getType().equals(TypePost.QUEUED)){
-                    log.info(post.getPublishDate().toString());
-                    log.info(LocalDateTime.now().toString());
-                    long dateNow = new Date().getTime();
-                    long publishDate = post.getPublishDate().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-                    long timeSleep = publishDate - dateNow;
-                    ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
-                    service.schedule(() -> {
-                        post.setType(TypePost.POSTED);
-                        postRepository.save(post);
-                        log.info("Post is published");
-                    }, timeSleep, TimeUnit.MILLISECONDS);
-                }
+//                if (post.getType().equals(TypePost.QUEUED)){
+//                    long dateNow = new Date().getTime();
+//                    long publishDate = post.getPublishDate().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+//                    long timeSleep = publishDate - dateNow;
+//                    ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
+//                    service.schedule(() -> {
+//                        post.setType(TypePost.POSTED);
+//                        postRepository.save(post);
+//                        log.info("Post is published");
+//                    }, timeSleep, TimeUnit.MILLISECONDS);
+//                }
                 for (Tag tag : tags){
                     tagRepository.save(tag);
                 }
