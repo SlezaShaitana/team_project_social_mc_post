@@ -114,6 +114,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public String updatePost(PostDto postDto, String headerRequestByAuth) {
         Post post = postRepository.findById(postDto.getId()).orElse(null);
+        if (!postDto.getTags().isEmpty()){
+            List<Tag> tags = createTags(postDto.getTags(), post);
+            tags.forEach(tagRepository::save);
+        }
         try {
             if (!post.getAuthorId().equals(getAuthorId(headerRequestByAuth))){
                 return "You didn't create the post! The post has not been changed!";

@@ -12,6 +12,7 @@ import com.social.mc_post.dto.notification.NotificationType;
 import com.social.mc_post.exception.ResourceNotFoundException;
 import com.social.mc_post.kafka.KafkaProducer;
 import com.social.mc_post.mapper.CommentMapper;
+import com.social.mc_post.mapper.LikeMapper;
 import com.social.mc_post.model.Comment;
 import com.social.mc_post.model.Like;
 import com.social.mc_post.model.Post;
@@ -41,6 +42,7 @@ public class CommentServiceImpl implements CommentService {
     private final LikeRepository likeRepository;
     private final KafkaProducer producer;
     private final CommentMapper commentMapper;
+    private final LikeMapper likeMapper;
 
 
     @Override
@@ -145,7 +147,7 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    public String createLikeComment(String idPost, String idComment,LikeDto likeDto,
+    public LikeDto createLikeComment(String idPost, String idComment,LikeDto likeDto,
                                     String headerRequestByAuth) {
         Post post = postRepository.findById(idPost).orElse(null);
         Comment comment = commentRepository.findById(idComment).orElse(null);
@@ -159,7 +161,7 @@ public class CommentServiceImpl implements CommentService {
                    comment.setMyLike(true);
                    commentRepository.save(comment);
                }
-               return "Like for comment created";
+               return likeMapper.mapEntityToDto(like);
            }
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
