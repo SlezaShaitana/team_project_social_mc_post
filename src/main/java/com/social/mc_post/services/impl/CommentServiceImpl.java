@@ -171,11 +171,17 @@ public class CommentServiceImpl implements CommentService {
     public void removeLikeComment(String idPost, String idComment, String headerRequestByAuth){
         Comment comment = commentRepository.findById(idComment).orElse(null);
         try {
-            if (comment != null && comment.getAuthorId().equals(getAuthorId(headerRequestByAuth))){
+            String authorId = getAuthorId(headerRequestByAuth);
+            if (comment != null && comment.getAuthorId().equals(authorId)){
                 List<Like> likes = likeRepository.findByComment(comment);
                 likes.forEach(like -> {
                     likeRepository.delete(like);
                     log.info("Like for comment deleted");
+                    if (like.getComment().getAuthorId().equals(authorId)){
+                        Comment com = like.getComment();
+                        com.setMyLike(false);
+                        commentRepository.save(com);
+                    }
                 });
             }
 
