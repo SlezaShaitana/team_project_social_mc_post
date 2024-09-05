@@ -30,10 +30,10 @@ public class PostController {
 
 
     @GetMapping("/post")
-    public Page<PostDto> getListPosts(PostSearchDto searchDto, TagSearchDto tagSearchDto,
+    public Page<PostDto> getListPosts(PostSearchDto searchDto,
                                       PageDto pageableDto,
                                       @RequestHeader("Authorization") String headerRequestByAuth){
-            return postService.getPosts(searchDto, tagSearchDto, pageableDto, headerRequestByAuth);
+            return postService.getPosts(searchDto, pageableDto, headerRequestByAuth);
     }
 
     @PutMapping("/post")

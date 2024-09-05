@@ -57,10 +57,9 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public Page<PostDto> getPosts(PostSearchDto searchDto, TagSearchDto tagSearchDto,
+    public Page<PostDto> getPosts(PostSearchDto searchDto,
                                   PageDto pageDto, String headerRequestByAuth) {
         log.info(searchDto.toString());
-        log.info(tagSearchDto.toString());
         try {
             DecodedToken token = DecodedToken.getDecoded(headerRequestByAuth);
             boolean withFriends = searchDto.getWithFriends() != null && searchDto.getWithFriends();
