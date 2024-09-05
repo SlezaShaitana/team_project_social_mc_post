@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -164,6 +165,7 @@ public class CommentServiceImpl implements CommentService {
                return likeMapper.mapEntityToDto(like);
            }
         }catch (Exception e){
+            log.info(Arrays.toString(e.getStackTrace()));
             throw new ResourceNotFoundException("Error: " + e.getMessage());
         }
         return null;
