@@ -28,7 +28,7 @@ public class PostSearchDto {
 
     private List<String> tags;
 
-    private Date dateFrom;
+    private LocalDateTime dateFrom;
 
-    private Date dateTo;
+    private LocalDateTime dateTo;
 }

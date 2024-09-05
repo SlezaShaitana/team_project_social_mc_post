@@ -85,6 +85,7 @@ public class PostServiceImpl implements PostService {
                 pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
             }
 
+
             return new PageImpl<>(posts,pageable, pageDto.getSize());
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
