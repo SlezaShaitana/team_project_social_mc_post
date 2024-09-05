@@ -70,11 +70,13 @@ public class PostServiceImpl implements PostService {
                         .map(UUID::toString).toList());
             }
             List<PostDto> posts = postRepository.getAll(token.getId()).stream()
-                    .filter(post -> ids.contains(post.getAuthorId()))
+            //        .filter(post -> ids.contains(post.getAuthorId()))
                     .filter(post -> post.getType().equals(TypePost.POSTED))
                     .map(postMapper::mapEntityToDto)
                     .toList();
             Sort sort = Sort.unsorted();
+
+            log.info(posts.toString());
 
             Pageable pageable;
             if (pageDto.getSort() == null) {
@@ -82,8 +84,6 @@ public class PostServiceImpl implements PostService {
             } else {
                 pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
             }
-
-
             return new PageImpl<>(posts,pageable, pageDto.getSize());
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
