@@ -22,7 +22,6 @@ import com.social.mc_post.repository.PostRepository;
 import com.social.mc_post.repository.TagRepository;
 import com.social.mc_post.security.DecodedToken;
 import com.social.mc_post.services.PostService;
-import com.social.mc_post.specification.PostSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
