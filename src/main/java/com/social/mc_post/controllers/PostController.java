@@ -36,8 +36,10 @@ public class PostController {
     }
 
     @PutMapping("/post")
-    public PostDto handlerUpdatePost(@RequestBody PostDto postDto){
-        return postService.updatePost(postDto);
+    public ResponseDto handlerUpdatePost(@RequestBody PostDto postDto,
+                                     @RequestHeader("Authorization") String headerRequestByAuth){
+        return new ResponseDto(HttpStatus.OK.value(),
+                postService.updatePost(postDto, headerRequestByAuth));
     }
 
     @PostMapping("/post")
@@ -50,9 +52,10 @@ public class PostController {
 
     @PutMapping("/post/{id}/comment")
     public ResponseDto handlerComment(@PathVariable(value = "id") String id,
-                                     @RequestBody CommentDto commentDto){
+                                     @RequestBody CommentDto commentDto,
+                                      @RequestHeader("Authorization") String headerRequestByAuth){
         return new ResponseDto(HttpStatus.CREATED.value()
-                ,commentService.updateComment(id, commentDto));
+                ,commentService.updateComment(id, commentDto, headerRequestByAuth));
     }
 
     @PostMapping("/post/{id}/comment")
@@ -75,8 +78,9 @@ public class PostController {
     @DeleteMapping("/post/{id}/comment/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void handlerDeleteComment(@PathVariable(value = "id") String id,
-                                                  @PathVariable(value = "commentId") String commentId){
-        commentService.deleteCommentPost(id, commentId);
+                                     @PathVariable(value = "commentId") String commentId,
+                                     @RequestHeader("Authorization") String headerRequestByAuth){
+        commentService.deleteCommentPost(id, commentId, headerRequestByAuth);
     }
 
     @PutMapping("/post/delayed")
@@ -94,23 +98,25 @@ public class PostController {
 
     @DeleteMapping("/post/{id}/like")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void handlerDeleteLike(@PathVariable(value = "id") String id) throws BadRequestException {
-        postService.deleteLike(id);
+    public void handlerDeleteLike(@PathVariable(value = "id") String id,
+                                  @RequestHeader("Authorization") String headerRequestByAuth){
+        postService.deleteLike(id, headerRequestByAuth);
     }
 
     @PostMapping("/post/{id}/comment/{commentId}/like")
     public ResponseDto handlerPostLikeComment(@PathVariable(value = "id") String idPost,
                                               @PathVariable(value = "commentId") String commentId,
                                               @RequestBody LikeDto likeDto,
-                                              @RequestHeader("Authorization") String headerRequestByAuth) throws BadRequestException {
+                                              @RequestHeader("Authorization") String headerRequestByAuth){
         return new ResponseDto(HttpStatus.CREATED.value(),
                 commentService.createLikeComment(idPost, commentId, likeDto, headerRequestByAuth));
     }
 
     @DeleteMapping("/post/{id}/comment/{commentId}/like")
     public ResponseDto handlerDeleteLikeComment(@PathVariable(value = "id") String idPost,
-                                                    @PathVariable(value = "commentId") String commentId) throws BadRequestException {
-        commentService.removeLikeComment(idPost, commentId);
+                                                    @PathVariable(value = "commentId") String commentId,
+                                                @RequestHeader("Authorization") String headerRequestByAuth){
+        commentService.removeLikeComment(idPost, commentId, headerRequestByAuth);
         return new ResponseDto(HttpStatus.OK.value(), "Successful operation");
     }
 
@@ -151,7 +157,8 @@ public class PostController {
 
     @DeleteMapping("/post/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePost(@PathVariable String id){
-        postService.deletePost(id);
+    public void deletePost(@PathVariable String id,
+                           @RequestHeader("Authorization") String headerRequestByAuth){
+        postService.deletePost(id, headerRequestByAuth);
     }
 }

@@ -45,114 +45,143 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public String createCommentPost(CommentDto commentDto, String postId,String headerRequestByAuth) {
-        Post post = postRepository.findById(postId).orElseThrow(
-                () -> new ResourceNotFoundException("Post not found!"));
-        try {
+        Post post = postRepository.findById(postId).orElse(null);
+        if (post != null){
+            try {
 
-            Comment comment = createComment(commentDto, post, headerRequestByAuth);
-            if (commentDto.getParentId() != null){
-                comment.setType(TypeComment.COMMENT);
-                comment.setParentCommentId(commentDto.getParentId());
+                Comment comment = createComment(commentDto, post, headerRequestByAuth);
+                if (commentDto.getParentId() != null){
+                    comment.setType(TypeComment.COMMENT);
+                    comment.setParentCommentId(commentDto.getParentId());
+                    commentRepository.save(comment);
+                    putNotification(UUID.fromString(comment.getAuthorId()),
+                            comment.getCommentText(),NotificationType.COMMENT_COMMENT,
+                            UUID.fromString(comment.getAuthorId()));
+                    return "SubComment created";
+                }
+                comment.setType(TypeComment.POST);
                 commentRepository.save(comment);
-                return "SubComment created";
+            }catch (Exception e){
+                throw new ResourceNotFoundException("Error: " + e.getMessage());
             }
-            comment.setType(TypeComment.POST);
-            commentRepository.save(comment);
-        }catch (Exception e){
-            throw new ResourceNotFoundException("Error: " + e.getMessage());
+            return "Comment created";
         }
-        return "Comment created";
+        return null;
     }
 
     @Override
     public String createSubCommentPost(String idPost, String idComment,
                                            CommentDto commentDto, String headerRequestByAuth) {
-        Post post = postRepository.findById(idPost).orElseThrow(
-                () -> new ResourceNotFoundException("Post not found!"));
-        Comment comment = commentRepository.findById(idComment).orElseThrow(
-                () -> new ResourceNotFoundException("Comment not found!"));
-        try {
-            Comment subComment = createComment(commentDto,post,headerRequestByAuth);
-            subComment.setType(TypeComment.COMMENT);
-            subComment.setParentCommentId(comment.getId());
-            commentRepository.save(subComment);
-            log.info("Create subComment");
-//            putNotification(UUID.fromString(subComment.getAuthorId()),
-//            subComment.getCommentText(),NotificationType.COMMENT_COMMENT,
-//            UUID.fromString(comment.getAuthorId()));
-            return subComment.toString();
-        }catch (Exception e){
-            throw new ResourceNotFoundException("Error: " + e.getMessage());
+        Post post = postRepository.findById(idPost).orElse(null);
+        Comment comment = commentRepository.findById(idComment).orElse(null);
+        if (post != null && comment != null){
+            try {
+                Comment subComment = createComment(commentDto,post,headerRequestByAuth);
+                subComment.setType(TypeComment.COMMENT);
+                subComment.setParentCommentId(comment.getId());
+                commentRepository.save(subComment);
+                log.info("Create subComment");
+                putNotification(UUID.fromString(subComment.getAuthorId()),
+                        subComment.getCommentText(),NotificationType.COMMENT_COMMENT,
+                        UUID.fromString(comment.getAuthorId()));
+                return subComment.toString();
+            }catch (Exception e){
+                throw new ResourceNotFoundException("Error: " + e.getMessage());
+            }
         }
+        return null;
     }
 
     @Override
-    public void deleteCommentPost(String postId, String commentId) {
-        Post post = postRepository.findById(postId).orElseThrow(
-                () -> new ResourceNotFoundException("Post not found!"));
-        List<Comment> comments = commentRepository.findByPost(post);
-        for (Comment comment : comments){
-            if (comment.getParentCommentId() != null && comment.getParentCommentId().equals(commentId)){
-                removeLikeComment(postId,commentId);
-                commentRepository.delete(comment);
-                log.info("SubComment is deleted");
-            }
-            if (comment.getId().equals(commentId)){
-                removeLikeComment(postId,commentId);
+    public void deleteCommentPost(String postId, String commentId, String headerRequestByAuth) {
+        Post post = postRepository.findById(postId).orElse(null);
+        Comment comment = commentRepository.findById(commentId).orElse(null);
+        try {
+            String authorId = getAuthorId(headerRequestByAuth);
+            if (post != null && comment != null && comment.getAuthorId().equals(authorId)){
                 commentRepository.delete(comment);
                 log.info("Comment of post deleted");
+                List<Comment> comments = commentRepository.findByParentCommentId(commentId);
+                for (Comment com : comments){
+                    commentRepository.delete(com);
+                    log.info("SubComment is deleted");
+                }
             }
-        }
-
-    }
-
-    @Override
-    public String updateComment(String idPost, CommentDto commentDto) {
-        Comment comment = commentRepository.findById(commentDto.getId()).orElseThrow(
-                () -> new ResourceNotFoundException("Comment not found!"));
-        comment.setTimeChanged(LocalDateTime.now());
-        comment.setCommentText(commentDto.getCommentText());
-        comment.setImagePath(commentDto.getImagePath());
-
-        boolean isDeleted = commentDto.getIsDeleted() == null ? comment.getIsDeleted() : commentDto.getIsDeleted();
-        boolean isBlocked = commentDto.getIsBlocked() == null ? comment.getIsBlocked() : commentDto.getIsBlocked();
-        boolean myLike = commentDto.getMyLike() == null ? comment.getMyLike() : commentDto.getMyLike();
-
-        comment.setIsDeleted(isDeleted);
-        comment.setIsBlocked(isBlocked);
-        comment.setMyLike(myLike);
-        commentRepository.save(comment);
-        return "Update comment";
-    }
-
-
-    @Override
-    public String createLikeComment(String idPost, String idComment,LikeDto likeDto, String headerRequestByAuth) {
-        Post post = postRepository.findById(idPost).orElseThrow(
-                () -> new ResourceNotFoundException("Post not found!"));
-        Comment comment = commentRepository.findById(idComment).orElseThrow(
-                () -> new ResourceNotFoundException("Comment not found!"));
-        String authorId = "";
-        try {
-            authorId = getAuthorId(headerRequestByAuth);
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
         }
-        Like like = createLike(likeDto,post, comment, authorId);
-        likeRepository.save(like);
-        log.info("Like for comment created ");
-       return "Like for comment created";
+
+
+
     }
 
     @Override
-    public void removeLikeComment(String idPost, String idComment){
-        Comment comment = commentRepository.findById(idComment).orElseThrow(
-                () -> new ResourceNotFoundException("Comment nor found!"));
-        List<Like> likes = likeRepository.findByComment(comment);
-        likes.forEach(like -> {
-            likeRepository.delete(like);
-            log.info("Like for comment deleted");
-        });
+    public String updateComment(String idPost, CommentDto commentDto, String headerRequestByAuth) {
+        Comment comment = commentRepository.findById(commentDto.getId()).orElse(null);
+        if (comment != null){
+            try {
+                if (comment.getAuthorId().equals(getAuthorId(headerRequestByAuth))){
+                    return "You didn't create the comment! The post has not been changed!";
+                }
+            }catch (Exception e){
+                throw new ResourceNotFoundException("Error: " + e.getMessage());
+            }
+            comment.setTimeChanged(LocalDateTime.now());
+            comment.setCommentText(commentDto.getCommentText());
+            comment.setImagePath(commentDto.getImagePath());
+
+            boolean isDeleted = commentDto.getIsDeleted() == null ? comment.getIsDeleted() : commentDto.getIsDeleted();
+            boolean isBlocked = commentDto.getIsBlocked() == null ? comment.getIsBlocked() : commentDto.getIsBlocked();
+            boolean myLike = commentDto.getMyLike() == null ? comment.getMyLike() : commentDto.getMyLike();
+
+            comment.setIsDeleted(isDeleted);
+            comment.setIsBlocked(isBlocked);
+            comment.setMyLike(myLike);
+            commentRepository.save(comment);
+            return "Update comment";
+        }
+        return null;
+    }
+
+
+    @Override
+    public String createLikeComment(String idPost, String idComment,LikeDto likeDto,
+                                    String headerRequestByAuth) {
+        Post post = postRepository.findById(idPost).orElse(null);
+        Comment comment = commentRepository.findById(idComment).orElse(null);
+        try {
+           String authorId = getAuthorId(headerRequestByAuth);
+           if (post != null && comment != null){
+               Like like = createLike(likeDto,post, comment, authorId);
+               likeRepository.save(like);
+               log.info("Like for comment created ");
+               if (comment.getAuthorId().equals(authorId)){
+                   comment.setMyLike(true);
+                   commentRepository.save(comment);
+               }
+               return "Like for comment created";
+           }
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Error: " + e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public void removeLikeComment(String idPost, String idComment, String headerRequestByAuth){
+        Comment comment = commentRepository.findById(idComment).orElse(null);
+        try {
+            if (comment != null && comment.getAuthorId().equals(getAuthorId(headerRequestByAuth))){
+                List<Like> likes = likeRepository.findByComment(comment);
+                likes.forEach(like -> {
+                    likeRepository.delete(like);
+                    log.info("Like for comment deleted");
+                });
+            }
+
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Error: " + e.getMessage());
+        }
     }
 
     @Override
