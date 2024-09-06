@@ -71,13 +71,13 @@ public class PostServiceImpl implements PostService {
                         .stream()
                         .map(UUID::toString).toList());
             }
-            log.info(ids.toString());
+            log.info(String.valueOf(postRepository.findByAuthorIdList(ids).size()));
             if (searchDto.getAuthor() != null){
                 log.info(searchDto.getAuthor());
             }
 
             boolean isDeleted = searchDto.getIsDeleted() != null && searchDto.getIsDeleted();
-            List<PostDto> posts = postRepository.getAll(token.getId()).stream()
+            List<PostDto> posts = postRepository.findByAuthorIdList(ids).stream()
                     .filter(post -> ids.contains(post.getAuthorId()))
                     .filter(post -> post.getIsDeleted().equals(isDeleted))
                     .filter(post -> post.getType().equals(TypePost.POSTED))
@@ -297,7 +297,7 @@ public class PostServiceImpl implements PostService {
         Post post = new Post(
                 null,
                 false,
-                LocalDateTime.now().plusHours(3).minusMonths(2),
+                LocalDateTime.now().plusHours(3),
                 null,
                 getAuthorId(headerRequestByAuth),
                 dto.getTitle(),

@@ -45,7 +45,7 @@ public class UrlParseUtils {
 
     public static PostSearchDto getSearchDTO(String url) {
         PostSearchDto searchDTO = new PostSearchDto();
-        log.info(url);
+        log.info("{} TTTTTTTTTTEEEEEEEEXXXXXXT", url);
 
         if (url.contains("author%3D")) {
             int startIndex = url.indexOf("author%3D");
