@@ -24,6 +24,8 @@ public class PostSearchDto {
 
     private String author;
 
+    private String text;
+
     private Boolean withFriends;
 
     private List<String> tags;

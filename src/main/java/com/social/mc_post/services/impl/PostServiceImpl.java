@@ -71,7 +71,6 @@ public class PostServiceImpl implements PostService {
                         .stream()
                         .map(UUID::toString).toList());
             }
-            log.info(String.valueOf(postRepository.findByAuthorIdList(ids).size()));
             if (searchDto.getAuthor() != null){
                 log.info(searchDto.getAuthor());
             }

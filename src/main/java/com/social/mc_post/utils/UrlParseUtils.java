@@ -45,7 +45,6 @@ public class UrlParseUtils {
 
     public static PostSearchDto getSearchDTO(String url) {
         PostSearchDto searchDTO = new PostSearchDto();
-        log.info("{} TTTTTTTTTTEEEEEEEEXXXXXXT", url);
 
         if (url.contains("author%3D")) {
             int startIndex = url.indexOf("author%3D");
@@ -60,6 +59,21 @@ public class UrlParseUtils {
             author = URLDecoder.decode(author, StandardCharsets.UTF_8);
 
             searchDTO.setAuthor(author);
+        }
+
+        if (url.contains("text%3D")) {
+            int startIndex = url.indexOf("text%3D");
+            startIndex += "text%3D".length();
+            int endIndex = url.indexOf("&", startIndex);
+
+            if (endIndex == -1) {
+                endIndex = url.length();
+            }
+
+            String text = url.substring(startIndex, endIndex);
+            text = URLDecoder.decode(text, StandardCharsets.UTF_8);
+
+            searchDTO.setText(text);
         }
 
         return searchDTO;
