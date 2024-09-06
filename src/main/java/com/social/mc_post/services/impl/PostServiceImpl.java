@@ -61,16 +61,39 @@ public class PostServiceImpl implements PostService {
     public Page<PostDto> getPosts(PostSearchDto searchDto,
                                   PageDto pageDto, String headerRequestByAuth) {
         try {
-            List<String> ids = getAuthorIdsFromSearch(headerRequestByAuth, searchDto);
+            List<String> ids;
+            List<PostDto> posts;
 
             boolean isDeleted = searchDto.getIsDeleted() != null && searchDto.getIsDeleted();
-            List<PostDto> posts = postRepository.findByAuthorIdList(ids).stream()
-                    .filter(post -> ids.contains(post.getAuthorId()))
-                    .filter(post -> post.getIsDeleted().equals(isDeleted))
-                    .filter(post -> post.getType().equals(TypePost.POSTED))
-                    .map(postMapper::mapEntityToDto)
-                    .toList();
 
+            if (searchDto.getDateTo() != null && searchDto.getDateFrom() != null){
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
+                LocalDateTime from = LocalDateTime.parse(searchDto.getDateFrom(), formatter);
+                LocalDateTime to = LocalDateTime.parse(searchDto.getDateTo(), formatter);
+                if (searchDto.getAuthor() == null){
+                    posts = new ArrayList<>(postRepository.findAll().stream()
+                            .filter(post -> post.getTime().isAfter(from) && post.getTime().isBefore(to))
+                            .filter(post -> post.getIsDeleted().equals(isDeleted))
+                            .filter(post -> post.getType().equals(TypePost.POSTED))
+                            .map(postMapper::mapEntityToDto)
+                            .toList());
+                }else {
+                    ids = List.of(); // реализовать получение через mc-account
+                    posts = new ArrayList<>(postRepository.findByAuthorIdList(ids).stream()
+                            .filter(post -> post.getIsDeleted().equals(isDeleted))
+                            .filter(post -> post.getType().equals(TypePost.POSTED))
+                            .filter(post -> post.getTime().isAfter(from) && post.getTime().isBefore(to))
+                            .map(postMapper::mapEntityToDto)
+                            .toList());
+                }
+            }else {
+                ids = getAuthorIdsFromSearch(headerRequestByAuth, searchDto);
+                posts = new ArrayList<>(postRepository.findByAuthorIdList(ids).stream()
+                        .filter(post -> post.getIsDeleted().equals(isDeleted))
+                        .filter(post -> post.getType().equals(TypePost.POSTED))
+                        .map(postMapper::mapEntityToDto)
+                        .toList());
+            }
             if (searchDto.getText() != null){
                 posts = posts.stream()
                         .filter(postDto -> postDto.getPostText().toLowerCase().contains(searchDto.getText().toLowerCase()) ||
@@ -78,14 +101,6 @@ public class PostServiceImpl implements PostService {
                         .toList();
             }
 
-            if (searchDto.getDateTo() != null && searchDto.getDateFrom() != null){
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
-                LocalDateTime from = LocalDateTime.parse(searchDto.getDateFrom(), formatter);
-                LocalDateTime to = LocalDateTime.parse(searchDto.getDateTo(), formatter);
-                posts = posts.stream()
-                        .filter(post -> post.getTime().isAfter(from) && post.getTime().isBefore(to))
-                        .toList();
-            }
             Sort sort = Sort.unsorted();
 
             Pageable pageable;
