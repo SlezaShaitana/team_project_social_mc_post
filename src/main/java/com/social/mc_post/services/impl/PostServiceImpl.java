@@ -1,12 +1,15 @@
 package com.social.mc_post.services.impl;
 
 import com.social.mc_post.dto.*;
+import com.social.mc_post.dto.account.AccountMeDTO;
+import com.social.mc_post.dto.account.SearchDTO;
 import com.social.mc_post.dto.enums.TypeLike;
 import com.social.mc_post.dto.enums.TypePost;
 import com.social.mc_post.dto.notification.MicroServiceName;
 import com.social.mc_post.dto.notification.NotificationDTO;
 import com.social.mc_post.dto.notification.NotificationType;
 import com.social.mc_post.exception.ResourceNotFoundException;
+import com.social.mc_post.feign.AccountClient;
 import com.social.mc_post.feign.FriendClient;
 import com.social.mc_post.kafka.KafkaProducer;
 import com.social.mc_post.mapper.LikeMapper;
@@ -55,63 +58,8 @@ public class PostServiceImpl implements PostService {
     private final LikeMapper likeMapper;
     private final KafkaProducer producer;
     private final FriendClient friendClient;
+    private final AccountClient accountClient;
 
-
-    @Override
-    public Page<PostDto> getPosts(PostSearchDto searchDto,
-                                  PageDto pageDto, String headerRequestByAuth) {
-        log.info(searchDto.toString());
-        try {
-            DecodedToken token = DecodedToken.getDecoded(headerRequestByAuth);
-            boolean withFriends = searchDto.getWithFriends() != null && searchDto.getWithFriends();
-            ArrayList<String> ids = new ArrayList<>();
-            ids.add(token.getId());
-            if (withFriends){
-                ids.addAll(friendClient.getFriendsIdListByUserId(headerRequestByAuth,token.getId())
-                        .stream()
-                        .map(UUID::toString).toList());
-            }
-            if (searchDto.getAuthor() != null){
-                log.info(searchDto.getAuthor());
-            }
-
-            boolean isDeleted = searchDto.getIsDeleted() != null && searchDto.getIsDeleted();
-            List<PostDto> posts = postRepository.findByAuthorIdList(ids).stream()
-                    .filter(post -> ids.contains(post.getAuthorId()))
-                    .filter(post -> post.getIsDeleted().equals(isDeleted))
-                    .filter(post -> post.getType().equals(TypePost.POSTED))
-                    .map(postMapper::mapEntityToDto)
-                    .toList();
-
-            if (searchDto.getText() != null){
-                posts = posts.stream()
-                        .filter(postDto -> postDto.getPostText().toLowerCase().contains(searchDto.getText().toLowerCase()) ||
-                                postDto.getTitle().toLowerCase().contains(searchDto.getText().toLowerCase()))
-                        .toList();
-            }
-
-            if (searchDto.getDateTo() != null && searchDto.getDateFrom() != null){
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
-                LocalDateTime from = LocalDateTime.parse(searchDto.getDateFrom(), formatter);
-                LocalDateTime to = LocalDateTime.parse(searchDto.getDateTo(), formatter);
-                posts = posts.stream()
-                        .filter(post -> post.getTime().isAfter(from) && post.getTime().isBefore(to))
-                        .toList();
-            }
-            Sort sort = Sort.unsorted();
-
-            Pageable pageable;
-            if (pageDto.getSort() == null) {
-                pageable = PageRequest.of(0, 10, sort);
-            } else {
-                pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
-            }
-            return new PageImpl<>(posts,pageable, pageDto.getSize());
-        }catch (Exception e){
-            throw new ResourceNotFoundException("Error: " + e.getMessage());
-        }
-
-    }
 
     @Override
     public String createPost(PostDto postDto, String headerRequestByAuth) {
@@ -279,6 +227,104 @@ public class PostServiceImpl implements PostService {
             return postMapper.mapEntityToDto(post);
         }
        return null;
+    }
+
+    @Override
+    public Page<PostDto> getPosts(PostSearchDto postSearchDto,
+                                  PageDto pageDto, String headerRequestByAuth) {
+        log.info(postSearchDto.toString());
+        try {
+            Sort sort = Sort.unsorted();
+
+            Pageable pageable;
+            if (pageDto.getSort() == null) {
+                pageable = PageRequest.of(0, 10, sort);
+            } else {
+                pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
+            }
+
+            DecodedToken token = DecodedToken.getDecoded(headerRequestByAuth);
+            boolean withFriends = postSearchDto.getWithFriends() != null && postSearchDto.getWithFriends();
+            ArrayList<String> ids = new ArrayList<>();
+            ids.add(token.getId());
+            if (withFriends){
+                ids.addAll(friendClient.getFriendsIdListByUserId(headerRequestByAuth,token.getId())
+                        .stream()
+                        .map(UUID::toString).toList());
+            }
+
+            if (postSearchDto.getAuthor() != null){
+                ids = new ArrayList<>();
+                postSearchDto.setWithFriends(false);
+                SearchDTO searchDTO = new SearchDTO();
+                String[] data = postSearchDto.getAuthor().split("\\s+");
+                if (data.length == 2){
+                    searchDTO.setFirstName(data[0]);
+                    searchDTO.setLastName(data[1]);
+                    List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
+                            searchDTO,
+                            pageable).getContent();
+                    if (accounts.isEmpty()){
+                        searchDTO.setFirstName(data[1]);
+                        searchDTO.setLastName(data[0]);
+                        accounts = accountClient.getListAccounts(headerRequestByAuth,
+                                searchDTO,
+                                pageable).getContent();
+                    }
+                    ids = new ArrayList<>(accounts.stream()
+                            .map(AccountMeDTO::getId)
+                            .map(UUID::toString)
+                            .toList());
+                }else if (data.length == 1){
+                    searchDTO.setFirstName(data[0]);
+                    List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
+                            searchDTO,
+                            pageable).getContent();
+                    if (accounts.isEmpty()){
+                        searchDTO.setFirstName(null);
+                        searchDTO.setLastName(data[0]);
+                        accounts = accountClient.getListAccounts(headerRequestByAuth,
+                                searchDTO,
+                                pageable).getContent();
+                    }
+                    ids = new ArrayList<>(accounts.stream()
+                            .map(AccountMeDTO::getId)
+                            .map(UUID::toString)
+                            .toList());
+                }else {
+                    return new PageImpl<>(List.of(),pageable, pageDto.getSize());
+                }
+            }
+
+            boolean isDeleted = postSearchDto.getIsDeleted() != null && postSearchDto.getIsDeleted();
+            ArrayList<String> finalIds = ids;
+            log.info(finalIds.toString());
+            List<PostDto> posts = postRepository.findByAuthorIdList(ids).stream()
+                    .filter(post -> finalIds.contains(post.getAuthorId()))
+                    .filter(post -> post.getIsDeleted().equals(isDeleted))
+                    .filter(post -> post.getType().equals(TypePost.POSTED))
+                    .map(postMapper::mapEntityToDto)
+                    .toList();
+
+            if (postSearchDto.getText() != null){
+                posts = posts.stream()
+                        .filter(postDto -> postDto.getTitle().toLowerCase().contains(postSearchDto.getText().toLowerCase()))
+                        .toList();
+            }
+
+            if (postSearchDto.getDateTo() != null && postSearchDto.getDateFrom() != null){
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
+                LocalDateTime from = LocalDateTime.parse(postSearchDto.getDateFrom(), formatter);
+                LocalDateTime to = LocalDateTime.parse(postSearchDto.getDateTo(), formatter);
+                posts = posts.stream()
+                        .filter(post -> post.getTime().isAfter(from) && post.getTime().isBefore(to))
+                        .toList();
+            }
+
+            return new PageImpl<>(posts,pageable, pageDto.getSize());
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Error: " + e.getMessage());
+        }
     }
 
     public List<Tag> createTags(List<TagDto> tagDtoList, Post post){
