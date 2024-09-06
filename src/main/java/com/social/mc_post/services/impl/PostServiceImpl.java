@@ -259,13 +259,13 @@ public class PostServiceImpl implements PostService {
                 String[] data = postSearchDto.getAuthor().split("\\s+");
                 if (data.length == 2){
                     List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
-                            data[0],
-                            data[1],
+                            new String(data[0].getBytes(),"UTF-8"),
+                            new String(data[1].getBytes(),"UTF-8"),
                             pageable).getContent();
                     if (accounts.isEmpty()){
                         accounts = accountClient.getListAccounts(headerRequestByAuth,
-                                data[1],
-                                data[0],
+                                new String(data[1].getBytes(),"UTF-8"),
+                                new String(data[0].getBytes(),"UTF-8"),
                                 pageable).getContent();
                     }
                     ids = new ArrayList<>(accounts.stream()
@@ -275,11 +275,11 @@ public class PostServiceImpl implements PostService {
                 }else if (data.length == 1){
                     List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
                             null,
-                            data[0],
+                            new String(data[0].getBytes(),"UTF-8"),
                             pageable).getContent();
                     if (accounts.isEmpty()){
                         accounts = accountClient.getListAccounts(headerRequestByAuth,
-                                data[0],
+                                new String(data[0].getBytes(),"UTF-8"),
                                 null,
                                 pageable).getContent();
                     }
