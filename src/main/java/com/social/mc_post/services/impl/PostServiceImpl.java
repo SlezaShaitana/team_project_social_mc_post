@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -69,14 +70,23 @@ public class PostServiceImpl implements PostService {
                         .stream()
                         .map(UUID::toString).toList());
             }
-            List<PostDto> posts = postRepository.getAll(token.getId()).stream()
-            //        .filter(post -> ids.contains(post.getAuthorId()))
+            if (searchDto.getAuthor() != null){
+                log.info(searchDto.getAuthor());
+            }
+            List<Post> posts = postRepository.getAll(token.getId()).stream()
+                    .filter(post -> ids.contains(post.getAuthorId()))
                     .filter(post -> post.getType().equals(TypePost.POSTED))
-                    .map(postMapper::mapEntityToDto)
                     .toList();
-            Sort sort = Sort.unsorted();
 
-            log.info(posts.toString());
+            if (searchDto.getDateTo() != null && searchDto.getDateFrom() != null){
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
+                LocalDateTime from = LocalDateTime.parse(searchDto.getDateFrom(), formatter);
+                LocalDateTime to = LocalDateTime.parse(searchDto.getDateTo(), formatter);
+                posts = posts.stream()
+                        .filter(post -> post.getTime().isAfter(from) && post.getTime().isBefore(to))
+                        .toList();
+            }
+            Sort sort = Sort.unsorted();
 
             Pageable pageable;
             if (pageDto.getSort() == null) {
@@ -84,7 +94,8 @@ public class PostServiceImpl implements PostService {
             } else {
                 pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
             }
-            return new PageImpl<>(posts,pageable, pageDto.getSize());
+            return new PageImpl<>(posts.stream().map(postMapper::mapEntityToDto).toList()
+                    ,pageable, pageDto.getSize());
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
         }

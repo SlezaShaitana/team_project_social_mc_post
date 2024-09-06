@@ -3,11 +3,15 @@ package com.social.mc_post.utils;
 
 import com.social.mc_post.dto.PageDto;
 import com.social.mc_post.dto.PostSearchDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
 public class UrlParseUtils {
+
+    private static final Logger log = LoggerFactory.getLogger(UrlParseUtils.class);
 
     public static PageDto getPageable(String url) {
         PageDto pageDto = new PageDto();
@@ -41,6 +45,7 @@ public class UrlParseUtils {
 
     public static PostSearchDto getSearchDTO(String url) {
         PostSearchDto searchDTO = new PostSearchDto();
+        log.info(url);
 
         if (url.contains("author%3D")) {
             int startIndex = url.indexOf("author%3D");
