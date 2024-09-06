@@ -96,8 +96,7 @@ public class PostServiceImpl implements PostService {
             }
             if (searchDto.getText() != null){
                 posts = posts.stream()
-                        .filter(postDto -> postDto.getPostText().toLowerCase().contains(searchDto.getText().toLowerCase()) ||
-                                postDto.getTitle().toLowerCase().contains(searchDto.getText().toLowerCase()))
+                        .filter(postDto -> postDto.getTitle().toLowerCase().contains(searchDto.getText().toLowerCase()))
                         .toList();
             }
 
