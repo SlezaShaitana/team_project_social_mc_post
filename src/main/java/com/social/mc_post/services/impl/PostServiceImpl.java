@@ -256,19 +256,16 @@ public class PostServiceImpl implements PostService {
             if (postSearchDto.getAuthor() != null){
                 ids = new ArrayList<>();
                 postSearchDto.setWithFriends(false);
-                SearchDTO searchDTO = new SearchDTO();
                 String[] data = postSearchDto.getAuthor().split("\\s+");
                 if (data.length == 2){
-                    searchDTO.setFirstName(data[0]);
-                    searchDTO.setLastName(data[1]);
                     List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
-                            searchDTO,
+                            data[0],
+                            data[1],
                             pageable).getContent();
                     if (accounts.isEmpty()){
-                        searchDTO.setFirstName(data[1]);
-                        searchDTO.setLastName(data[0]);
                         accounts = accountClient.getListAccounts(headerRequestByAuth,
-                                searchDTO,
+                                data[1],
+                                data[0],
                                 pageable).getContent();
                     }
                     ids = new ArrayList<>(accounts.stream()
@@ -276,15 +273,14 @@ public class PostServiceImpl implements PostService {
                             .map(UUID::toString)
                             .toList());
                 }else if (data.length == 1){
-                    searchDTO.setFirstName(data[0]);
                     List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
-                            searchDTO,
+                            null,
+                            data[0],
                             pageable).getContent();
                     if (accounts.isEmpty()){
-                        searchDTO.setFirstName(null);
-                        searchDTO.setLastName(data[0]);
                         accounts = accountClient.getListAccounts(headerRequestByAuth,
-                                searchDTO,
+                                data[0],
+                                null,
                                 pageable).getContent();
                     }
                     ids = new ArrayList<>(accounts.stream()
