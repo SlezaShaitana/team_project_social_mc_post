@@ -83,6 +83,13 @@ public class PostServiceImpl implements PostService {
                     .map(postMapper::mapEntityToDto)
                     .toList();
 
+            if (searchDto.getText() != null){
+                posts = posts.stream()
+                        .filter(postDto -> postDto.getPostText().contains(searchDto.getText()) ||
+                                postDto.getTitle().contains(searchDto.getText()))
+                        .toList();
+            }
+
             if (searchDto.getDateTo() != null && searchDto.getDateFrom() != null){
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
                 LocalDateTime from = LocalDateTime.parse(searchDto.getDateFrom(), formatter);
