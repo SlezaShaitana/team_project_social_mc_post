@@ -65,6 +65,7 @@ public class PostServiceImpl implements PostService {
             DecodedToken token = DecodedToken.getDecoded(headerRequestByAuth);
             boolean withFriends = searchDto.getWithFriends() != null && searchDto.getWithFriends();
             ArrayList<String> ids = new ArrayList<>();
+            ids.add(token.getId());
             if (withFriends){
                 ids.addAll(friendClient.getFriendsIdListByUserId(headerRequestByAuth,token.getId())
                         .stream()
@@ -73,9 +74,10 @@ public class PostServiceImpl implements PostService {
             if (searchDto.getAuthor() != null){
                 log.info(searchDto.getAuthor());
             }
-            List<Post> posts = postRepository.getAll(token.getId()).stream()
+            List<PostDto> posts = postRepository.getAll(token.getId()).stream()
                     .filter(post -> ids.contains(post.getAuthorId()))
                     .filter(post -> post.getType().equals(TypePost.POSTED))
+                    .map(postMapper::mapEntityToDto)
                     .toList();
 
             if (searchDto.getDateTo() != null && searchDto.getDateFrom() != null){
@@ -94,8 +96,7 @@ public class PostServiceImpl implements PostService {
             } else {
                 pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
             }
-            return new PageImpl<>(posts.stream().map(postMapper::mapEntityToDto).toList()
-                    ,pageable, pageDto.getSize());
+            return new PageImpl<>(posts,pageable, pageDto.getSize());
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
         }
