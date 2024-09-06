@@ -254,44 +254,44 @@ public class PostServiceImpl implements PostService {
                         .map(UUID::toString).toList());
             }
 
-            if (postSearchDto.getAuthor() != null){
-                ids = new ArrayList<>();
-                postSearchDto.setWithFriends(false);
-                String[] data = postSearchDto.getAuthor().split("\\s+");
-                if (data.length == 2){
-                    List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
-                            new String(data[0].getBytes(), StandardCharsets.UTF_8),
-                            new String(data[1].getBytes(), StandardCharsets.UTF_8),
-                            pageable).getContent();
-                    if (accounts.isEmpty()){
-                        accounts = accountClient.getListAccounts(headerRequestByAuth,
-                                new String(data[1].getBytes(), StandardCharsets.UTF_8),
-                                new String(data[0].getBytes(), StandardCharsets.UTF_8),
-                                pageable).getContent();
-                    }
-                    ids = new ArrayList<>(accounts.stream()
-                            .map(AccountMeDTO::getId)
-                            .map(UUID::toString)
-                            .toList());
-                }else if (data.length == 1){
-                    List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
-                            null,
-                            new String(data[0].getBytes(), StandardCharsets.UTF_8),
-                            pageable).getContent();
-                    if (accounts.isEmpty()){
-                        accounts = accountClient.getListAccounts(headerRequestByAuth,
-                                new String(data[0].getBytes(), StandardCharsets.UTF_8),
-                                null,
-                                pageable).getContent();
-                    }
-                    ids = new ArrayList<>(accounts.stream()
-                            .map(AccountMeDTO::getId)
-                            .map(UUID::toString)
-                            .toList());
-                }else {
-                    return new PageImpl<>(List.of(),pageable, pageDto.getSize());
-                }
-            }
+//            if (postSearchDto.getAuthor() != null){
+//                ids = new ArrayList<>();
+//                postSearchDto.setWithFriends(false);
+//                String[] data = postSearchDto.getAuthor().split("\\s+");
+//                if (data.length == 2){
+//                    List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
+//                            new String(data[0].getBytes(), StandardCharsets.UTF_8),
+//                            new String(data[1].getBytes(), StandardCharsets.UTF_8),
+//                            pageable).getContent();
+//                    if (accounts.isEmpty()){
+//                        accounts = accountClient.getListAccounts(headerRequestByAuth,
+//                                new String(data[1].getBytes(), StandardCharsets.UTF_8),
+//                                new String(data[0].getBytes(), StandardCharsets.UTF_8),
+//                                pageable).getContent();
+//                    }
+//                    ids = new ArrayList<>(accounts.stream()
+//                            .map(AccountMeDTO::getId)
+//                            .map(UUID::toString)
+//                            .toList());
+//                }else if (data.length == 1){
+//                    List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
+//                            null,
+//                            new String(data[0].getBytes(), StandardCharsets.UTF_8),
+//                            pageable).getContent();
+//                    if (accounts.isEmpty()){
+//                        accounts = accountClient.getListAccounts(headerRequestByAuth,
+//                                new String(data[0].getBytes(), StandardCharsets.UTF_8),
+//                                null,
+//                                pageable).getContent();
+//                    }
+//                    ids = new ArrayList<>(accounts.stream()
+//                            .map(AccountMeDTO::getId)
+//                            .map(UUID::toString)
+//                            .toList());
+//                }else {
+//                    return new PageImpl<>(List.of(),pageable, pageDto.getSize());
+//                }
+//            }
 
             boolean isDeleted = postSearchDto.getIsDeleted() != null && postSearchDto.getIsDeleted();
             ArrayList<String> finalIds = ids;
