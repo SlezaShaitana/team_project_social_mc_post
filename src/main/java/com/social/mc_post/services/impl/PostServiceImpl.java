@@ -37,6 +37,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -259,13 +260,13 @@ public class PostServiceImpl implements PostService {
                 String[] data = postSearchDto.getAuthor().split("\\s+");
                 if (data.length == 2){
                     List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
-                            new String(data[0].getBytes(),"UTF-8"),
-                            new String(data[1].getBytes(),"UTF-8"),
+                            new String(data[0].getBytes(), StandardCharsets.UTF_8),
+                            new String(data[1].getBytes(), StandardCharsets.UTF_8),
                             pageable).getContent();
                     if (accounts.isEmpty()){
                         accounts = accountClient.getListAccounts(headerRequestByAuth,
-                                new String(data[1].getBytes(),"UTF-8"),
-                                new String(data[0].getBytes(),"UTF-8"),
+                                new String(data[1].getBytes(), StandardCharsets.UTF_8),
+                                new String(data[0].getBytes(), StandardCharsets.UTF_8),
                                 pageable).getContent();
                     }
                     ids = new ArrayList<>(accounts.stream()
@@ -275,11 +276,11 @@ public class PostServiceImpl implements PostService {
                 }else if (data.length == 1){
                     List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
                             null,
-                            new String(data[0].getBytes(),"UTF-8"),
+                            new String(data[0].getBytes(), StandardCharsets.UTF_8),
                             pageable).getContent();
                     if (accounts.isEmpty()){
                         accounts = accountClient.getListAccounts(headerRequestByAuth,
-                                new String(data[0].getBytes(),"UTF-8"),
+                                new String(data[0].getBytes(), StandardCharsets.UTF_8),
                                 null,
                                 pageable).getContent();
                     }
