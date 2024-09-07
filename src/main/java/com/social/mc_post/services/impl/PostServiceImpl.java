@@ -322,8 +322,7 @@ public class PostServiceImpl implements PostService {
     private List<String> getIdsByAuthorName(PostSearchDto searchDto, PageDto pageDto,
                                             String headerRequestByAuth){
         List<String> ids = new ArrayList<>();
-        String[] data = searchDto.getAuthor().split("\s++");
-        log.info(Arrays.toString(data));
+        String[] data = searchDto.getAuthor().split("\s");
         String size = "size%3D" + pageDto.getSize();
         if(data.length == 2){
             List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
@@ -335,6 +334,7 @@ public class PostServiceImpl implements PostService {
                     data[0],
                     size).getContent());
             accounts.forEach(account -> ids.add(String.valueOf(account.getId())));
+            log.info(accounts.toString());
             return ids;
         }else if (data.length == 1){
             List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
@@ -346,6 +346,7 @@ public class PostServiceImpl implements PostService {
                     data[0],
                     size).getContent());
             accounts.forEach(account -> ids.add(String.valueOf(account.getId())));
+            log.info(accounts.toString());
             return ids;
         }
         return List.of();
