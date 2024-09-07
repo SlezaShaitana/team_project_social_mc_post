@@ -1,12 +1,14 @@
 package com.social.mc_post.services.impl;
 
 import com.social.mc_post.dto.*;
+import com.social.mc_post.dto.account.AccountMeDTO;
 import com.social.mc_post.dto.enums.TypeLike;
 import com.social.mc_post.dto.enums.TypePost;
 import com.social.mc_post.dto.notification.MicroServiceName;
 import com.social.mc_post.dto.notification.NotificationDTO;
 import com.social.mc_post.dto.notification.NotificationType;
 import com.social.mc_post.exception.ResourceNotFoundException;
+import com.social.mc_post.feign.AccountClient;
 import com.social.mc_post.feign.FriendClient;
 import com.social.mc_post.kafka.KafkaProducer;
 import com.social.mc_post.mapper.LikeMapper;
@@ -56,6 +58,7 @@ public class PostServiceImpl implements PostService {
     private final LikeMapper likeMapper;
     private final KafkaProducer producer;
     private final FriendClient friendClient;
+    private final AccountClient accountClient;
 
 
     @Override
@@ -114,7 +117,6 @@ public class PostServiceImpl implements PostService {
             Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
             return new PageImpl<>(List.of() , pageable, pageDto.getSize());
         }
-
     }
 
     @Override
@@ -297,8 +299,12 @@ public class PostServiceImpl implements PostService {
         }
 
         if (searchDto.getAuthor() != null){
-
-
+            String[] data = searchDto.getAuthor().split("\\s+");
+            // add variation
+            List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
+                    data[0],
+                    data[1]).getContent();
+            log.info(accounts.toString());
         }
 
         boolean withFriends = searchDto.getWithFriends() != null && searchDto.getWithFriends();
@@ -312,7 +318,6 @@ public class PostServiceImpl implements PostService {
                     .stream()
                     .map(UUID::toString).toList());
         }
-      log.info(ids.toString());
       return ids;
     }
 
@@ -338,7 +343,7 @@ public class PostServiceImpl implements PostService {
         Post post = new Post(
                 null,
                 false,
-                LocalDateTime.now().plusHours(3),
+                LocalDateTime.now(),
                 null,
                 getAuthorId(headerRequestByAuth),
                 dto.getTitle(),
