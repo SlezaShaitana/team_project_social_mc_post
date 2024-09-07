@@ -298,6 +298,11 @@ public class PostServiceImpl implements PostService {
       }
 
       boolean withFriends = searchDto.getWithFriends() != null && searchDto.getWithFriends();
+
+      if (searchDto.getAuthor() == null && searchDto.getAccountIds() == null && withFriends){
+          ids.add(getAuthorId(headerRequestByAuth));
+      }
+
       for (String id : ids){
           if (withFriends){
               ids.addAll(friendClient.getFriendsIdListByUserId(headerRequestByAuth,id)
