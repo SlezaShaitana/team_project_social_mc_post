@@ -300,14 +300,7 @@ public class PostServiceImpl implements PostService {
         }
 
         if (searchDto.getAuthor() != null){
-            String[] data = searchDto.getAuthor().split("\\s+");
-            String size = "size%3D" + pageDto.getSize();
-            // add variation
-            List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
-                    data[0],
-                    data[1],
-                    size).getContent();
-            log.info(accounts.toString());
+            ids.addAll(getIdsByAuthorName(searchDto, pageDto, headerRequestByAuth));
         }
 
         boolean withFriends = searchDto.getWithFriends() != null && searchDto.getWithFriends();
@@ -322,6 +315,37 @@ public class PostServiceImpl implements PostService {
                     .map(UUID::toString).toList());
         }
       return ids;
+    }
+
+    private List<String> getIdsByAuthorName(PostSearchDto searchDto, PageDto pageDto,
+                                            String headerRequestByAuth){
+        List<String> ids = new ArrayList<>();
+        String[] data = searchDto.getAuthor().split("\\s+");
+        String size = "size%3D" + pageDto.getSize();
+        if(data.length == 2){
+            List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
+                    data[0],
+                    data[1],
+                    size).getContent();
+            accounts.addAll(accountClient.getListAccounts(headerRequestByAuth,
+                    data[1],
+                    data[0],
+                    size).getContent());
+            accounts.forEach(account -> ids.add(String.valueOf(account.getId())));
+            return ids;
+        }else if (data.length == 1){
+            List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
+                    data[0],
+                    null,
+                    size).getContent();
+            accounts.addAll(accountClient.getListAccounts(headerRequestByAuth,
+                    null,
+                    data[0],
+                    size).getContent());
+            accounts.forEach(account -> ids.add(String.valueOf(account.getId())));
+            return ids;
+        }
+        return List.of();
     }
 
     private List<Tag> createTags(List<TagDto> tagDtoList, Post post){
