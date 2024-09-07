@@ -54,16 +54,24 @@ public class CommentServiceImpl implements CommentService {
 
                 Comment comment = createComment(commentDto, post, headerRequestByAuth);
                 if (commentDto.getParentId() != null){
-                    comment.setType(TypeComment.COMMENT);
-                    comment.setParentCommentId(commentDto.getParentId());
-                    commentRepository.save(comment);
-                    putNotification(UUID.fromString(comment.getAuthorId()),
-                            comment.getCommentText(),NotificationType.COMMENT_COMMENT,
-                            UUID.fromString(comment.getAuthorId()));
-                    return "SubComment created";
+                    Comment parentComment = commentRepository.findById(commentDto.getParentId()).orElse(null);
+                    if (parentComment != null){
+                        comment.setType(TypeComment.COMMENT);
+                        comment.setParentCommentId(commentDto.getParentId());
+                        commentRepository.save(comment);
+
+                        putNotification(UUID.fromString(comment.getAuthorId()),
+                                comment.getCommentText(),NotificationType.COMMENT_COMMENT,
+                                UUID.fromString(parentComment.getId()));
+                        return "SubComment created";
+                    }
+                    return null;
                 }
                 comment.setType(TypeComment.POST);
                 commentRepository.save(comment);
+                putNotification(UUID.fromString(comment.getAuthorId()),
+                        comment.getCommentText(), NotificationType.POST_COMMENT,
+                        UUID.fromString(post.getAuthorId()));
             }catch (Exception e){
                 throw new ResourceNotFoundException("Error: " + e.getMessage());
             }
@@ -161,6 +169,10 @@ public class CommentServiceImpl implements CommentService {
                if (comment.getAuthorId().equals(authorId)){
                    comment.setMyLike(true);
                    commentRepository.save(comment);
+                   putNotification(UUID.fromString(like.getAuthorId()),
+                           "Ваш комментарий одобрили",
+                           NotificationType.LIKE_COMMENT,
+                           UUID.fromString(comment.getAuthorId()));
                }
                return likeMapper.mapEntityToDto(like);
            }

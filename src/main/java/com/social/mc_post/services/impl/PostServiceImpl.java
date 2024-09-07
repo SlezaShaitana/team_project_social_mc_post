@@ -26,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
+import org.jsoup.Jsoup;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -61,54 +62,52 @@ public class PostServiceImpl implements PostService {
     public Page<PostDto> getPosts(PostSearchDto searchDto,
                                   PageDto pageDto, String headerRequestByAuth) {
         try {
-            List<String> ids;
-            List<PostDto> posts;
-
-            boolean isDeleted = searchDto.getIsDeleted() != null && searchDto.getIsDeleted();
-
-            if (searchDto.getDateTo() != null && searchDto.getDateFrom() != null){
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
-                LocalDateTime from = LocalDateTime.parse(searchDto.getDateFrom(), formatter);
-                LocalDateTime to = LocalDateTime.parse(searchDto.getDateTo(), formatter);
-                if (searchDto.getAuthor() == null){
-                    posts = new ArrayList<>(postRepository.findAll().stream()
-                            .filter(post -> post.getTime().isAfter(from) && post.getTime().isBefore(to))
-                            .filter(post -> post.getIsDeleted().equals(isDeleted))
-                            .filter(post -> post.getType().equals(TypePost.POSTED))
-                            .map(postMapper::mapEntityToDto)
-                            .toList());
-                }else {
-                    ids = List.of(); // реализовать получение через mc-account
-                    posts = new ArrayList<>(postRepository.findByAuthorIdList(ids).stream()
-                            .filter(post -> post.getIsDeleted().equals(isDeleted))
-                            .filter(post -> post.getType().equals(TypePost.POSTED))
-                            .filter(post -> post.getTime().isAfter(from) && post.getTime().isBefore(to))
-                            .map(postMapper::mapEntityToDto)
-                            .toList());
-                }
-            }else {
-                ids = getAuthorIdsFromSearch(headerRequestByAuth, searchDto);
-                posts = new ArrayList<>(postRepository.findByAuthorIdList(ids).stream()
-                        .filter(post -> post.getIsDeleted().equals(isDeleted))
-                        .filter(post -> post.getType().equals(TypePost.POSTED))
-                        .map(postMapper::mapEntityToDto)
-                        .toList());
-            }
-            if (searchDto.getText() != null){
-                posts = posts.stream()
-                        .filter(postDto -> postDto.getTitle().toLowerCase().contains(searchDto.getText().toLowerCase()))
-                        .toList();
-            }
-
             Sort sort = Sort.unsorted();
-
             Pageable pageable;
             if (pageDto.getSort() == null) {
                 pageable = PageRequest.of(0, 10, sort);
             } else {
                 pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
             }
-            return new PageImpl<>(posts,pageable, pageDto.getSize());
+
+           List<String> ids = getAuthorIdsFromSearch(headerRequestByAuth, searchDto);
+           if (ids.isEmpty()){
+               return new PageImpl<>(List.of(),pageable, pageDto.getSize());
+           }
+
+           boolean isDeleted = searchDto.getIsDeleted() != null && searchDto.getIsDeleted();
+           List<PostDto> posts = postRepository.findByAuthorIdList(ids).stream()
+                   .filter(post -> post.getIsDeleted().equals(isDeleted))
+                   .filter(post -> post.getType().equals(TypePost.POSTED))
+                   .map(postMapper::mapEntityToDto)
+                   .toList();
+
+
+           if (searchDto.getDateTo() != null && searchDto.getDateFrom() != null){
+               DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
+               LocalDateTime from = LocalDateTime.parse(searchDto.getDateFrom(), formatter);
+               LocalDateTime to = LocalDateTime.parse(searchDto.getDateTo(), formatter);
+               posts = posts.stream()
+                       .filter(post -> post.getTime().isAfter(from) && post.getTime().isBefore(to))
+                       .toList();
+            }
+
+           if (searchDto.getText() != null){
+               posts = posts.stream()
+                       .filter(postDto -> postDto.getTitle().toLowerCase()
+                               .contains(searchDto.getText().toLowerCase()))
+                       .toList();
+           }
+
+           List<String> tags = searchDto.getTags() == null ? List.of() : searchDto.getTags();
+           if (!tags.isEmpty()){
+               for (String tag : tags){
+                   posts = posts.stream()
+                           .filter(postDto -> postDto.getTags().contains(tag))
+                           .toList();
+               }
+           }
+           return new PageImpl<>(posts,pageable, pageDto.getSize());
         }catch (Exception e){
             throw new ResourceNotFoundException("Error: " + e.getMessage());
         }
@@ -285,19 +284,28 @@ public class PostServiceImpl implements PostService {
 
     private List<String> getAuthorIdsFromSearch(String headerRequestByAuth,
                                                 PostSearchDto searchDto) throws UnsupportedEncodingException {
-        String authorId = getAuthorId(headerRequestByAuth);
-        boolean withFriends = searchDto.getWithFriends() != null && searchDto.getWithFriends();
-        ArrayList<String> ids = new ArrayList<>();
-        ids.add(authorId);
-        if (withFriends){
-            ids.addAll(friendClient.getFriendsIdListByUserId(headerRequestByAuth,authorId)
-                    .stream()
-                    .map(UUID::toString).toList());
-        }
-        if (searchDto.getAuthor() != null){
-            log.info(searchDto.getAuthor());
-        }
-        return ids;
+      List<String> ids = new ArrayList<>();
+      if (searchDto == null){
+          return List.of();
+      }
+
+      if (searchDto.getAccountIds() != null){
+          ids.addAll(searchDto.getAccountIds());
+      }
+
+      if (searchDto.getAuthor() != null){
+
+      }
+
+      boolean withFriends = searchDto.getWithFriends() != null && searchDto.getWithFriends();
+      for (String id : ids){
+          if (withFriends){
+              ids.addAll(friendClient.getFriendsIdListByUserId(headerRequestByAuth,id)
+                      .stream()
+                      .map(UUID::toString).toList());
+          }
+      }
+      return ids;
     }
 
     private List<Tag> createTags(List<TagDto> tagDtoList, Post post){
@@ -327,7 +335,7 @@ public class PostServiceImpl implements PostService {
                 getAuthorId(headerRequestByAuth),
                 dto.getTitle(),
                 null,
-                dto.getPostText(),
+                Jsoup.parse(dto.getPostText()).text(),
                 false,
                 dto.getMyReaction(),
                 false,
