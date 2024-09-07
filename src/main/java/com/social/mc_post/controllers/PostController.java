@@ -106,11 +106,12 @@ public class PostController {
 
     @PostMapping("/post/{id}/comment/{commentId}/like")
     @ResponseStatus(HttpStatus.CREATED)
-    public LikeDto handlerPostLikeComment(@PathVariable String id,
+    public String handlerPostLikeComment(@PathVariable String id,
                                               @PathVariable String commentId,
                                               @RequestBody LikeDto likeDto,
                                               @RequestHeader("Authorization") String headerRequestByAuth){
-        return commentService.createLikeComment(id, commentId, likeDto, headerRequestByAuth);
+        commentService.createLikeComment(id, commentId, likeDto, headerRequestByAuth);
+        return "ok";
     }
 
     @DeleteMapping("/post/{id}/comment/{commentId}/like")
