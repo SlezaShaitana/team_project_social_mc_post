@@ -40,7 +40,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-
         String requestURI = request.getRequestURI();
 
         if (requestURI.equals("/prometheus") || requestURI.equals("/actuator/prometheus")) {
@@ -51,22 +50,33 @@ public class JwtFilter extends OncePerRequestFilter {
 
         try {
             String stringToken = getToken(request);
-            boolean validateToken = jwtValidation.validateToken(stringToken);
-            log.info("Result token verification in mc-auth is {}", validateToken);
-            if (validateToken) {
+            if (jwtValidation.validateToken(stringToken)) {
+                DecodedToken token = DecodedToken.getDecoded(stringToken);
+                String email = token.getEmail();
+                List<String> roles = token.getRole();
+
+                Collection<? extends GrantedAuthority> authorities = (roles != null ? roles.stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList()) : Collections.emptyList());
+
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        null, null, null
-                );
-
+                        email, null, authorities);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }else {
-                throw new IllegalArgumentException();
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
             }
+        } catch (MalformedJwtException e) {
+            log.error("Invalid JWT token format: {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
         } catch (Exception e) {
-            log.error("Error : {}", e.getMessage());
+            log.error("JWT token validation failed: {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
         }
+
         filterChain.doFilter(request, response);
     }
 
