@@ -301,6 +301,8 @@ public class PostServiceImpl implements PostService {
 
         if (searchDto.getAuthor() != null){
             ids.addAll(getIdsByAuthorName(searchDto, pageDto, headerRequestByAuth));
+            log.info(searchDto.getAuthor());
+            log.info(ids.toString());
         }
 
         boolean withFriends = searchDto.getWithFriends() != null && searchDto.getWithFriends();
