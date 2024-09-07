@@ -313,6 +313,7 @@ public class PostServiceImpl implements PostService {
                       .map(UUID::toString).toList());
           }
       }
+      log.info(ids.toString());
       return ids;
     }
 
