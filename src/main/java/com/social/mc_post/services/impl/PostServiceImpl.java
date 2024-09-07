@@ -109,7 +109,7 @@ public class PostServiceImpl implements PostService {
            }
            return new PageImpl<>(posts,pageable, pageDto.getSize());
         }catch (Exception e){
-            log.info("Error: {}", e.getMessage());
+            log.error("Error: {}", e.getMessage());
             Sort sort = Sort.unsorted();
             Pageable pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
             return new PageImpl<>(List.of() , pageable, pageDto.getSize());
