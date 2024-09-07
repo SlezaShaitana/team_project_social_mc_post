@@ -306,13 +306,14 @@ public class PostServiceImpl implements PostService {
           ids.add(getAuthorId(headerRequestByAuth));
       }
 
-      for (String id : ids){
-          if (withFriends){
-              ids.addAll(friendClient.getFriendsIdListByUserId(headerRequestByAuth,id)
-                      .stream()
-                      .map(UUID::toString).toList());
-          }
-      }
+        if (withFriends){
+            ids.addAll(friendClient.getFriendsIdListByUserId(headerRequestByAuth,ids.get(0))
+                    .stream()
+                    .map(UUID::toString).toList());
+        }
+//      for (String id : ids){
+//
+//      }
       log.info(ids.toString());
       return ids;
     }
