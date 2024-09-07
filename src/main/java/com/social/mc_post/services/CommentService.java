@@ -12,7 +12,7 @@ public interface CommentService {
     String createSubCommentPost(String idPost, String idComment, CommentDto subComment, String headerRequestByAuth);
     void deleteCommentPost(String postId, String commentId, String headerRequestByAuth);
     String updateComment(String idComment, CommentDto commentDto, String headerRequestByAuth);
-    LikeDto createLikeComment(String idPost, String idComment, LikeDto likeDto, String headerRequestByAuth);
+    LikeDto createLikeComment(String idPost, String idComment, String headerRequestByAuth);
     void removeLikeComment(String idPost, String idComment, String headerRequestByAuth);
     Page<CommentDto> getCommentsByPostId(CommentSearchDto searchDto, PageDto pageableDto);
     Page<CommentDto> getSubCommentsByPostIdAndCommentId(CommentSearchDto searchDto, PageDto pageableDto);

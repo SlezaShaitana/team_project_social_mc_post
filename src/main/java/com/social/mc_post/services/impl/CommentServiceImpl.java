@@ -148,14 +148,14 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    public LikeDto createLikeComment(String idPost, String idComment,LikeDto likeDto,
+    public LikeDto createLikeComment(String idPost, String idComment,
                                     String headerRequestByAuth) {
         Post post = postRepository.findById(idPost).orElse(null);
         Comment comment = commentRepository.findById(idComment).orElse(null);
         try {
            String authorId = getAuthorId(headerRequestByAuth);
            if (post != null && comment != null){
-               Like like = createLike(likeDto,post, comment, authorId);
+               Like like = createLike(post, comment, authorId);
                likeRepository.save(like);
                log.info("Like for comment created ");
                if (comment.getAuthorId().equals(authorId)){
@@ -236,7 +236,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
 
-    private Like createLike(LikeDto likeDto, Post post, Comment comment, String authorId){
+    private Like createLike(Post post, Comment comment, String authorId){
         return new Like(
                 null,
                 false,
@@ -245,7 +245,7 @@ public class CommentServiceImpl implements CommentService {
                 post,
                 comment,
                 TypeLike.COMMENT,
-                likeDto.getReactionType());
+                null);
     }
 
     private void putNotification(UUID authorId, String content, NotificationType type, UUID receiverId) {

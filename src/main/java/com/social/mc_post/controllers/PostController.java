@@ -109,8 +109,7 @@ public class PostController {
     public LikeDto handlerPostLikeComment(@PathVariable String id,
                                               @PathVariable String commentId,
                                               @RequestHeader("Authorization") String headerRequestByAuth){
-        LikeDto likeDto = new LikeDto();
-        return commentService.createLikeComment(id, commentId, likeDto, headerRequestByAuth);
+        return commentService.createLikeComment(id, commentId, headerRequestByAuth);
     }
 
     @DeleteMapping("/post/{id}/comment/{commentId}/like")
