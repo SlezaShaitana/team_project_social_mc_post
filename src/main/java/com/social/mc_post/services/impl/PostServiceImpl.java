@@ -40,6 +40,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -301,7 +302,6 @@ public class PostServiceImpl implements PostService {
 
         if (searchDto.getAuthor() != null){
             ids.addAll(getIdsByAuthorName(searchDto, pageDto, headerRequestByAuth));
-            log.info(searchDto.getAuthor());
             log.info(ids.toString());
         }
 
@@ -322,7 +322,8 @@ public class PostServiceImpl implements PostService {
     private List<String> getIdsByAuthorName(PostSearchDto searchDto, PageDto pageDto,
                                             String headerRequestByAuth){
         List<String> ids = new ArrayList<>();
-        String[] data = searchDto.getAuthor().split("\\s+");
+        String[] data = searchDto.getAuthor().split("\s++");
+        log.info(Arrays.toString(data));
         String size = "size%3D" + pageDto.getSize();
         if(data.length == 2){
             List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
