@@ -108,8 +108,8 @@ public class PostController {
     @ResponseStatus(HttpStatus.CREATED)
     public LikeDto handlerPostLikeComment(@PathVariable String id,
                                               @PathVariable String commentId,
-                                              @RequestBody LikeDto likeDto,
                                               @RequestHeader("Authorization") String headerRequestByAuth){
+        LikeDto likeDto = new LikeDto();
         return commentService.createLikeComment(id, commentId, likeDto, headerRequestByAuth);
     }
 
