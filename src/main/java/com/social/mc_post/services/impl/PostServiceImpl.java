@@ -73,7 +73,7 @@ public class PostServiceImpl implements PostService {
                 pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
             }
 
-           List<String> ids = getAuthorIdsFromSearch(headerRequestByAuth, searchDto);
+           List<String> ids = getAuthorIdsFromSearch(headerRequestByAuth, searchDto, pageDto);
            if (ids.isEmpty()){
                return new PageImpl<>(List.of(),pageable, pageDto.getSize());
            }
@@ -288,7 +288,8 @@ public class PostServiceImpl implements PostService {
     }
 
     private List<String> getAuthorIdsFromSearch(String headerRequestByAuth,
-                                                PostSearchDto searchDto) throws UnsupportedEncodingException {
+                                                PostSearchDto searchDto,
+                                                PageDto pageDto) throws UnsupportedEncodingException {
         List<String> ids = new ArrayList<>();
         if (searchDto == null){
             return List.of();
@@ -300,10 +301,12 @@ public class PostServiceImpl implements PostService {
 
         if (searchDto.getAuthor() != null){
             String[] data = searchDto.getAuthor().split("\\s+");
+            String size = "size%3D" + pageDto.getSize();
             // add variation
             List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
                     data[0],
-                    data[1]).getContent();
+                    data[1],
+                    size).getContent();
             log.info(accounts.toString());
         }
 

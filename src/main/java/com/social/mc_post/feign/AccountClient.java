@@ -17,5 +17,6 @@ public interface AccountClient {
     @GetMapping("/search")
     Page<AccountMeDTO> getListAccounts(@RequestHeader("Authorization") String headerRequestByAuth,
                                        @RequestParam String firstName,
-                                       @RequestParam String lastName);
+                                       @RequestParam String lastName,
+                                       @RequestParam(name = "0") String size);
 }
