@@ -38,44 +38,36 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+
+        String requestURI = request.getRequestURI();
+
+        if (requestURI.equals("/prometheus") || requestURI.equals("/actuator/prometheus")) {
+            log.info("Skipping JWT validation for URI: {}", requestURI);
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
-            String stringToken  = getToken(request);
-            log.info("Token: '{}'", stringToken);
-
-            if (jwtValidation.validateToken(stringToken)) {
-                DecodedToken token = DecodedToken.getDecoded(stringToken);
-
-                String email = token.getEmail();
-                List<String> roles = token.getRole();
-//                Collection<? extends GrantedAuthority> authorities = roles.stream()
-//                        .map(SimpleGrantedAuthority::new)
-//                        .collect(Collectors.toList());
-
-
-
+            String stringToken = getToken(request);
+            boolean validateToken = jwtValidation.validateToken(stringToken);
+            log.info("Result token verification in mc-auth is {}", validateToken);
+            if (validateToken) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        email, null, List.of());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        null, null, null
+                );
 
-                return;
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }else {
+                throw new IllegalArgumentException();
             }
-        } catch (MalformedJwtException e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            log.error("Invalid JWT token format: {}", e.getMessage());
-            return;
         } catch (Exception e) {
-            log.error("JWT token validation failed: {}", e.getMessage());
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
+            log.error("Error : {}", e.getMessage());
         }
         filterChain.doFilter(request, response);
     }
-    private Boolean isAuthorized(){
-        return true;
-    }
+
 }
