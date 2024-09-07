@@ -287,33 +287,31 @@ public class PostServiceImpl implements PostService {
 
     private List<String> getAuthorIdsFromSearch(String headerRequestByAuth,
                                                 PostSearchDto searchDto) throws UnsupportedEncodingException {
-      List<String> ids = new ArrayList<>();
-      if (searchDto == null){
-          return List.of();
-      }
+        List<String> ids = new ArrayList<>();
+        if (searchDto == null){
+            return List.of();
+        }
 
-      if (searchDto.getAccountIds() != null){
-          ids.addAll(searchDto.getAccountIds());
-      }
+        if (searchDto.getAccountIds() != null){
+            ids.addAll(searchDto.getAccountIds());
+        }
 
-      if (searchDto.getAuthor() != null){
+        if (searchDto.getAuthor() != null){
 
-      }
 
-      boolean withFriends = searchDto.getWithFriends() != null && searchDto.getWithFriends();
+        }
 
-      if (searchDto.getAuthor() == null && searchDto.getAccountIds() == null && withFriends){
-          ids.add(getAuthorId(headerRequestByAuth));
-      }
+        boolean withFriends = searchDto.getWithFriends() != null && searchDto.getWithFriends();
 
-        if (withFriends){
+        if (searchDto.getAuthor() == null && searchDto.getAccountIds() == null && withFriends){
+            ids.add(getAuthorId(headerRequestByAuth));
+        }
+
+        if (withFriends && ids.size() == 1){
             ids.addAll(friendClient.getFriendsIdListByUserId(headerRequestByAuth,ids.get(0))
                     .stream()
                     .map(UUID::toString).toList());
         }
-//      for (String id : ids){
-//
-//      }
       log.info(ids.toString());
       return ids;
     }
