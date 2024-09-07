@@ -329,10 +329,10 @@ public class PostServiceImpl implements PostService {
                     data[0],
                     data[1],
                     size).getContent();
-            accounts.addAll(accountClient.getListAccounts(headerRequestByAuth,
-                    data[1],
-                    data[0],
-                    size).getContent());
+//            accounts.addAll(accountClient.getListAccounts(headerRequestByAuth,
+//                    data[1],
+//                    data[0],
+//                    size).getContent());
             accounts.forEach(account -> ids.add(String.valueOf(account.getId())));
             log.info(accounts.toString());
             return ids;
@@ -341,10 +341,10 @@ public class PostServiceImpl implements PostService {
                     data[0],
                     null,
                     size).getContent();
-            accounts.addAll(accountClient.getListAccounts(headerRequestByAuth,
-                    null,
-                    data[0],
-                    size).getContent());
+//            accounts.addAll(accountClient.getListAccounts(headerRequestByAuth,
+//                    null,
+//                    data[0],
+//                    size).getContent());
             accounts.forEach(account -> ids.add(String.valueOf(account.getId())));
             log.info(accounts.toString());
             return ids;
