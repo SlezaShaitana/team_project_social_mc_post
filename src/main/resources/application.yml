@@ -27,6 +27,10 @@ spring:
     bootstrap-servers: 79.174.80.200:9092
     kafkaMessageTopicForNotification: "notification-topic"
 
+logging:
+  level:
+    root: debug
+
 eureka:
   client:
     service-url:
