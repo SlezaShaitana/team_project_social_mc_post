@@ -344,10 +344,6 @@ public class PostServiceImpl implements PostService {
                     data[0],
                     data[1],
                     size).getContent();
-            accounts.addAll(accountClient.getListAccounts(headerRequestByAuth,
-                    data[1],
-                    data[0],
-                    size).getContent());
             log.info(accounts.toString());
             return accounts.stream()
                     .map(AccountMeDTO::getId)
