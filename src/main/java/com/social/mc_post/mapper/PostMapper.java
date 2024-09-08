@@ -52,8 +52,10 @@ public class PostMapper {
         List<Like> likes = likeRepository.findByPost(post);
         Map<String, Integer> reactionMap = new HashMap<>();
         for (Like like : likes){
-            reactionMap.put(like.getReaction(), likeRepository.countByPostAndReaction(post
-                    , like.getReaction()));
+            if (like.getReaction() != null){
+                reactionMap.put(like.getReaction(), likeRepository.countByPostAndReaction(post
+                        , like.getReaction()));
+            }
         }
 
         List<ReactionDto> reactions = new ArrayList<>();

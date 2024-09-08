@@ -303,7 +303,7 @@ public class PostServiceImpl implements PostService {
     }
 
     private List<String> getAuthorIdsFromSearch(String headerRequestByAuth,
-                                                PostSearchDto searchDto) throws UnsupportedEncodingException {
+                                                PostSearchDto searchDto) throws Exception {
         List<String> ids = new ArrayList<>();
         if (searchDto == null){
             return List.of();
@@ -335,7 +335,7 @@ public class PostServiceImpl implements PostService {
     }
 
     private List<String> getIdsByAuthorData(String headerRequestByAuth,
-                                            PostSearchDto searchDto){
+                                            PostSearchDto searchDto) throws Exception {
         List<String> ids = new ArrayList<>();
         String[] data = searchDto.getAuthor().trim().split("\\s+");
         if (data.length == 2){
@@ -347,8 +347,9 @@ public class PostServiceImpl implements PostService {
                     .getListIdsAccounts(headerRequestByAuth, data[1], data[0]).stream()
                     .map(UUID::toString)
                     .toList());
+            return ids;
         }
-        return ids;
+       throw new Exception("Неверный формат ввода автора!");
     }
 
     private List<Tag> createTags(List<TagDto> tagDtoList, Post post){
