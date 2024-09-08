@@ -339,6 +339,7 @@ public class PostServiceImpl implements PostService {
 
     private List<String> getIdsByAuthor(String[] data, String size, String headerRequestByAuth){
         if (data.length == 2){
+            log.info(Arrays.toString(data));
             List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
                     data[0],
                     data[1],
