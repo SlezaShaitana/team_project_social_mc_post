@@ -343,6 +343,7 @@ public class PostServiceImpl implements PostService {
                     data[0],
                     data[1],
                     size).getContent();
+            log.info(accounts.toString());
             return accounts.stream()
                     .map(AccountMeDTO::getId)
                     .map(UUID::toString)
