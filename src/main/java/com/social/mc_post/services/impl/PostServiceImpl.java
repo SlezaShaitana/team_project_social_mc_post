@@ -1,7 +1,6 @@
 package com.social.mc_post.services.impl;
 
 import com.social.mc_post.dto.*;
-import com.social.mc_post.dto.account.AccountMeDTO;
 import com.social.mc_post.dto.enums.TypeLike;
 import com.social.mc_post.dto.enums.TypePost;
 import com.social.mc_post.dto.notification.MicroServiceName;
@@ -316,12 +315,7 @@ public class PostServiceImpl implements PostService {
 
         if (searchDto.getAuthor() != null){
             searchDto.setWithFriends(false);
-            String[] data = searchDto.getAuthor().trim().split("\\s+");
-            List<String> accountsIds = accountClient
-                    .getListIdsAccounts(headerRequestByAuth, data[0], data[1]).stream()
-                    .map(UUID::toString)
-                    .toList();
-            ids.addAll(accountsIds);
+            ids.addAll(getIdsByAuthorData(headerRequestByAuth, searchDto));
             log.info(ids.toString());
         }
 
@@ -337,6 +331,33 @@ public class PostServiceImpl implements PostService {
                     .map(UUID::toString).toList());
         }
       return ids;
+    }
+
+    private List<String> getIdsByAuthorData(String headerRequestByAuth,
+                                            PostSearchDto searchDto){
+        List<String> ids = new ArrayList<>();
+        String[] data = searchDto.getAuthor().trim().split("\\s+");
+        if (data.length == 2){
+            ids.addAll(accountClient
+                    .getListIdsAccounts(headerRequestByAuth, data[0], data[1]).stream()
+                    .map(UUID::toString)
+                    .toList());
+            ids.addAll(accountClient
+                    .getListIdsAccounts(headerRequestByAuth, data[1], data[0]).stream()
+                    .map(UUID::toString)
+                    .toList());
+        }
+        if (data.length == 1){
+            ids.addAll(accountClient
+                    .getListIdsAccounts(headerRequestByAuth, data[0], null).stream()
+                    .map(UUID::toString)
+                    .toList());
+            ids.addAll(accountClient
+                    .getListIdsAccounts(headerRequestByAuth, null, data[0]).stream()
+                    .map(UUID::toString)
+                    .toList());
+        }
+        return ids;
     }
 
     private List<Tag> createTags(List<TagDto> tagDtoList, Post post){
