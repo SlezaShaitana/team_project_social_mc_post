@@ -337,7 +337,6 @@ public class PostServiceImpl implements PostService {
                                             PostSearchDto searchDto){
         List<String> ids = new ArrayList<>();
         String[] data = searchDto.getAuthor().trim().split("\\s+");
-        log.info(data.toString());
         if (data.length == 2){
             ids.addAll(accountClient
                     .getListIdsAccounts(headerRequestByAuth, data[0], data[1]).stream()
@@ -345,16 +344,6 @@ public class PostServiceImpl implements PostService {
                     .toList());
             ids.addAll(accountClient
                     .getListIdsAccounts(headerRequestByAuth, data[1], data[0]).stream()
-                    .map(UUID::toString)
-                    .toList());
-        }
-        if (data.length == 1){
-            ids.addAll(accountClient
-                    .getListIdsAccounts(headerRequestByAuth, data[0], null).stream()
-                    .map(UUID::toString)
-                    .toList());
-            ids.addAll(accountClient
-                    .getListIdsAccounts(headerRequestByAuth, null, data[0]).stream()
                     .map(UUID::toString)
                     .toList());
         }
