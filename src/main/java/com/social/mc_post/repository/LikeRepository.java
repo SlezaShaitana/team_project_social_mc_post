@@ -1,6 +1,7 @@
 package com.social.mc_post.repository;
 
 import com.social.mc_post.dto.ReactionDto;
+import com.social.mc_post.dto.enums.TypeLike;
 import com.social.mc_post.model.Comment;
 import com.social.mc_post.model.Like;
 import com.social.mc_post.model.Post;
@@ -26,6 +27,6 @@ public interface LikeRepository extends JpaRepository<Like, String> {
     @Query("select count(*) from Like as l WHERE l.comment =:comment")
     Integer countByComment(Comment comment);
 
-    @Query("select l from Like as l WHERE l.post =:post and l.authorId =:authorId and l.comment =:comment")
-    Like foundByPostAndAuthorId(Post post, String authorId, Comment comment);
+    @Query("select l from Like as l WHERE l.post =:post and l.authorId =:authorId and l.type =:type")
+    Like foundByPostAndAuthorId(Post post, String authorId, TypeLike type);
 }

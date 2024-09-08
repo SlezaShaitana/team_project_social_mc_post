@@ -196,7 +196,8 @@ public class PostServiceImpl implements PostService {
         if (post != null){
             try {
                 String authorId = getAuthorId(headerRequestByAuth);
-                Like oldLike = likeRepository.foundByPostAndAuthorId(post, authorId, null);
+                Like oldLike = likeRepository.foundByPostAndAuthorId(post, authorId, TypeLike.POST);
+                log.info(oldLike.toString());
                 if (oldLike != null){
                     likeRepository.delete(oldLike);
                 }

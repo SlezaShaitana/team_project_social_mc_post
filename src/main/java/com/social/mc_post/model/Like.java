@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "likes")
-@Setter
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Like {

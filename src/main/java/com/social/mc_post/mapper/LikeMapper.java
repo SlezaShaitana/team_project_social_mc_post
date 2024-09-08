@@ -14,6 +14,7 @@ public class LikeMapper {
                 .id(like.getId())
                 .isDeleted(like.getIsDeleted())
                 .authorId(like.getAuthorId())
+                .time(like.getTime())
                 .itemId(itemId)
                 .type(like.getType())
                 .reactionType(like.getReaction())
