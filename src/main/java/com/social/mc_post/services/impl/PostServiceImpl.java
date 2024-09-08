@@ -74,7 +74,7 @@ public class PostServiceImpl implements PostService {
                 pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
             }
 
-            List<String> ids = getAuthorIdsFromSearch(headerRequestByAuth, searchDto, pageDto);
+            List<String> ids = getAuthorIdsFromSearch(headerRequestByAuth, searchDto);
             List<PostDto> posts = getPostDtoByFilterTime(searchDto, ids);
 
            if (searchDto.getText() != null){
@@ -304,8 +304,7 @@ public class PostServiceImpl implements PostService {
     }
 
     private List<String> getAuthorIdsFromSearch(String headerRequestByAuth,
-                                                PostSearchDto searchDto,
-                                                PageDto pageDto) throws UnsupportedEncodingException {
+                                                PostSearchDto searchDto) throws UnsupportedEncodingException {
         List<String> ids = new ArrayList<>();
         if (searchDto == null){
             return List.of();
@@ -317,9 +316,12 @@ public class PostServiceImpl implements PostService {
 
         if (searchDto.getAuthor() != null){
             searchDto.setWithFriends(false);
-            String[] data = searchDto.getAuthor().trim().split("\\s+");
-            String size = "size%3D" + pageDto.getSize();
-            ids = getIdsByAuthor(data,size, headerRequestByAuth);
+            int maxCountSearch = 1000000000;
+            String size = "size%3D" + maxCountSearch;
+            List<AccountMeDTO> accounts = accountClient
+                    .getListAccounts(headerRequestByAuth, searchDto.getAuthor().trim(), size)
+                    .getContent();
+            accounts.forEach(account -> ids.add(String.valueOf(account.getId())));
             log.info(ids.toString());
         }
 
@@ -335,36 +337,6 @@ public class PostServiceImpl implements PostService {
                     .map(UUID::toString).toList());
         }
       return ids;
-    }
-
-    private List<String> getIdsByAuthor(String[] data, String size, String headerRequestByAuth){
-        if (data.length == 2){
-            log.info(Arrays.toString(data));
-            List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
-                    data[0],
-                    data[1],
-                    size).getContent();
-            log.info(accounts.toString());
-            return accounts.stream()
-                    .map(AccountMeDTO::getId)
-                    .map(UUID::toString)
-                    .toList();
-        }
-        if (data.length == 1){
-            List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
-                    data[0],
-                    null,
-                    size).getContent();
-            accounts.addAll(accountClient.getListAccounts(headerRequestByAuth,
-                    null,
-                    data[0],
-                    size).getContent());
-            return accounts.stream()
-                    .map(AccountMeDTO::getId)
-                    .map(UUID::toString)
-                    .toList();
-        }
-        return List.of();
     }
 
     private List<Tag> createTags(List<TagDto> tagDtoList, Post post){
