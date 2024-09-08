@@ -14,8 +14,8 @@ import java.util.UUID;
 @FeignClient(value = "account", url = "http://79.174.80.200:9095/api/v1/account")
 public interface AccountClient {
 
-    @GetMapping("/search")
-    Page<AccountMeDTO> getListAccounts(@RequestHeader("Authorization") String headerRequestByAuth,
-                                       @RequestParam String author,
-                                       @RequestParam(name = "0") String size);
+    @GetMapping("/search_by_fullName")
+    List<UUID> getListIdsAccounts(@RequestHeader("Authorization") String headerRequestByAuth,
+                                       @RequestParam String firstName,
+                                       @RequestParam String lastName);
 }

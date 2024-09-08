@@ -316,12 +316,12 @@ public class PostServiceImpl implements PostService {
 
         if (searchDto.getAuthor() != null){
             searchDto.setWithFriends(false);
-            int maxCountSearch = 1000000000;
-            String size = "size%3D" + maxCountSearch;
-            List<AccountMeDTO> accounts = accountClient
-                    .getListAccounts(headerRequestByAuth, searchDto.getAuthor().trim(), size)
-                    .getContent();
-            accounts.forEach(account -> ids.add(String.valueOf(account.getId())));
+            String[] data = searchDto.getAuthor().trim().split("\\s+");
+            List<String> accountsIds = accountClient
+                    .getListIdsAccounts(headerRequestByAuth, data[0], data[1]).stream()
+                    .map(UUID::toString)
+                    .toList();
+            ids.addAll(accountsIds);
             log.info(ids.toString());
         }
 
