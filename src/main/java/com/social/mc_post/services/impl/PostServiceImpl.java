@@ -198,7 +198,6 @@ public class PostServiceImpl implements PostService {
                 String authorId = getAuthorId(headerRequestByAuth);
                 Like oldLike = likeRepository.foundByPostAndAuthorId(post, authorId, TypeLike.POST);
                 if (oldLike != null){
-                    log.info(oldLike.toString());
                     likeRepository.delete(oldLike);
                 }
                 Like like = createLike(likeDto, post, authorId);
@@ -322,7 +321,8 @@ public class PostServiceImpl implements PostService {
 
         boolean withFriends = searchDto.getWithFriends() != null && searchDto.getWithFriends();
 
-        if (searchDto.getAuthor() == null && searchDto.getAccountIds() == null && withFriends){
+        if (searchDto.getAuthor() == null && searchDto.getAccountIds() == null && withFriends
+                && searchDto.getDateTo() == null){
             ids.add(getAuthorId(headerRequestByAuth));
         }
 
