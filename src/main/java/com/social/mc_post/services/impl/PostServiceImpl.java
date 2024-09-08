@@ -316,15 +316,11 @@ public class PostServiceImpl implements PostService {
         }
 
         if (searchDto.getAuthor() != null){
-            String[] data = searchDto.getAuthor().split("\\s+");
-            log.info(Arrays.toString(data));
+            searchDto.setWithFriends(false);
+            String[] data = searchDto.getAuthor().trim().split("\\s+");
             String size = "size%3D" + pageDto.getSize();
-            // add variation
-            List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
-                    data[0],
-                    data[1],
-                    size).getContent();
-            log.info(accounts.toString());
+            ids = getIdsByAuthor(data,size, headerRequestByAuth);
+            log.info(ids.toString());
         }
 
         boolean withFriends = searchDto.getWithFriends() != null && searchDto.getWithFriends();
@@ -339,6 +335,34 @@ public class PostServiceImpl implements PostService {
                     .map(UUID::toString).toList());
         }
       return ids;
+    }
+
+    private List<String> getIdsByAuthor(String[] data, String size, String headerRequestByAuth){
+        if (data.length == 2){
+            List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
+                    data[0],
+                    data[1],
+                    size).getContent();
+            return accounts.stream()
+                    .map(AccountMeDTO::getId)
+                    .map(UUID::toString)
+                    .toList();
+        }
+        if (data.length == 1){
+            List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
+                    data[0],
+                    null,
+                    size).getContent();
+            accounts.addAll(accountClient.getListAccounts(headerRequestByAuth,
+                    null,
+                    data[0],
+                    size).getContent());
+            return accounts.stream()
+                    .map(AccountMeDTO::getId)
+                    .map(UUID::toString)
+                    .toList();
+        }
+        return List.of();
     }
 
     private List<Tag> createTags(List<TagDto> tagDtoList, Post post){
