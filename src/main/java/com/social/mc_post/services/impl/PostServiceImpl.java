@@ -337,6 +337,7 @@ public class PostServiceImpl implements PostService {
                                             PostSearchDto searchDto){
         List<String> ids = new ArrayList<>();
         String[] data = searchDto.getAuthor().trim().split("\\s+");
+        log.info(data.toString());
         if (data.length == 2){
             ids.addAll(accountClient
                     .getListIdsAccounts(headerRequestByAuth, data[0], data[1]).stream()
