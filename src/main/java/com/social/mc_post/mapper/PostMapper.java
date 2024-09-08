@@ -3,6 +3,7 @@ package com.social.mc_post.mapper;
 import com.social.mc_post.dto.PostDto;
 import com.social.mc_post.dto.ReactionDto;
 import com.social.mc_post.dto.TagDto;
+import com.social.mc_post.dto.enums.TypeLike;
 import com.social.mc_post.model.Like;
 import com.social.mc_post.model.Post;
 import com.social.mc_post.repository.CommentRepository;
@@ -51,21 +52,10 @@ public class PostMapper {
         List<Like> likes = likeRepository.findByPost(post);
         Map<String, Integer> reactionMap = new HashMap<>();
         for (Like like : likes){
-            if (reactionMap.containsKey(like.getReaction())){
-                int count = reactionMap.get(like.getReaction());
-                reactionMap.put(like.getReaction(), count + 1);
-            }else {
-                reactionMap.put(like.getReaction(), 1);
-            }
+            reactionMap.put(like.getReaction(), likeRepository.countByPostAndReaction(post
+                    , like.getReaction()));
         }
-        String reactionPost = post.getMyReaction();
-        if (reactionPost != null){
-            if (reactionMap.containsKey(reactionPost)){
-                reactionMap.compute(reactionPost, (k, count) -> count + 1);
-            }else {
-                reactionMap.put(reactionPost, 1);
-            }
-        }
+
         List<ReactionDto> reactions = new ArrayList<>();
         for (Map.Entry<String,Integer> entry : reactionMap.entrySet()){
             reactions.add(new ReactionDto(entry.getKey(),entry.getValue()));
