@@ -74,27 +74,8 @@ public class PostServiceImpl implements PostService {
                 pageable = PageRequest.of(pageDto.getPage(), pageDto.getSize(), sort);
             }
 
-           List<String> ids = getAuthorIdsFromSearch(headerRequestByAuth, searchDto, pageDto);
-           if (ids.isEmpty()){
-               return new PageImpl<>(List.of(),pageable, pageDto.getSize());
-           }
-
-           boolean isDeleted = searchDto.getIsDeleted() != null && searchDto.getIsDeleted();
-           List<PostDto> posts = postRepository.findByAuthorIdList(ids).stream()
-                   .filter(post -> post.getIsDeleted().equals(isDeleted))
-                   .filter(post -> post.getType().equals(TypePost.POSTED))
-                   .map(postMapper::mapEntityToDto)
-                   .toList();
-
-
-           if (searchDto.getDateTo() != null && searchDto.getDateFrom() != null){
-               DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
-               LocalDateTime from = LocalDateTime.parse(searchDto.getDateFrom(), formatter);
-               LocalDateTime to = LocalDateTime.parse(searchDto.getDateTo(), formatter);
-               posts = posts.stream()
-                       .filter(post -> post.getTime().isAfter(from) && post.getTime().isBefore(to))
-                       .toList();
-            }
+            List<String> ids = getAuthorIdsFromSearch(headerRequestByAuth, searchDto, pageDto);
+            List<PostDto> posts = getPostDtoByFilterTime(searchDto, ids);
 
            if (searchDto.getText() != null){
                posts = posts.stream()
@@ -288,6 +269,40 @@ public class PostServiceImpl implements PostService {
        return null;
     }
 
+    private List<PostDto> getPostDtoByFilterTime(PostSearchDto searchDto, List<String> ids){
+        boolean isDeleted = searchDto.getIsDeleted() != null && searchDto.getIsDeleted();
+        List<PostDto> posts = new ArrayList<>();
+
+        if (searchDto.getDateTo() != null && searchDto.getDateFrom() != null){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
+            LocalDateTime from = LocalDateTime.parse(searchDto.getDateFrom(), formatter);
+            LocalDateTime to = LocalDateTime.parse(searchDto.getDateTo(), formatter);
+
+            if (ids.isEmpty()){
+                posts.addAll(postRepository.findAll().stream()
+                        .filter(post -> post.getIsDeleted().equals(isDeleted))
+                        .filter(post -> post.getType().equals(TypePost.POSTED))
+                        .filter(post -> post.getTime().isAfter(from) && post.getTime().isBefore(to))
+                        .map(postMapper::mapEntityToDto)
+                        .toList());
+            }else {
+                posts.addAll(postRepository.findByAuthorIdList(ids).stream()
+                        .filter(post -> post.getIsDeleted().equals(isDeleted))
+                        .filter(post -> post.getType().equals(TypePost.POSTED))
+                        .filter(post -> post.getTime().isAfter(from) && post.getTime().isBefore(to))
+                        .map(postMapper::mapEntityToDto)
+                        .toList());
+            }
+        }else {
+            posts.addAll(postRepository.findByAuthorIdList(ids).stream()
+                    .filter(post -> post.getIsDeleted().equals(isDeleted))
+                    .filter(post -> post.getType().equals(TypePost.POSTED))
+                    .map(postMapper::mapEntityToDto)
+                    .toList());
+        }
+        return posts;
+    }
+
     private List<String> getAuthorIdsFromSearch(String headerRequestByAuth,
                                                 PostSearchDto searchDto,
                                                 PageDto pageDto) throws UnsupportedEncodingException {
@@ -301,8 +316,15 @@ public class PostServiceImpl implements PostService {
         }
 
         if (searchDto.getAuthor() != null){
-            ids.addAll(getIdsByAuthorName(searchDto, pageDto, headerRequestByAuth));
-            log.info(ids.toString());
+            String[] data = searchDto.getAuthor().split("\\s+");
+            log.info(Arrays.toString(data));
+            String size = "size%3D" + pageDto.getSize();
+            // add variation
+            List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
+                    data[0],
+                    data[1],
+                    size).getContent();
+            log.info(accounts.toString());
         }
 
         boolean withFriends = searchDto.getWithFriends() != null && searchDto.getWithFriends();
@@ -317,39 +339,6 @@ public class PostServiceImpl implements PostService {
                     .map(UUID::toString).toList());
         }
       return ids;
-    }
-
-    private List<String> getIdsByAuthorName(PostSearchDto searchDto, PageDto pageDto,
-                                            String headerRequestByAuth){
-        List<String> ids = new ArrayList<>();
-        String[] data = searchDto.getAuthor().split("\s");
-        String size = "size%3D" + pageDto.getSize();
-        if(data.length == 2){
-            List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
-                    data[0],
-                    data[1],
-                    size).getContent();
-//            accounts.addAll(accountClient.getListAccounts(headerRequestByAuth,
-//                    data[1],
-//                    data[0],
-//                    size).getContent());
-            accounts.forEach(account -> ids.add(String.valueOf(account.getId())));
-            log.info(accounts.toString());
-            return ids;
-        }else if (data.length == 1){
-            List<AccountMeDTO> accounts = accountClient.getListAccounts(headerRequestByAuth,
-                    data[0],
-                    null,
-                    size).getContent();
-//            accounts.addAll(accountClient.getListAccounts(headerRequestByAuth,
-//                    null,
-//                    data[0],
-//                    size).getContent());
-            accounts.forEach(account -> ids.add(String.valueOf(account.getId())));
-            log.info(accounts.toString());
-            return ids;
-        }
-        return List.of();
     }
 
     private List<Tag> createTags(List<TagDto> tagDtoList, Post post){
