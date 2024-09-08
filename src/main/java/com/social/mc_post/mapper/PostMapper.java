@@ -40,7 +40,7 @@ public class PostMapper {
                 .tags(getTagDtoList(post))
                 .reactions(getReactionDtoList(post))
                 .myReaction(post.getMyReaction())
-                .likeAmount(likeRepository.countByPost(post))
+                .likeAmount(likeRepository.countByPostAndType(post, TypeLike.POST))
                 .commentsCount(commentRepository.countByPost(post))
                 .myLike(post.getMyLike())
                 .imagePath(post.getImagePath())
