@@ -52,7 +52,8 @@ public class PostMapper {
         Map<String, Integer> reactionMap = new HashMap<>();
         for (Like like : likes){
             if (reactionMap.containsKey(like.getReaction())){
-                reactionMap.compute(like.getReaction(), (k, count) -> count + 1);
+                int count = reactionMap.get(like.getReaction());
+                reactionMap.put(like.getReaction(), count + 1);
             }else {
                 reactionMap.put(like.getReaction(), 1);
             }
