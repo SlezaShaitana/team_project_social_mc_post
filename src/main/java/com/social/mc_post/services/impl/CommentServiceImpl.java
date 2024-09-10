@@ -170,13 +170,13 @@ public class CommentServiceImpl implements CommentService {
                Like like = createLike(post, comment, authorId);
                likeRepository.save(like);
                log.info("Like for comment created ");
+               putNotification(UUID.fromString(like.getAuthorId()),
+                       "Ваш комментарий одобрили",
+                       NotificationType.LIKE_COMMENT,
+                       UUID.fromString(comment.getAuthorId()));
                if (comment.getAuthorId().equals(authorId)){
                    comment.setMyLike(true);
                    commentRepository.save(comment);
-                   putNotification(UUID.fromString(like.getAuthorId()),
-                           "Ваш комментарий одобрили",
-                           NotificationType.LIKE_COMMENT,
-                           UUID.fromString(comment.getAuthorId()));
                }
                return likeMapper.mapEntityToDto(like);
            }
