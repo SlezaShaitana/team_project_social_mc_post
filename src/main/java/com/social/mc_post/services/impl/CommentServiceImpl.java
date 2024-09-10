@@ -62,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
 
                         putNotification(UUID.fromString(comment.getAuthorId()),
                                 comment.getCommentText(),NotificationType.COMMENT_COMMENT,
-                                UUID.fromString(parentComment.getId()));
+                                UUID.fromString(parentComment.getAuthorId()));
                         return "SubComment created";
                     }
                     return null;
@@ -261,10 +261,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private void putNotification(UUID authorId, String content, NotificationType type, UUID receiverId) {
-        UUID id = UUID.randomUUID();
-        log.info(new NotificationDTO(id, authorId,content,type,LocalDateTime.now(),receiverId,MicroServiceName.POST).toString());
         producer.sendMessageForNotification(NotificationDTO.builder()
-                .id(id)
+                .id(UUID.randomUUID())
                 .authorId(authorId)
                 .content(content)
                 .notificationType(type)
