@@ -28,6 +28,4 @@ public interface CommentRepository extends JpaRepository<Comment, String>, JpaSp
     @Query("select c from Comment as c WHERE c.parentCommentId =:parentId")
     List<Comment> findByParentCommentId(String parentId);
 
-    @Query("select c from Comment as c WHERE c.post =:post and c.type =: type")
-    List<Comment> findByPostAndType(Post post, TypeComment type);
 }

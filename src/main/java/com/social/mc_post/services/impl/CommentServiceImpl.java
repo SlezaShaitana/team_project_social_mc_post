@@ -215,7 +215,8 @@ public class CommentServiceImpl implements CommentService {
         Post post = postRepository.findById(searchDto.getPostId()).orElse(null);
         List<CommentDto> comments = new ArrayList<>();
         if (post !=null){
-            comments.addAll(commentRepository.findByPostAndType(post, TypeComment.POST).stream()
+            comments.addAll(commentRepository.findByPost(post).stream()
+                    .filter(comment -> comment.getParentCommentId() == null)
                     .map(commentMapper::mapEntityToDto)
                     .toList());
         }
