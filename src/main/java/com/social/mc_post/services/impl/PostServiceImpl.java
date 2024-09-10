@@ -111,7 +111,7 @@ public class PostServiceImpl implements PostService {
                 }
                 log.info("Create new POST: {}", postDto.getTitle());
 
-                String content = post.getTitle() + "\n" + post.getPostText();
+                String content = post.getTitle();
                 putNotification(UUID.fromString(post.getAuthorId()), content, NotificationType.POST, null);
 
                 return "Post created";
