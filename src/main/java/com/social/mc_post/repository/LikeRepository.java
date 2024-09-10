@@ -35,4 +35,7 @@ public interface LikeRepository extends JpaRepository<Like, String> {
 
     @Query("select count(*) from Like as l WHERE l.post =:post and l.type =:type")
     Integer countByPostAndType(Post post, TypeLike type);
+
+    @Query("select l from Like as l WHERE l.comment =:comment and l.authorId =:authorId and l.type =:type")
+    Like findByCommentAndAuthorId(Comment comment, String authorId, TypeLike type);
 }

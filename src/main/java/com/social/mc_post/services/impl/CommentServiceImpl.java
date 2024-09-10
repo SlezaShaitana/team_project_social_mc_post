@@ -163,6 +163,10 @@ public class CommentServiceImpl implements CommentService {
         try {
            String authorId = getAuthorId(headerRequestByAuth);
            if (post != null && comment != null){
+               Like oldLike = likeRepository.findByCommentAndAuthorId(comment, authorId, TypeLike.COMMENT);
+               if (oldLike != null){
+                   return likeMapper.mapEntityToDto(oldLike);
+               }
                Like like = createLike(post, comment, authorId);
                likeRepository.save(like);
                log.info("Like for comment created ");
