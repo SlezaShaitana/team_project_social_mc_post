@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,4 +39,7 @@ public interface LikeRepository extends JpaRepository<Like, String> {
 
     @Query("select l from Like as l WHERE l.comment =:comment and l.authorId =:authorId and l.type =:type")
     Like findByCommentAndAuthorId(Comment comment, String authorId, TypeLike type);
+
+    @Query("select l from Like as l WHERE l.authorId =:authorId")
+    List<Like> findByAuthorId(String authorId);
 }

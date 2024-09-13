@@ -1,28 +1,34 @@
 package com.social.mc_post.controllers;
 
 import com.social.mc_post.dto.RequestDto;
+import com.social.mc_post.dto.ResponseStatisticDto;
+import com.social.mc_post.services.StatisticService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/post/statistic")
+@RequiredArgsConstructor
 public class StatisticController {
 
+    private final StatisticService statisticService;
+
     @GetMapping("/post")
-    public ResponseEntity<?> handlerStatisticPost(@RequestBody RequestDto requestDto){
-        return ResponseEntity.ok(requestDto);
+    public ResponseStatisticDto handlerStatisticPost(@RequestBody RequestDto requestDto,
+                                                     @RequestHeader("Authorization") String headerRequestByAuth){
+        return statisticService.getStatisticPost(requestDto, headerRequestByAuth);
     }
 
     @GetMapping("/like")
-    public ResponseEntity<?> handlerStatisticLike(@RequestBody RequestDto requestDto){
-        return ResponseEntity.ok(requestDto);
+    public ResponseStatisticDto handlerStatisticLike(@RequestBody RequestDto requestDto,
+                                                  @RequestHeader("Authorization") String headerRequestByAuth){
+        return statisticService.getStatisticLike(requestDto, headerRequestByAuth);
     }
 
     @GetMapping("/comment")
-    public ResponseEntity<?> handlerStatisticComment(@RequestBody RequestDto requestDto){
-        return ResponseEntity.ok(requestDto);
+    public ResponseStatisticDto handlerStatisticComment(@RequestBody RequestDto requestDto,
+                                                     @RequestHeader("Authorization") String headerRequestByAuth){
+        return statisticService.getStatisticComment(requestDto, headerRequestByAuth);
     }
 }
