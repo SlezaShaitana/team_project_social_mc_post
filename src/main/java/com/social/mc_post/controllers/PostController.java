@@ -33,6 +33,7 @@ public class PostController {
     public Page<PostDto> getListPosts(PostSearchDto searchDto,
                                       PageDto pageableDto,
                                       @RequestHeader("Authorization") String headerRequestByAuth){
+        log.info(headerRequestByAuth);
             return postService.getPosts(searchDto, pageableDto, headerRequestByAuth);
     }
 
