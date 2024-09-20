@@ -267,6 +267,19 @@ public class PostServiceImpl implements PostService {
        return null;
     }
 
+    @Override
+    public List<PostDto> getPostDtoByAuthorId(String headerRequestByAuth) {
+        try {
+            String authorId = getAuthorId(headerRequestByAuth);
+            return postRepository.findByAuthorIdList(List.of(authorId)).stream()
+                    .map(postMapper::mapEntityToDto)
+                    .toList();
+        } catch (UnsupportedEncodingException e) {
+            log.error("Error : {}", e.getMessage());
+            return List.of();
+        }
+    }
+
     private List<PostDto> getPostDtoByFilterTime(PostSearchDto searchDto, List<String> ids){
         boolean isDeleted = searchDto.getIsDeleted() != null && searchDto.getIsDeleted();
         List<PostDto> posts = new ArrayList<>();

@@ -33,7 +33,6 @@ public class PostController {
     public Page<PostDto> getListPosts(PostSearchDto searchDto,
                                       PageDto pageableDto,
                                       @RequestHeader("Authorization") String headerRequestByAuth){
-        log.info(headerRequestByAuth);
             return postService.getPosts(searchDto, pageableDto, headerRequestByAuth);
     }
 
@@ -154,6 +153,11 @@ public class PostController {
     @GetMapping("/post/{id}")
     public PostDto getPost(@PathVariable(value = "id") String id){
         return postService.getPostDtoById(id);
+    }
+
+    @GetMapping("/post_by_authorId")
+    public List<PostDto> getPosts(@RequestHeader("Authorization") String headerRequestByAuth){
+        return postService.getPostDtoByAuthorId(headerRequestByAuth);
     }
 
     @DeleteMapping("/post/{id}")

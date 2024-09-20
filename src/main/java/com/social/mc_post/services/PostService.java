@@ -3,6 +3,8 @@ package com.social.mc_post.services;
 import com.social.mc_post.dto.*;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 
 public interface PostService {
 
@@ -14,4 +16,6 @@ public interface PostService {
     void deleteLike(String id, String headerRequestByAuth);
     String delayed(String token);
     PostDto getPostDtoById(String id);
+
+    List<PostDto> getPostDtoByAuthorId(String headerRequestByAuth);
 }
