@@ -155,11 +155,6 @@ public class PostController {
         return postService.getPostDtoById(id);
     }
 
-    @GetMapping("/post_by_authorId")
-    public List<PostDto> getPosts(@RequestHeader("Authorization") String headerRequestByAuth){
-        return postService.getPostDtoByAuthorId(headerRequestByAuth);
-    }
-
     @DeleteMapping("/post/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePost(@PathVariable String id,

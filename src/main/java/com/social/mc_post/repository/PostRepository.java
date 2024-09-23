@@ -21,6 +21,9 @@ public interface PostRepository extends JpaRepository<Post, String>, JpaSpecific
     @Query("select p from Post as p WHERE p.type =:type and p.authorId =:authorId")
     List<Post> findByTypeAndAuthorId(TypePost type, String authorId);
 
+    @Query("select p from Post as p WHERE p.authorId =:authorId")
+    List<Post> findByAuthorId(String authorId);
+
     @Query("select p from Post as p WHERE p.type =:type")
     List<Post> findByType(TypePost type);
 
