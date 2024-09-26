@@ -1,5 +1,6 @@
 package com.social.mc_post.security;
 
+import com.social.mc_post.aop.JwtTokenException;
 import com.social.mc_post.feign.JwtValidation;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.NonNull;
@@ -37,6 +38,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     @Override
+<<<<<<< HEAD
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         try {
@@ -51,6 +53,28 @@ public class JwtFilter extends OncePerRequestFilter {
                 Collection<? extends GrantedAuthority> authorities = roles.stream()
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
+=======
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+        String requestURI = request.getRequestURI();
+
+        if (requestURI.equals("/prometheus") || requestURI.equals("/actuator/prometheus")) {
+            log.info("Skipping JWT validation for URI: {}", requestURI);
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        try {
+            String stringToken = getToken(request);
+            if (jwtValidation.validateToken(stringToken)) {
+                DecodedToken token = DecodedToken.getDecoded(stringToken);
+                String email = token.getEmail();
+                List<String> roles = token.getRole();
+
+                Collection<? extends GrantedAuthority> authorities = (roles != null ? roles.stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList()) : Collections.emptyList());
+>>>>>>> 37f25c01f13c20b5d3ef933116c30d9e480c03c4
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         email, null, authorities);
@@ -69,9 +93,14 @@ public class JwtFilter extends OncePerRequestFilter {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
+
         filterChain.doFilter(request, response);
     }
+<<<<<<< HEAD
     private Boolean isAuthorized(){
         return true;
     }
+=======
+
+>>>>>>> 37f25c01f13c20b5d3ef933116c30d9e480c03c4
 }

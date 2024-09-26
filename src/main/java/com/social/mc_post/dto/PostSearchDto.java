@@ -2,11 +2,11 @@ package com.social.mc_post.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -24,11 +24,13 @@ public class PostSearchDto {
 
     private String author;
 
+    private String text;
+
     private Boolean withFriends;
 
     private List<String> tags;
 
-    private Date dateFrom;
+    private String dateFrom;
 
-    private Date dateTo;
+    private String dateTo;
 }

@@ -37,6 +37,11 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.18.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
 		</dependency>
@@ -58,7 +63,6 @@
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -139,7 +143,14 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+<<<<<<< HEAD
 
+=======
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+>>>>>>> 37f25c01f13c20b5d3ef933116c30d9e480c03c4
     </dependencies>
 	<dependencyManagement>
 		<dependencies>

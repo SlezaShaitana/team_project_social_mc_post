@@ -4,10 +4,10 @@ package com.social.mc_post.dto;
 import com.social.mc_post.dto.enums.TypeComment;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -19,9 +19,9 @@ public class CommentDto {
 
     private TypeComment commentType;
 
-    private Date time;
+    private LocalDateTime time;
 
-    private Date timeChanged;
+    private LocalDateTime timeChanged;
 
     private String authorId;
 

@@ -20,7 +20,13 @@ public class DecodedToken {
     public static DecodedToken getDecoded(String encodedToken) throws UnsupportedEncodingException {
         String[] pieces = encodedToken.split("\\.");
         String b64payload = pieces[1];
+
         String jsonString = new String(Base64.decodeBase64(b64payload), "UTF-8");
+<<<<<<< HEAD
+=======
+        log.info("Payload token: {}", jsonString);
+
+>>>>>>> 37f25c01f13c20b5d3ef933116c30d9e480c03c4
         return new Gson().fromJson(jsonString, DecodedToken.class);
     }
 

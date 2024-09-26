@@ -19,15 +19,13 @@ spring:
     show-sql: true
     dialect: org.hibernate.dialect.PostgreSQLDialect
 
-
   liquibase:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.xml
 
-
   kafka:
     bootstrap-servers: 79.174.80.200:9092
-    kafkaMessageTopicForNotification: "NotificationTopic"
+    kafkaMessageTopicForNotification: "notification-topic"
 
 eureka:
   client:
@@ -40,4 +38,3 @@ eureka:
 
 sonar:
   - qp_097fc7d5711be538609763b02245a7bdd7703573
-

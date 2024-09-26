@@ -1,11 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
-  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
-  http://www.liquibase.org/xml/ns/dbchangelog
-  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <include file="changeset/changeset-master.xml" relativeToChangelogFile="true"/>
+    <changeSet id="create-tag-table" author="skillbox">
+        <createTable tableName="tags">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="is_deleted" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="post_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-like-table" author="skillbox">
+        <createTable tableName="likes" >
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="is_deleted" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_created" type="timestamp(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="item_post_id" type="varchar(255)"/>
+            <column name="item_comment_id" type="varchar(255)"/>
+            <column name="type" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reaction" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-post-table" author="skillbox">
+        <createTable tableName="posts" >
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="is_deleted" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_created" type="timestamp(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_changed" type="timestamp(6)"/>
+            <column name="author_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)"/>
+            <column name="type" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="post_text" type="varchar(255)"/>
+            <column name="is_blocked" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="my_reaction" type="varchar(255)"/>
+            <column name="my_like" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_path" type="varchar(255)"/>
+            <column name="publish_date" type="timestamp(6)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-comment-table" author="skillbox">
+        <createTable tableName="comments" >
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="is_deleted" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_created" type="timestamp(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_changed" type="timestamp(6)"/>
+            <column name="author_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_of_comment_id" type="varchar(255)"/>
+            <column name="comment_text" type="varchar(255)"/>
+            <column name="post_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_blocked" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="my_like" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_path" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

@@ -2,14 +2,15 @@ package com.social.mc_post.dto;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 public class RequestDto {
 
-    private Date date;
+    private String date;
 
-    private Date firstMonth;
+    private String firstMonth;
 
-    private Date lastMonth;
+    private String lastMonth;
+
 }
